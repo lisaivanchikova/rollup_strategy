@@ -63,9 +63,21 @@
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 14px 0; }
   .card { background: transparent; border: 0; border-top: 2px solid #31435B; padding: 14px 0 0 0; border-radius: 0; font-size: 13px; }
   .card b { color: #31435B; display: block; margin-bottom: 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
-  .schema { background: #ffffff; padding: 24px 16px 18px; border: 1px solid #C9D2DC; margin: 18px 0; box-shadow: 0 1px 0 rgba(49,67,91,0.04); }
-  .schema-caption { font-size: 11.5px; color: #6b7785; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; text-align: center; font-weight: 600; }
+  .schema { background: #ffffff; padding: 18px 14px 14px; border: 1px solid #C9D2DC; margin: 12px 0; box-shadow: 0 1px 0 rgba(49,67,91,0.04); }
+  .schema-caption { font-size: 11px; color: #6b7785; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; text-align: center; font-weight: 600; }
   .schema svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+  .schema.compact { padding: 12px 10px 10px; margin: 8px 0; }
+  .schema.compact .schema-caption { font-size: 10.5px; margin-bottom: 8px; }
+
+  /* Split layout — text on left, schema on right */
+  .split-layout { display: grid; grid-template-columns: 1.05fr 1fr; gap: 28px; align-items: start; margin: 14px 0 22px; }
+  .split-layout.wide-schema { grid-template-columns: 1fr 1.35fr; }
+  .split-layout > .col-text > :first-child { margin-top: 0; }
+  .split-layout > .col-schema > :first-child { margin-top: 0; }
+  .split-layout .schema-stack { display: flex; flex-direction: column; gap: 10px; }
+  @media (max-width: 980px) {
+    .split-layout, .split-layout.wide-schema { grid-template-columns: 1fr; gap: 14px; }
+  }
   .stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0; margin: 18px 0 24px; background: #ffffff; border: 1px solid #C9D2DC; }
   .stat-strip .stat-cell { padding: 22px 24px; border-right: 1px solid #C9D2DC; }
   .stat-strip .stat-cell:last-child { border-right: none; }
@@ -218,7 +230,7 @@
 <!-- ========================================= PAGE 1 ========================================= -->
 <header class="doc-header">
   <h1>Business Models & Replication Units — Integration Company</h1>
-  <div class="meta">Strategic Analysis · Bobroff Cap · 2026-06-10 · Independent research across 120+ sources · Rev 2026-06-10 20:30</div>
+  <div class="meta">Strategic Analysis · Bobroff Cap · 2026-06-10 · Independent research across 120+ sources · Rev 2026-06-10 21:00</div>
 </header>
 
 <h2>01 · Executive Summary</h2>
@@ -715,12 +727,17 @@ GainShare AI
 <div style="margin-top:10px;"><span class="src" style="color:#A9C5D6;">Source: <a href="https://www.sidley.com/en/insights/newsupdates/2025/08/sec-brings-enforcement-action-against-private-fund-adviser-for-fee-offset-related-conduct">Sidley TZP analysis</a> · <a href="https://www.sec.gov/newsroom/press-releases/2016-165">SEC Apollo Press Release</a></span></div>
 </div>
 
-<h3>The same four-entity skeleton supports both models</h3>
+<div class="split-layout">
+<div class="col-text">
+<h3 style="margin-top:0;">The same four-entity skeleton supports both models</h3>
 <p>Only the ownership line between Fund/HoldCo and Integration Co changes. Everything downstream — HoldCo holding the QSBS-eligible C-corp wrapper, OpCos paying for services at arm's-length, founder minority retention — is identical.</p>
+<p style="margin-top:10px;">Model A wraps Integration Co as a wholly-owned subsidiary of the fund — fast, narrative-clean, but every related-party transaction needs documented arm's-length pricing.</p>
+<p>Model B carves Integration Co out as an independent Delaware C-corp with the fund as sub-25% anchor — slower setup, but unlocks ISO grants, outside capital, and clean third-party-customer warrants.</p>
+</div>
+<div class="col-schema">
+<div class="schema-stack">
 
-<div class="grid-2" style="gap: 18px;">
-
-<div class="schema">
+<div class="schema compact">
 <div class="schema-caption">Model A — Integration Co inside the Fund</div>
 <svg viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -767,7 +784,7 @@ GainShare AI
 </svg>
 </div>
 
-<div class="schema">
+<div class="schema compact">
 <div class="schema-caption">Model B — Integration Co as Stand-Alone Startup</div>
 <svg viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -813,10 +830,40 @@ GainShare AI
 </div>
 
 </div>
+</div>
+</div>
 
-<h3>The 4-entity operating skeleton in detail (Model A baseline shown)</h3>
+<div class="split-layout wide-schema">
+<div class="col-text">
+<h3 style="margin-top:0;">The 4-entity operating skeleton</h3>
+<p>Whichever Integration Co configuration is chosen, the four-entity skeleton remains the same. Only the line between Fund/HoldCo and Integration Co changes.</p>
+
+<div class="grid-2" style="margin-top:14px;">
+<div class="card">
+<b>Key principles</b>
+<ul>
+<li>Fund and Integration Co are <b>legally separate</b> (Bain Capital ↔ Bain & Co blueprint)</li>
+<li>Integration Co charges <b>market-rate fees</b> to portfolio OpCos with annual third-party benchmark</li>
+<li>HoldCo as C-corp preserves <b>QSBS Section 1202</b> for founders/LPs on Integration Co exit (up to $15M per founder under OBBBA 2025)</li>
+<li>Fund acquires majority of OpCos; Integration Co stays separate and can raise own venture round later (Distyl path)</li>
+</ul>
+</div>
+<div class="card">
+<b>Section 206 mitigations</b>
+<ul>
+<li>Arm's-length pricing with annual Big-4 benchmark report</li>
+<li>LPAC consent for related-party services contracts above $250K/year</li>
+<li>Disclosure in PPM at fund formation</li>
+<li><b>Management fee offset</b> for margin Integration Co earns from portfolio (industry standard since 2014 SEC PE Compliance Sweep)</li>
+<li>2022 SEC Private Fund Adviser Rule was vacated by 5th Circuit Aug 2024 → back to principles-based Section 206 enforcement = <b>more permissive. Window is open.</b></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="col-schema">
 <div class="schema">
-<div class="schema-caption">Capital and services flow · Year 1 operating state</div>
+<div class="schema-caption">Capital and services flow · Year 1 operating state (Model A baseline)</div>
 <svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
   <defs>
     <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#31435B"/></marker>
@@ -872,26 +919,6 @@ GainShare AI
   <text x="500" y="367" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#31435B">3rd-party SMEs · L1 fees + L2 gainshare + L3 warrants → fund pipeline</text>
 </svg>
 </div>
-
-<div class="grid-2">
-<div class="card">
-<b>Key principles</b>
-<ul>
-<li>Fund and Integration Co are <b>legally separate</b> (Bain Capital ↔ Bain & Co blueprint)</li>
-<li>Integration Co charges <b>market-rate fees</b> to portfolio OpCos with annual third-party benchmark</li>
-<li>HoldCo as C-corp preserves <b>QSBS Section 1202</b> for founders/LPs on Integration Co exit (up to $15M per founder under OBBBA 2025)</li>
-<li>Fund acquires majority of OpCos; Integration Co stays separate and can raise own venture round later (Distyl path)</li>
-</ul>
-</div>
-<div class="card">
-<b>Section 206 mitigations (required)</b>
-<ul>
-<li>Arm's-length pricing with annual Big-4 benchmark report</li>
-<li>LPAC consent for related-party services contracts above $250K/year</li>
-<li>Disclosure in PPM at fund formation</li>
-<li><b>Management fee offset</b> for margin Integration Co earns from portfolio (industry standard since 2014 SEC PE Compliance Sweep)</li>
-<li>2022 SEC Private Fund Adviser Rule was vacated by 5th Circuit Aug 2024 → back to principles-based Section 206 enforcement = <b>more permissive. Window is open.</b></li>
-</ul>
 </div>
 </div>
 
