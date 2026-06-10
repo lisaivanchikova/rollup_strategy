@@ -67,10 +67,19 @@
   /* Exhibit — BCG/McKinsey-style schema as inline page element, no panel/box */
   .exhibit { margin: 18px 0 28px; }
   .exhibit-eyebrow { font-size: 10.5px; color: #2E7780; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 4px; }
-  .exhibit-title { font-size: 16px; font-weight: 700; color: #31435B; margin-bottom: 14px; line-height: 1.3; max-width: 920px; }
+  .exhibit-title { font-size: 14px; font-weight: 700; color: #31435B; margin-bottom: 12px; line-height: 1.3; max-width: 100%; }
   .exhibit-art { background: transparent; padding: 0; border: none; }
   .exhibit-art svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
-  .exhibit-source { font-size: 11px; color: #6b7785; margin-top: 12px; font-style: normal; border-top: 1px solid #C9D2DC; padding-top: 8px; max-width: 900px; }
+  .exhibit-source { font-size: 10.5px; color: #6b7785; margin-top: 10px; font-style: normal; border-top: 1px solid #C9D2DC; padding-top: 6px; }
+
+  /* Float-right exhibit — text wraps around schema like in BCG / McKinsey reports */
+  .exhibit.float-right { float: right; width: 42%; max-width: 480px; margin: 6px 0 20px 32px; clear: right; }
+  .exhibit.float-right.wide { width: 50%; max-width: 620px; }
+  .clear-floats::after { content: ""; display: block; clear: both; }
+  h2, h3 { clear: both; }
+  @media (max-width: 980px) {
+    .exhibit.float-right, .exhibit.float-right.wide { float: none; width: 100%; max-width: 100%; margin: 16px 0; }
+  }
 
   /* Two-column text — newspaper/report style for long-form prose */
   .twocol { column-count: 2; column-gap: 36px; column-rule: none; margin: 12px 0 18px; max-width: 1100px; }
@@ -228,7 +237,7 @@
 <!-- ========================================= PAGE 1 ========================================= -->
 <header class="doc-header">
   <h1>Business Models & Replication Units — Integration Company</h1>
-  <div class="meta">Strategic Analysis · Bobroff Cap · 2026-06-10 · Independent research across 120+ sources · Rev 2026-06-10 21:45</div>
+  <div class="meta">Strategic Analysis · Bobroff Cap · 2026-06-10 · Independent research across 120+ sources · Rev 2026-06-10 22:15</div>
 </header>
 
 <h2>01 · Executive Summary</h2>
@@ -726,16 +735,13 @@ GainShare AI
 </div>
 
 <h3>The same four-entity skeleton supports both models</h3>
-<div class="twocol">
-<p>Only the ownership line between Fund/HoldCo and Integration Co changes. Everything downstream — HoldCo holding the QSBS-eligible C-corp wrapper, OpCos paying for services at arm's-length, founder minority retention — is identical.</p>
-<p>Model A wraps Integration Co as a wholly-owned subsidiary of the fund — fast, narrative-clean, but every related-party transaction needs documented arm's-length pricing.</p>
-<p>Model B carves Integration Co out as an independent Delaware C-corp with the fund as sub-25% anchor — slower setup, but unlocks ISO grants, outside capital, and clean third-party-customer warrants.</p>
-</div>
 
-<div class="exhibit">
+<div class="clear-floats">
+
+<div class="exhibit float-right">
 <div class="exhibit-eyebrow">Exhibit 1</div>
-<div class="exhibit-title">Model A wraps Integration Co inside the fund as a wholly-owned subsidiary</div>
-<div class="exhibit-art" style="max-width: 560px; margin: 0 auto;">
+<div class="exhibit-title">Model A — Integration Co inside the fund as wholly-owned subsidiary</div>
+<div class="exhibit-art">
 <svg viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#31435B"/></marker>
@@ -780,13 +786,21 @@ GainShare AI
   <line x1="180" y1="243" x2="180" y2="263" stroke="#2E7780" stroke-width="1" marker-end="url(#arrA)"/>
 </svg>
 </div>
-<div class="exhibit-source">Source: Bobroff Cap internal · Vista Consulting Group structural precedent</div>
+<div class="exhibit-source">Source: Bobroff Cap · Vista Consulting Group precedent</div>
 </div>
 
-<div class="exhibit">
+<p>Only the ownership line between Fund/HoldCo and Integration Co changes. Everything downstream — HoldCo holding the QSBS-eligible C-corp wrapper, OpCos paying for services at arm's-length, founder minority retention — is identical across both models.</p>
+<p><b>Model A</b> wraps Integration Co as a wholly-owned subsidiary of the fund. Setup compresses to 30–60 days because there is one LPA, one ERA filing, one board. The narrative to LPs is the cleanest possible — "we built the operating arm." The trade-off is structural exposure: at any economic control level above 25%, Integration Co becomes an affiliate of the adviser, and every warrant flowing from a portfolio company through Integration Co requires documented arm's-length pricing plus annual independent valuation.</p>
+<p>Vista Consulting Group ($107B AUM) is the textbook precedent — 100+ operators captive to portfolio, no external revenue line. Bain Capital Portfolio Group and Blackstone's Portfolio Operations (Rodney Zemmel, ex-McKinsey, took over Feb 2025) run the same pattern at larger scale.</p>
+
+</div>
+
+<div class="clear-floats">
+
+<div class="exhibit float-right wide">
 <div class="exhibit-eyebrow">Exhibit 2</div>
-<div class="exhibit-title">Model B carves Integration Co out as an independent Delaware C-corp with the fund as sub-25% anchor</div>
-<div class="exhibit-art" style="max-width: 640px; margin: 0 auto;">
+<div class="exhibit-title">Model B — Integration Co as independent Delaware C-corp with fund as sub-25% anchor</div>
+<div class="exhibit-art">
 <svg viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg" data-skip-close="1">
   <defs>
     <marker id="arrB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#31435B"/></marker>
@@ -829,11 +843,61 @@ GainShare AI
   <text x="180" y="297" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" font-style="italic" fill="#2E7780">SaaS-strategic + growth equity + ISO grants ENABLED</text>
 </svg>
 </div>
-<div class="exhibit-source">Source: Bobroff Cap internal · KKR Capstone structural precedent · Eudia Series A mechanic (PR Newswire Feb 2025)</div>
+<div class="exhibit-source">Source: Bobroff Cap · KKR Capstone precedent · Eudia Series A mechanic</div>
+</div>
+
+<p><b>Model B</b> carves Integration Co out as an independent Delaware C-corp. The Bobroff fund sits as anchor investor at sub-25%, paired with operating-founder equity (35–45%) and strategic investors (Adam Zoia, OpenAI-style partners, growth equity — 30–40%). Setup runs 3–6 months with separate incorporation, board, audit, and legal opinion, but the structural payoff is large.</p>
+<p>Section 206(3) friction materially weakens when the fund stays under the 25% control threshold and adds no other indicia of control. Integration Co can now grant ISO options to operators — critical at 2026 AI-startup comp benchmarks where Vertical Leads command $260K+ base and $50K+ equity. Eudia's structural innovation becomes available too: $30M upfront + $75M contingent on milestone acquisitions the fund approves.</p>
+<p>KKR Capstone is the 25-year precedent — per KKR's 10-Q filings, "owned and controlled by senior management, not a subsidiary or affiliate of KKR." Operates under consulting agreements, uses the KKR name under license. No SEC enforcement against the structure in over two decades.</p>
+
 </div>
 
 <h3>The 4-entity operating skeleton</h3>
-<p>Whichever Integration Co configuration is chosen, the four-entity skeleton remains the same. Only the line between Fund/HoldCo and Integration Co changes.</p>
+
+<div class="clear-floats">
+
+<div class="exhibit float-right wide">
+<div class="exhibit-eyebrow">Exhibit 3</div>
+<div class="exhibit-title">All four entities plug together via documented arm's-length flows</div>
+<div class="exhibit-art">
+<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#31435B"/></marker>
+    <marker id="arr4t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2E7780"/></marker>
+  </defs>
+  <rect x="350" y="14" width="300" height="44" fill="#FAF9F6" stroke="#31435B" stroke-width="1.5"/>
+  <text x="500" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#31435B">LP Investors</text>
+  <text x="500" y="50" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#6b7785">$25.5M S16 + $26.5M co-investors = $52M committed</text>
+  <line x1="500" y1="58" x2="500" y2="92" stroke="#31435B" stroke-width="1.5" marker-end="url(#arr4)"/>
+  <rect x="310" y="92" width="380" height="48" fill="#31435B" stroke="#31435B" stroke-width="1.5"/>
+  <text x="500" y="114" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#fff">Bobroff AI Fund I, LP</text>
+  <text x="500" y="130" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#A9C5D6">Delaware LP · GP + 20% carry · ERA status</text>
+  <line x1="380" y1="140" x2="270" y2="180" stroke="#31435B" stroke-width="1.5" marker-end="url(#arr4)"/>
+  <text x="240" y="170" font-family="Inter,sans-serif" font-size="10" fill="#6b7785">acquires equity 100%</text>
+  <line x1="620" y1="140" x2="730" y2="180" stroke="#31435B" stroke-width="1.5" marker-end="url(#arr4)"/>
+  <text x="660" y="170" font-family="Inter,sans-serif" font-size="10" fill="#6b7785">acquires via HoldCo</text>
+  <rect x="115" y="180" width="310" height="48" fill="#FAF9F6" stroke="#31435B" stroke-width="1.5"/>
+  <text x="270" y="201" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#31435B">HoldCo LLC</text>
+  <text x="270" y="217" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#6b7785">US C-corp · QSBS 1202 eligible</text>
+  <rect x="575" y="180" width="310" height="48" fill="#FAF9F6" stroke="#31435B" stroke-width="1.5"/>
+  <text x="730" y="201" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#31435B">SME OpCos 1–5</text>
+  <text x="730" y="217" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#6b7785">acquired services SMEs</text>
+  <line x1="270" y1="228" x2="350" y2="270" stroke="#31435B" stroke-width="1.5" marker-end="url(#arr4)"/>
+  <text x="225" y="252" font-family="Inter,sans-serif" font-size="10" fill="#6b7785">owns 100%</text>
+  <line x1="730" y1="228" x2="650" y2="270" stroke="#2E7780" stroke-width="1.5" marker-end="url(#arr4t)" stroke-dasharray="4,3"/>
+  <text x="700" y="252" font-family="Inter,sans-serif" font-size="10" fill="#2E7780" font-style="italic">arm's-length services</text>
+  <rect x="200" y="270" width="600" height="56" fill="#2E7780" stroke="#2E7780" stroke-width="1.5"/>
+  <text x="500" y="294" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="700" fill="#fff">Bobroff AI Integration Co</text>
+  <text x="500" y="312" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#DCE5EC">C-corp · services to portfolio + 3rd-party SMEs</text>
+  <line x1="500" y1="326" x2="500" y2="350" stroke="#2E7780" stroke-width="1.5" marker-end="url(#arr4t)"/>
+  <rect x="280" y="350" width="440" height="24" fill="#FAF9F6" stroke="#C9D2DC" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="500" y="367" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#31435B">3rd-party SMEs · L1 + L2 + L3 warrants → fund pipeline</text>
+</svg>
+</div>
+<div class="exhibit-source">Source: Bobroff Cap · synthesized from Vista, HATCo, Capstone precedents</div>
+</div>
+
+<p>Whichever Integration Co configuration is chosen, the four-entity skeleton remains the same. Only the line between Fund/HoldCo and Integration Co changes. The downstream relationships — HoldCo as QSBS-eligible C-corp wrapper, OpCos held below for acquisition consolidation, Integration Co billing portfolio companies at arm's-length while selling externally — work identically in both architectures.</p>
 
 <div class="grid-2" style="margin-top:14px;">
 <div class="card">
@@ -856,68 +920,6 @@ GainShare AI
 </ul>
 </div>
 </div>
-</div>
-
-<div class="exhibit">
-<div class="exhibit-eyebrow">Exhibit 3</div>
-<div class="exhibit-title">All four entities of the operating skeleton plug together via documented arm's-length flows</div>
-<div class="exhibit-art">
-<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-  <defs>
-    <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#31435B"/></marker>
-    <marker id="arr4t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2E7780"/></marker>
-  </defs>
-  <!-- Layer 1: LP Investors -->
-  <rect x="350" y="14" width="300" height="44" fill="#fff" stroke="#31435B" stroke-width="1.5"/>
-  <text x="500" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#31435B">LP Investors</text>
-  <text x="500" y="50" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#6b7785">$25.5M S16 + $26.5M pre-Series B co-investors = $52M committed</text>
-  <line x1="500" y1="58" x2="500" y2="92" stroke="#31435B" stroke-width="1.5" marker-end="url(#arr4)"/>
-  <text x="510" y="78" font-family="Inter,sans-serif" font-size="10" fill="#6b7785">capital + carry</text>
-
-  <!-- Layer 2: Fund -->
-  <rect x="310" y="92" width="380" height="48" fill="#31435B" stroke="#31435B" stroke-width="1.5"/>
-  <text x="500" y="114" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#fff">Bobroff AI Fund I, LP</text>
-  <text x="500" y="130" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#A9C5D6">Delaware Limited Partnership · GP + 20% carry · ERA status</text>
-
-  <!-- Arrows from Fund -->
-  <line x1="380" y1="140" x2="270" y2="180" stroke="#31435B" stroke-width="1.5" marker-end="url(#arr4)"/>
-  <text x="282" y="166" font-family="Inter,sans-serif" font-size="10" fill="#6b7785">acquires</text>
-  <text x="282" y="178" font-family="Inter,sans-serif" font-size="10" fill="#6b7785">equity 100%</text>
-
-  <line x1="620" y1="140" x2="730" y2="180" stroke="#31435B" stroke-width="1.5" marker-end="url(#arr4)"/>
-  <text x="660" y="166" font-family="Inter,sans-serif" font-size="10" fill="#6b7785">acquires majority</text>
-  <text x="660" y="178" font-family="Inter,sans-serif" font-size="10" fill="#6b7785">via HoldCo</text>
-
-  <!-- Layer 3 left: HoldCo -->
-  <rect x="115" y="180" width="310" height="48" fill="#fff" stroke="#31435B" stroke-width="1.5"/>
-  <text x="270" y="201" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#31435B">HoldCo LLC</text>
-  <text x="270" y="217" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#6b7785">US C-corp wrapper · QSBS Section 1202 eligible</text>
-
-  <!-- Layer 3 right: OpCos -->
-  <rect x="575" y="180" width="310" height="48" fill="#fff" stroke="#31435B" stroke-width="1.5"/>
-  <text x="730" y="201" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#31435B">SME OpCos 1, 2, 3, 4, 5</text>
-  <text x="730" y="217" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#6b7785">acquired services SMEs · founder retains minority</text>
-
-  <!-- Arrows down to IntCo + services up -->
-  <line x1="270" y1="228" x2="350" y2="270" stroke="#31435B" stroke-width="1.5" marker-end="url(#arr4)"/>
-  <text x="200" y="252" font-family="Inter,sans-serif" font-size="10" fill="#6b7785">owns 100%</text>
-
-  <line x1="730" y1="228" x2="650" y2="270" stroke="#2E7780" stroke-width="1.5" marker-end="url(#arr4t)" stroke-dasharray="4,3"/>
-  <text x="700" y="252" font-family="Inter,sans-serif" font-size="10" fill="#2E7780" font-style="italic">pays for services</text>
-  <text x="700" y="264" font-family="Inter,sans-serif" font-size="10" fill="#2E7780" font-style="italic">at arm's-length rates</text>
-
-  <!-- Layer 4: IntCo -->
-  <rect x="200" y="270" width="600" height="56" fill="#2E7780" stroke="#2E7780" stroke-width="1.5"/>
-  <text x="500" y="294" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="700" fill="#fff">Bobroff AI Integration Co (OpCo)</text>
-  <text x="500" y="312" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#DCE5EC">C-corp · sells AI integration services to portfolio OpCos AND 3rd-party SMEs</text>
-
-  <!-- Layer 5: 3rd-party SMEs -->
-  <line x1="500" y1="326" x2="500" y2="350" stroke="#2E7780" stroke-width="1.5" marker-end="url(#arr4t)"/>
-  <rect x="280" y="350" width="440" height="24" fill="#FAF9F6" stroke="#C9D2DC" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="500" y="367" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#31435B">3rd-party SMEs · L1 fees + L2 gainshare + L3 warrants → fund pipeline</text>
-</svg>
-</div>
-<div class="exhibit-source">Source: Bobroff Cap internal · framework synthesized from Vista Consulting Group, General Catalyst HATCo, KKR Capstone structural precedents</div>
 </div>
 
 <details class="appendix-master">
