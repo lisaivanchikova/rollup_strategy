@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Strategic Decision Memo · Starting Position Maximization</title>
+<style>
+:root{
+  --deep-slate:#31435B;
+  --petrol-teal:#2E7780;
+  --soft-steel:#A9C5D6;
+  --silver-mist:#DCE5EC;
+  --near-black:#151A1F;
+  --cool-gray:#C9D2DC;
+  --off-white:#FAF9F6;
+  --rule:#D8DEE5;
+  --shade-1:#F4F2EE;
+  --top:#2E7780;
+  --mid:#C5874A;
+  --low:#7A3030;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--off-white);color:var(--near-black);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.55;letter-spacing:-0.005em;-webkit-font-smoothing:antialiased}
+.page{max-width:1180px;margin:0 auto;padding:56px 72px 64px;border-bottom:1px solid var(--rule);background:var(--off-white)}
+.page:first-of-type{padding-top:120px}
+.eyebrow{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;margin-bottom:14px}
+.eyebrow .num{color:var(--deep-slate);font-weight:700;margin-right:10px}
+h1.action{font-size:30px;line-height:1.2;font-weight:700;color:var(--deep-slate);letter-spacing:-0.02em;margin-bottom:18px;max-width:980px}
+h2.section{font-size:22px;line-height:1.25;font-weight:700;color:var(--deep-slate);margin:22px 0 12px;letter-spacing:-0.015em}
+h3.sub{font-size:13px;font-weight:700;color:var(--deep-slate);text-transform:uppercase;letter-spacing:0.08em;margin:20px 0 10px}
+h4.minor{font-size:14px;font-weight:700;color:var(--deep-slate);margin:14px 0 6px}
+p.body{font-size:13.5px;line-height:1.6;color:var(--near-black);margin-bottom:10px;max-width:960px}
+p.body b{color:var(--deep-slate)}
+ul.body{font-size:13.5px;line-height:1.6;color:var(--near-black);margin:8px 0 14px 20px;max-width:960px}
+ul.body li{margin-bottom:5px}
+ul.body li b{color:var(--deep-slate)}
+.source{font-size:10.5px;letter-spacing:0.03em;color:#7B8590;border-top:1px solid var(--rule);padding-top:10px;margin-top:30px}
+.cover{min-height:78vh;display:flex;flex-direction:column;justify-content:space-between;padding-top:140px}
+.cover .top-mark{font-size:10px;letter-spacing:0.22em;color:var(--petrol-teal);font-weight:600;text-transform:uppercase}
+.cover h1{font-size:42px;line-height:1.1;font-weight:700;letter-spacing:-0.025em;color:var(--deep-slate);margin:54px 0 22px;max-width:980px}
+.cover .deck{font-size:17px;color:#3F4A57;max-width:880px;line-height:1.55;font-weight:400}
+.cover .meta{display:flex;gap:64px;margin-top:60px;font-size:12px;color:#5A6470}
+.cover .meta .label{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;display:block;margin-bottom:6px}
+.cover .meta .v{font-size:14px;color:var(--near-black);font-weight:600}
+.cover .palette{display:flex;gap:0;margin-top:40px;border-top:1px solid var(--rule);padding-top:18px}
+.cover .palette span{display:block;width:32px;height:6px}
+.bluf{background:var(--silver-mist);border-left:4px solid var(--petrol-teal);padding:22px 26px;margin:18px 0 24px;max-width:980px}
+.bluf .bluf-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:10px}
+.bluf p{font-size:14.5px;line-height:1.55;color:var(--near-black)}
+.callout{border:1px solid var(--cool-gray);background:#FDFCFA;padding:16px 22px;margin:14px 0;border-left:3px solid var(--petrol-teal);max-width:980px}
+.callout .h{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:8px}
+.callout p{font-size:12.8px;line-height:1.55;color:var(--near-black)}
+table.mck{width:100%;border-collapse:collapse;background:#fff;font-size:12px;margin:14px 0 12px}
+table.mck th{background:var(--deep-slate);color:#fff;text-align:left;padding:10px 12px;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;border-right:1px solid #3D506B;vertical-align:top}
+table.mck th:last-child{border-right:none}
+table.mck td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.5}
+table.mck tr:nth-child(even) td{background:var(--shade-1)}
+table.mck td.lvr{font-weight:700;color:var(--deep-slate);width:42px;text-align:center}
+table.mck td.name{font-weight:700;color:var(--deep-slate)}
+table.mck td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.mck td.center{text-align:center;font-variant-numeric:tabular-nums}
+.score-top{background:#E1F0EE !important;color:var(--top);font-weight:700}
+.score-mid{background:#F5E8D5 !important;color:var(--mid);font-weight:700}
+.score-low{background:#EDD4D4 !important;color:var(--low);font-weight:700}
+.lever-block{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--petrol-teal);padding:22px 26px;margin:18px 0;max-width:980px}
+.lever-block .id{font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:6px}
+.lever-block .title{font-size:18px;font-weight:700;color:var(--deep-slate);margin-bottom:8px;line-height:1.3}
+.lever-block .question{font-size:13px;color:#3F4A57;font-style:italic;margin-bottom:14px;line-height:1.5}
+.options-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}
+.options-grid.three{grid-template-columns:repeat(3,1fr)}
+.option{background:#fff;border:1px solid var(--rule);padding:14px 16px;border-top:3px solid var(--soft-steel)}
+.option .opt-lbl{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;color:var(--deep-slate);margin-bottom:4px}
+.option .opt-name{font-weight:700;color:var(--deep-slate);font-size:13.5px;margin-bottom:6px;line-height:1.3}
+.option .desc{font-size:12px;line-height:1.55;color:#2A323B}
+.option .desc b{color:var(--deep-slate)}
+.tree{margin:16px 0 6px;font-family:'JetBrains Mono','Menlo',monospace;font-size:12px;line-height:1.7;color:var(--near-black);background:#fff;border:1px solid var(--rule);padding:20px 24px;white-space:pre;overflow-x:auto}
+.tree .root{color:var(--deep-slate);font-weight:700}
+.tree .branch{color:var(--petrol-teal);font-weight:600}
+.tree .leaf{color:#3F4A57}
+@media print{body{font-size:10px}.page{padding:30px 36px;max-width:none;page-break-after:always}.cover{min-height:auto}table.mck th{background:var(--deep-slate)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.lever-block{page-break-inside:avoid}.options-grid{page-break-inside:avoid}.callout{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<section class="page cover">
+  <div>
+    <div class="top-mark">Strategic Decision Memo · Internal Strategy</div>
+    <h1>Maximizing the Starting Position — Comparative Analysis of Seven Day-Zero Levers for AI-Native Operating Holdco</h1>
+    <div class="deck">
+      The archetype is chosen — AI-Native Operating Holdco. This memo asks a separate question: across seven Day-Zero levers (vertical, LP base, operator structure, advisors, legal, capital, team and brand), which positions maximise the probability of a strong founder-profit outcome on a 4–7 year horizon? Each lever is evaluated as an open question. The vertical, the LP base, the operator structure — none are pre-decided. Recommendations are outputs of comparative analysis against documented reference operators, not validations of any plan already on paper.
+    </div>
+  </div>
+  <div>
+    <div class="meta">
+      <div><span class="label">Prepared</span><span class="v">June 14, 2026</span></div>
+      <div><span class="label">Series</span><span class="v">Strategic Decision Memos</span></div>
+      <div><span class="label">Method</span><span class="v">Unbiased comparative — recommendations as conclusions, not premises</span></div>
+    </div>
+    <div class="palette">
+      <span style="background:#31435B"></span><span style="background:#2E7780"></span><span style="background:#A9C5D6"></span>
+      <span style="background:#DCE5EC"></span><span style="background:#151A1F"></span><span style="background:#C9D2DC"></span>
+      <span style="background:#FAF9F6;border-right:1px solid #ddd;border-left:1px solid #ddd"></span>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">01</span>The Question and the Method</div>
+  <h1 class="action">Given that the archetype is chosen, what Day-Zero positions across seven levers maximise the probability of strong founder profit on a 4–7 year horizon? Each lever is left open; conclusions emerge from comparative analysis.</h1>
+
+  <div class="bluf">
+    <div class="bluf-label">Bottom Line Up Front</div>
+    <p>This memo does not assume the answers. For each of the seven levers — vertical, LP base, operator structure, advisors, legal, capital, team and brand — multiple options are scored on documented evidence from the four reference operators in the archetype (Long Lake, GC Creation, Shield Technology Partners, Crete / Current) and against the failure pattern (Smarter Technologies / NMC). The vertical analysis ranks five Hell-Yes candidates against a weighted scoring matrix and shows how the ranking shifts under different weight schemes. Each subsequent lever applies the same open structure. The recommended composite position is the output of the analysis; if the weights change, the position changes.</p>
+  </div>
+
+  <h3 class="sub">The frame Nicolas set</h3>
+  <ul class="body">
+    <li>The archetype is chosen — AI-Native Operating Holdco per Game Selection Framework (June 12, 2026; score 100/125; only archetype using all three enablers at structural strength).</li>
+    <li>Target horizon for "good exit" — 4 to 7 years. Game Selection's parameter range for this archetype was 7–12 years; the 4–7 year target is the upper quartile of cycle speed.</li>
+    <li>Other archetypes remain options that can be played in the US; they are addressed in the Combinations Memo (June 14, 2026) and not re-litigated here.</li>
+    <li>With the game chosen, the question is the winning starting position via partners, legal structure, industry — and four other levers this memo adds because they are equally Day-Zero (LP base composition, capital structure, team composition, brand identity).</li>
+  </ul>
+
+  <h3 class="sub">The capitalisation envelope from Game Selection — what we are optimising within</h3>
+  <p class="body">For Archetype 06 · AI-Native Operating Holdco the Game Selection Framework documented: exit multiple 8–14× EBITDA post-AI uplift; capital required $200–500M sponsor fund (the documented entry range, not a hard floor); founder ownership 20–35% blended via sponsor equity plus GP carry; realistic absolute founder cash-out $200M–$400M at probability-weighted median. This memo asks how to push the configuration to the upper quartile of that distribution — not how to change the envelope itself.</p>
+
+  <h3 class="sub">Method for each lever section (04–10)</h3>
+  <ul class="body">
+    <li><b>Frame the open question</b> — what is being decided, not what has been decided.</li>
+    <li><b>Present 3–5 documented options</b> — each from a reference operator or established structural pattern.</li>
+    <li><b>Apply criteria with explicit weights</b> — Multiple, Scale, Retained Ownership, Probability factors from the math in Section 02.</li>
+    <li><b>Score and rank</b> — show the calculation, not just the conclusion.</li>
+    <li><b>Surface trade-offs</b> — show what changes the ranking if weights shift.</li>
+    <li><b>Recommend with reasoning</b> — the recommendation follows from the scoring; it is not the starting point.</li>
+  </ul>
+
+  <div class="source">Sources: Game Selection Framework (June 12, 2026, bobroff-cap/roll-ups/analysis); Pure HoldCo Decision Memo (June 14); Combinations and Sequencing Decision Memo (June 14); AI-Native Operating Holdco archetype deep dive (June 13).</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">02</span>Reading the Math — Four Factors of Founder Profit</div>
+  <h1 class="action">Founder profit decomposes into four multiplicative factors. Day-Zero levers move three; the fourth — probability of exit on horizon — is the survival rate that compounds against every other choice.</h1>
+
+  <p class="body">From the Game Selection Framework, founder cash-out at exit is a function of three levers — Exit Multiple × Scale × Retained Ownership. For the AI-Native Operating Holdco archetype operating on a 4–7 year horizon, those levers operate against a fourth — the probability that the exit clears at all on the target horizon. Day-Zero decisions move all four.</p>
+
+<div class="tree">
+<span class="root">Founder Profit at Exit = Multiple × Scale × Retained Ownership × Probability of Exit on Horizon</span>
+│
+├── <span class="branch">Multiple</span> — what the buyer or market pays per unit of EBITDA at exit
+│        ├── <span class="leaf">Determined by vertical multiple-arbitrage gap (Lever 1)</span>
+│        ├── <span class="leaf">Determined by buyer universe at exit (Lever 4 advisor relationships)</span>
+│        └── <span class="leaf">Determined by audit-quality EBITDA + verified AI uplift (Lever 7 engineering)</span>
+│
+├── <span class="branch">Scale</span> — EBITDA on which the multiple is applied
+│        ├── <span class="leaf">Determined by capital deployable + reserve ratio (Lever 6)</span>
+│        ├── <span class="leaf">Determined by acquisition cadence (Lever 4 advisors, Lever 7 team)</span>
+│        └── <span class="leaf">Determined by vertical fragmentation supply (Lever 1)</span>
+│
+├── <span class="branch">Retained Ownership</span> — share of EV the founder receives
+│        ├── <span class="leaf">Determined by GP commit + carry + HoldCo equity allocation (Lever 5)</span>
+│        ├── <span class="leaf">Determined by Vintage 2 dilution path (Lever 2 LP terms)</span>
+│        └── <span class="leaf">Determined by QSBS Section 1202 eligibility (Lever 5 — up to 100% federal exclusion on $10M per shareholder)</span>
+│
+└── <span class="branch">Probability of Exit on Horizon</span> — survival rate of the configuration
+         ├── <span class="leaf">Determined by team integration discipline (Lever 7)</span>
+         ├── <span class="leaf">Determined by LP base patience (Lever 2)</span>
+         ├── <span class="leaf">Determined by vertical regulatory exposure (Lever 1)</span>
+         └── <span class="leaf">Determined by AI uplift verifiability (Lever 1 + Lever 7 — PitchBook documented AI-services exits at 2.x MOIC when uplift unverified)</span>
+</div>
+
+  <h3 class="sub">Worked example — what "good exit" looks like in this archetype</h3>
+  <p class="body">Using the AI-Native Operating Holdco deep dive's $5M EBITDA MSP target as a transparent illustration (numbers from the deep dive, not invented): acquisition price $30M at 6×; debt $18M at 60%; equity $12M; AI deployment $1M one-time; 18 months later EBITDA grows to $6M (400 bps margin uplift on $25M revenue); exit at 11× platform multiple = $66M EV; after debt $18M repaid, equity proceeds $48M; <b>4× MOIC equity return at ~41% IRR on ~4-year hold</b>. Replicate across 4–7 OpCos in a vertical → consolidated platform exit at $200–500M EV → founder share at 20–35% retained ownership → $40–175M per founder on the first vintage.</p>
+
+  <p class="body">The reverse case is also documented. Smarter Technologies / NMC: $1B+ raised, integration failure within 7 months, CEO replaced via LinkedIn announcement (Becker's Hospital Review, Modern Healthcare, December 2025). PitchBook on recent AI-services exits "well within the twos" — operators with unverified AI uplift exit at 2× MOIC rather than 4×. These are the failure-mode endpoints the Day-Zero position is built to avoid.</p>
+
+  <h3 class="sub">What "winning" means in scoring</h3>
+  <p class="body">Throughout Sections 04–10, scoring uses a 1–5 scale where 5 represents an option strongest on the dimension at the documented reference-operator benchmark, and 1 represents the option weakest by the same standard. Weighted composite scores are calculated for each lever, with sensitivity to weight shifts shown in Section 11. No lever is decided on a single score; the composite picture is the output.</p>
+
+  <div class="source">Sources: Game Selection Framework lever decomposition; AI-Native Operating Holdco archetype deep dive unit economics; PitchBook on AI-services exit pricing; Becker's Hospital Review and Modern Healthcare on Smarter Tech CEO change December 2025.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">03</span>The Seven Day-Zero Levers — Open Questions, Not Pre-Committed Answers</div>
+  <h1 class="action">Seven levers are evaluated. Each is framed as an open question. The vertical is not pre-selected. The LP base composition is not pre-selected. The team architecture is not pre-selected. Recommendations emerge from analysis.</h1>
+
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:18%">Lever</th>
+      <th style="width:34%">Open Day-Zero question</th>
+      <th>Profit-math factor moved</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">1</td>
+        <td class="name">Vertical choice</td>
+        <td>Across five Hell-Yes candidates (HomeCare, Accounting, P&amp;C tier-2, HOA/PM, MSP), which maximises the weighted score on multiple-arbitrage gap, AI uplift verifiability, regulatory close, fragmentation supply, and direct reference operator evidence?</td>
+        <td>Multiple, Scale, Probability</td>
+      </tr>
+      <tr>
+        <td class="lvr">2</td>
+        <td class="name">LP base composition</td>
+        <td>Across institutional-anchor-led, strategic-family-office-led, HNW-led, and strategic-operator-led structures, which maximises Vintage 2 fundraising velocity and patient-capital alignment with the 4–7 year horizon?</td>
+        <td>Retained Ownership, Probability</td>
+      </tr>
+      <tr>
+        <td class="lvr">3</td>
+        <td class="name">Operator partner structure</td>
+        <td>Across 100%-acquired (Berkshire), majority-with-rollover (Long Lake / Shield), alliance (Crete), and minority growth equity structures, which maximises integration survival and AI uplift execution on the 4–7 year horizon?</td>
+        <td>Probability, Multiple</td>
+      </tr>
+      <tr>
+        <td class="lvr">4</td>
+        <td class="name">Advisors and board</td>
+        <td>What categories of advisors and board members (vertical M&amp;A, operator-in-residence, AI engineering, independent director, compliance) maximise deal flow and early failure-mode warning, and what board size and composition supports them?</td>
+        <td>Scale, Probability</td>
+      </tr>
+      <tr>
+        <td class="lvr">5</td>
+        <td class="name">Legal structure</td>
+        <td>What fund + Holdco + OpCo legal architecture maximises QSBS Section 1202 eligibility, minimises Section 206 friction, and preserves Vintage 2 evergreen conversion optionality?</td>
+        <td>Retained Ownership, Probability</td>
+      </tr>
+      <tr>
+        <td class="lvr">6</td>
+        <td class="name">Capital structure</td>
+        <td>Across concentrated-platform, balanced-diversified, and distributed-pilot allocation philosophies, which fits a 4–7 year exit horizon, and at what LBO leverage level?</td>
+        <td>Scale, Probability</td>
+      </tr>
+      <tr>
+        <td class="lvr">7</td>
+        <td class="name">Team and brand</td>
+        <td>What GP team size, AI Engineering Lead profile, vertical leadership model, and brand identity architecture maximise LP credibility, seller trust, and AI talent recruiting?</td>
+        <td>Probability, Scale</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="h">How each lever is read in Sections 04–10</div>
+    <p>Each lever section presents (a) the open question; (b) 3–5 documented options each derived from reference operator practice or established structural patterns; (c) scoring on relevant criteria with explicit weights; (d) the ranking and the conditions under which it would shift; (e) the recommendation as a conclusion of the analysis. Section 11 aggregates across all seven; Section 12 presents the composite position; Section 13 lays out the trigger structure.</p>
+  </div>
+
+  <div class="source">Method derived from Game Selection Framework lever decomposition and the comparative-evidence approach used in Pure HoldCo and Combinations Decision Memos (June 14, 2026).</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">04</span>Lever 1 · Vertical Choice — Comparative Analysis Across Five Candidates</div>
+  <h1 class="action">Each Hell-Yes vertical is scored against five criteria from the profit-math factors. The ranking depends on weight scheme: HOA / Property Management and Accounting top under direct-reference-operator weighting; P&amp;C tier-2 tops under multiple-arbitrage weighting; MSP balances both.</h1>
+
+  <div class="lever-block">
+    <div class="id">LEVER 1 · OPEN QUESTION</div>
+    <div class="title">Across five Hell-Yes candidates, which vertical maximises probability of strong founder profit on a 4–7 year horizon?</div>
+    <div class="question">No vertical is pre-selected. The candidates come from the rollup-economy V×C×A×B×M scoring map's Hell-Yes set as of May 2026: HomeCare, Accounting / CPA, P&amp;C brokerage tier-2 (sub-$1M EBITDA), HOA / Property Management, MSP. Each is scored on five criteria from the documented archetype deep-dive evidence.</div>
+  </div>
+
+  <h3 class="sub">Source data — vertical-by-vertical from the AI-Native Operating Holdco deep dive</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:20%">Vertical</th>
+      <th style="width:14%">SMB multiple</th>
+      <th style="width:16%">Platform multiple</th>
+      <th style="width:12%">Gap (turns)</th>
+      <th style="width:18%">Regulatory close</th>
+      <th>Documented AI uplift / direct reference operator</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="name">P&amp;C brokerage sub-$5M EBITDA</td>
+        <td class="num">7.5–12×</td>
+        <td class="num">16–18×</td>
+        <td class="num">6–8</td>
+        <td>State licensing transfer; 4–8 months</td>
+        <td>No direct AI-Holdco operator at scale documented publicly; arbitrage thesis well-established (Marsh Berry, Capstone Insurance Services Update June 2025)</td>
+      </tr>
+      <tr>
+        <td class="name">MSP $1–5M EBITDA</td>
+        <td class="num">4–8×</td>
+        <td class="num">11.2× avg, 14–20× top</td>
+        <td class="num">4–10</td>
+        <td>Cyber liability + SEC cyber-disclosure; 3–6 months</td>
+        <td>Shield Technology Partners — 9 MSP partners, $100M+ ARR Feb 2026, OpenAI equity in Thrive Holdings December 2025</td>
+      </tr>
+      <tr>
+        <td class="name">CPA / Accounting</td>
+        <td class="num">4–8×</td>
+        <td class="num">10–12×; Citrin sold to Blackstone at ~15× EBITDA in 2025</td>
+        <td class="num">3–7</td>
+        <td>State-board CPA ownership restrictions; alliance model needed (Crete precedent)</td>
+        <td>Current / Crete — $428M revenue, ~30 CPA firms, Tax AI 31% time savings, 98% accuracy across 7,000 returns in 2025 season; OpenAI / Thrive Tax AI accuracy 25% → 97% via reinforcement learning</td>
+      </tr>
+      <tr>
+        <td class="name">HOA / Property Management</td>
+        <td class="num">5–7×</td>
+        <td class="num">10×+ aspirational</td>
+        <td class="num">3–5</td>
+        <td>Lighter regulatory; 2–4 months</td>
+        <td>Long Lake Management — 25–30% per-FTE productivity gains in HOA OpCos; 10× sales pipeline expansion via AI lead generation; ~18–30 acquisitions; $1.28B raised; Amex GBT $6.3B take-private May 2026</td>
+      </tr>
+      <tr>
+        <td class="name">Home care (certified)</td>
+        <td class="num">4–8×</td>
+        <td class="num">7.5–9.5×</td>
+        <td class="num">2–4</td>
+        <td>CMS reimbursement caps; state licensure; W-2 vs 1099 classification</td>
+        <td>No direct AI-Holdco operator at scale documented publicly in home care specifically (Long Lake operates HOA + adjacent residential, not certified home care)</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="body">Sources: AI-Native Operating Holdco archetype deep dive (FOCUS Bankers home health 2026; Mertz Taggart Q1 2026 home-based care M&amp;A report; Aventis Advisors and Solganick MSP 2025; PeakValue MSP 12× multiples 2025; Auxo and FirmLever accounting; Marsh Berry and Capstone Partners P&amp;C; Insurance Journal Broker Valuations 2026; General Catalyst "Future of Services" on Long Lake; Crete / Current rebrand press June 2026).</p>
+
+  <h3 class="sub">Scoring framework — five criteria each weighted</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:30%">Criterion</th>
+      <th style="width:14%">Default weight</th>
+      <th>What "5" represents</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="name">Multiple-arbitrage gap</td><td class="num">25%</td><td>≥6 turns documented gap (Multiple factor)</td></tr>
+      <tr><td class="name">AI uplift verifiability</td><td class="num">20%</td><td>Documented production-grade uplift at a named reference operator (Probability factor)</td></tr>
+      <tr><td class="name">Direct reference operator at scale</td><td class="num">20%</td><td>Public operator running AI-Holdco model in this vertical at $100M+ revenue scale (Probability factor)</td></tr>
+      <tr><td class="name">Regulatory time-to-close</td><td class="num">15%</td><td>Under 3 months close cycle; no ownership restrictions (Scale + Probability factor)</td></tr>
+      <tr><td class="name">Fragmentation supply</td><td class="num">20%</td><td>Highest Boomer-density succession pipeline; deep bolt-on supply (Scale factor)</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Scoring — 1 to 5 per criterion per vertical</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:20%">Vertical</th>
+      <th class="center" style="width:14%">Arbitrage gap (25%)</th>
+      <th class="center" style="width:14%">AI uplift verifiability (20%)</th>
+      <th class="center" style="width:14%">Direct ref. operator (20%)</th>
+      <th class="center" style="width:14%">Regulatory close (15%)</th>
+      <th class="center" style="width:14%">Fragmentation (20%)</th>
+      <th class="center">Weighted total</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="name">HOA / Property Management</td>
+        <td class="center">3</td>
+        <td class="center score-top">4</td>
+        <td class="center score-top">5</td>
+        <td class="center score-top">5</td>
+        <td class="center score-top">5</td>
+        <td class="center score-top"><b>4.30</b></td>
+      </tr>
+      <tr>
+        <td class="name">CPA / Accounting</td>
+        <td class="center">3</td>
+        <td class="center score-top">5</td>
+        <td class="center score-top">5</td>
+        <td class="center">2</td>
+        <td class="center score-top">5</td>
+        <td class="center score-top"><b>4.05</b></td>
+      </tr>
+      <tr>
+        <td class="name">MSP $1–5M EBITDA</td>
+        <td class="center score-mid">4</td>
+        <td class="center">3</td>
+        <td class="center score-top">5</td>
+        <td class="center">3</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-mid"><b>3.85</b></td>
+      </tr>
+      <tr>
+        <td class="name">P&amp;C brokerage tier-2</td>
+        <td class="center score-top">5</td>
+        <td class="center score-low">2</td>
+        <td class="center score-low">2</td>
+        <td class="center">3</td>
+        <td class="center score-top">5</td>
+        <td class="center score-mid"><b>3.50</b></td>
+      </tr>
+      <tr>
+        <td class="name">HomeCare (certified)</td>
+        <td class="center score-low">2</td>
+        <td class="center">3</td>
+        <td class="center score-low">2</td>
+        <td class="center score-low">2</td>
+        <td class="center score-top">5</td>
+        <td class="center score-low"><b>2.90</b></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="body">Total weighted score using default weights — Multiple-arbitrage 25%, AI uplift verifiability 20%, Direct reference operator 20%, Regulatory close 15%, Fragmentation 20%.</p>
+
+  <h3 class="sub">Sensitivity — how the ranking shifts under different weight schemes</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:36%">Weight scheme</th>
+      <th>Top vertical</th>
+      <th>Second</th>
+      <th>Third</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="name">Default (balanced)</td>
+        <td>HOA / PM (4.30)</td>
+        <td>CPA / Accounting (4.05)</td>
+        <td>MSP (3.85)</td>
+      </tr>
+      <tr>
+        <td class="name">Multiple-arbitrage maximisation (50% on arbitrage)</td>
+        <td>P&amp;C tier-2</td>
+        <td>MSP</td>
+        <td>HOA / PM</td>
+      </tr>
+      <tr>
+        <td class="name">Reference-operator de-risking (50% on direct ref. operator)</td>
+        <td>HOA / PM, CPA, MSP (tied at top tier)</td>
+        <td>—</td>
+        <td>P&amp;C, HomeCare lower</td>
+      </tr>
+      <tr>
+        <td class="name">AI uplift evidence priority (50% on AI verifiability)</td>
+        <td>CPA / Accounting</td>
+        <td>HOA / PM</td>
+        <td>MSP, HomeCare tied</td>
+      </tr>
+      <tr>
+        <td class="name">Regulatory simplicity priority (50% on close speed)</td>
+        <td>HOA / PM</td>
+        <td>MSP, P&amp;C tied</td>
+        <td>HomeCare, CPA lower</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">What the analysis tells us</h3>
+  <ul class="body">
+    <li><b>HOA / Property Management is the most robust pick</b> — wins on default and three of four sensitivity schemes; never falls below third. Long Lake's documented AI uplift (25–30% per-FTE productivity), direct reference operator at $1.28B raised and Amex GBT $6.3B take-private exit, light regulatory close, deep fragmentation supply.</li>
+    <li><b>Accounting / CPA is the second-most robust</b> — strongest AI uplift evidence in the universe (Tax AI 25% → 97% accuracy via OpenAI / Thrive partnership; Crete / Current 31% time savings); Citrin Cooperman sold to Blackstone at ~15× EBITDA in 2025 as PE-to-PE proof transaction; state-board alliance model is the cost of entry.</li>
+    <li><b>MSP is the strongest "arbitrage plus reference operator" balance</b> — Shield Technology Partners is the direct AI-Holdco precedent at $100M+ ARR with OpenAI equity in the anchor; arbitrage gap 4–10 turns; cyber liability is the regulatory cost.</li>
+    <li><b>P&amp;C tier-2 wins on Multiple factor alone</b> — 6–8 turn arbitrage gap is the largest in the universe; but no direct AI-Holdco operator at scale documented publicly, so AI uplift verifiability is unproven; lacks reference operator de-risking.</li>
+    <li><b>HomeCare ranks lowest under default weights</b> — lowest arbitrage gap (2–4 turns), no direct reference operator at scale (Long Lake operates HOA, not certified home care), and CMS regulatory friction. It wins on fragmentation supply only.</li>
+  </ul>
+
+  <h3 class="sub">Recommendation as a conclusion of the analysis</h3>
+  <p class="body">If the goal is <b>maximising probability of strong founder profit on a 4–7 year horizon</b> with documented reference-operator de-risking — <b>HOA / Property Management is the recommended primary vertical</b>, with the path Long Lake walked from 2023 to 2026 (HOA primary, adjacent residential and infrastructure services bolt-ons) as the most direct precedent. The second vertical activates only after the first cell clears a productivity gate.</p>
+  <p class="body">If the goal is <b>maximising absolute Multiple factor</b> at the cost of higher unknown — P&amp;C tier-2 is the answer, but the lack of direct reference operator at scale means the operator is in a "be the first" position rather than a "follow the playbook" position. This memo does not recommend that trade for a Vintage 1 emerging manager because the failure cost (Smarter Tech / NMC at $1B+ raised) is documented and material.</p>
+  <p class="body">If the team holds specific deep expertise in any one vertical that this analysis does not weight — Accounting (with CPA alliance experience), HomeCare (with CMS expertise), or P&amp;C (with state insurance background) — the weighting should be revised and the analysis re-run. The framework is the contribution; the score is the function of the inputs.</p>
+
+  <div class="source">Sources: AI-Native Operating Holdco archetype deep dive (Mertz Taggart, FOCUS Bankers, Aventis Advisors, Auxo, Marsh Berry, Capstone Partners, Insurance Journal, IBBA Market Pulse 2025); rollup-economy V×C×A×B×M scoring map; General Catalyst on Long Lake; Crete / Current rebrand press June 2026; Shield Technology Partners BusinessWire / SiliconANGLE coverage; PitchBook Long Lake profile.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">05</span>Lever 2 · LP Base Composition — Four Documented Archetypes</div>
+  <h1 class="action">Four LP base archetypes from the documented reference operators. Institutional-anchor-led structure produced the strongest fundraising velocity and credibility signal; strategic-operator-led is the alternative when the operator has direct vertical credibility.</h1>
+
+  <div class="lever-block">
+    <div class="id">LEVER 2 · OPEN QUESTION</div>
+    <div class="title">Which LP base structure maximises Vintage 2 fundraising velocity and patient-capital alignment with the 4–7 year horizon?</div>
+    <div class="question">Four documented archetypes from the reference operators. Each is a distinct configuration of anchor LP role, diversification, and downstream optionality. The analysis compares them on Vintage 2 raise velocity, credibility signal, co-invest deal flow, patience with horizon, and operational drag.</div>
+  </div>
+
+  <h3 class="sub">Four LP base archetypes from reference operators</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:24%">Archetype</th>
+      <th style="width:30%">Reference operator</th>
+      <th>Structural pattern</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Institutional-anchor-led</td>
+        <td>Long Lake (General Catalyst anchor; Thrive Capital, Alpha Wave Global, Lightscape Partners join across vintages)</td>
+        <td>1 named institutional anchor at $50M+ ticket; balance from later strategic LPs; institutional credibility signal compounds across vintages</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Strategic-operator-led (joint anchor)</td>
+        <td>Shield Technology Partners (Thrive Holdings + ZBS Partners as joint anchors; OpenAI takes equity in Thrive Holdings December 2025)</td>
+        <td>Two strategic anchors at ~50/50; one provides capital and operating expertise (ZBS in MSP), the other provides AI capability (Thrive / OpenAI); model and talent access via anchor relationship</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Single-sponsor-internal allocation</td>
+        <td>GC Creation ($1.5B inside General Catalyst's $8B Fund XII)</td>
+        <td>Operator runs as dedicated allocation inside a larger sponsor's fund; no external LP fundraising; constrained by sponsor's fund terms</td>
+      </tr>
+      <tr>
+        <td class="lvr">D</td>
+        <td class="name">Strategic-platform-led</td>
+        <td>Crete / Current ($500M for AI roll-up; OpenAI / Thrive Tax AI partnership as anchor-quality signal)</td>
+        <td>Operator anchored by strategic platform relationship (here OpenAI / Thrive); LPs follow the strategic signal rather than leading it</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Scoring — four criteria</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:22%">Archetype</th>
+      <th class="center" style="width:14%">Vintage 2 velocity (30%)</th>
+      <th class="center" style="width:14%">Credibility signal (25%)</th>
+      <th class="center" style="width:14%">Patient capital (20%)</th>
+      <th class="center" style="width:14%">Co-invest flow (15%)</th>
+      <th class="center">Weighted total</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Institutional-anchor-led</td>
+        <td class="center score-top">5</td>
+        <td class="center score-top">5</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-top">5</td>
+        <td class="center score-top"><b>4.70</b></td>
+      </tr>
+      <tr>
+        <td class="lvr">D</td>
+        <td class="name">Strategic-platform-led</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-top">5</td>
+        <td class="center">3</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-top"><b>4.10</b></td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Strategic-operator-led</td>
+        <td class="center">3</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-mid"><b>3.65</b></td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Single-sponsor-internal</td>
+        <td class="center score-top">5</td>
+        <td class="center">3</td>
+        <td class="center score-top">5</td>
+        <td class="center score-low">2</td>
+        <td class="center score-mid"><b>3.95</b></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Reading the analysis</h3>
+  <ul class="body">
+    <li><b>Institutional-anchor-led (A) scores highest</b> — Vintage 2 velocity benefits from anchor track record (General Catalyst → Long Lake's $1.28B across multiple anchors); credibility signal compounds; co-invest deal flow active. The pattern fits an emerging manager with the ability to attract one named institutional anchor at meaningful ticket size.</li>
+    <li><b>Single-sponsor-internal (C) is unavailable to an emerging manager</b> — requires an existing $8B-scale sponsor willing to allocate $500M–$1.5B internally; not a Day-Zero option for a first-time vehicle.</li>
+    <li><b>Strategic-operator-led (B) is high-credibility but slower fundraising</b> — joint-anchor negotiation is more complex; requires both anchors to align on terms, which doubles negotiation surface.</li>
+    <li><b>Strategic-platform-led (D) is contingent on the platform relationship</b> — Crete benefited from a specific OpenAI / Thrive structure that is not replicable on demand; depends on operator capability the platform values.</li>
+  </ul>
+
+  <h3 class="sub">Recommendation</h3>
+  <p class="body"><b>Institutional-anchor-led (A) recommended</b> for an emerging-manager Vintage 1. The anchor LP role should be defined upfront with co-invest rights, Vintage 2 ROFR at same fee economics, and acceptance of European waterfall + 8% pref + 20% carry + 100% catch-up as standard. If a strategic-platform relationship (D) emerges during the fundraising window as an alternative, evaluate against the institutional anchor — but the institutional anchor scores higher on most criteria and is the safer default.</p>
+
+  <h3 class="sub">LPA provisions that any chosen LP archetype should support</h3>
+  <ul class="body">
+    <li><b>Vintage 2 evergreen conversion option</b> — LP-level option to convert their interest into an evergreen vehicle (per Combinations Memo Path B trigger) if Vintage 1 delivers a documented threshold of MOIC by a milestone year.</li>
+    <li><b>Anchor LP ROFR for Vintage 2</b> — right of first refusal at same fee economics.</li>
+    <li><b>Co-invest rights</b> — anchor and strategic LPs receive a multiple of pro-rata (typically 1.5×–2×) on follow-on / bolt-on opportunities.</li>
+    <li><b>Key-person provision</b> — if a defined fraction of founder GPs depart, fund deployment pauses until LP advisory board votes.</li>
+    <li><b>Carry waterfall</b> — European (whole-fund); standard for emerging managers per Cambridge Associates 2024.</li>
+    <li><b>Management fee</b> — typical 2% on committed during 5-year investment period; 1.5% on invested during harvest.</li>
+    <li><b>GP commit</b> — institutional standard 1–2% of committed capital.</li>
+  </ul>
+
+  <div class="source">Sources: PitchBook Long Lake profile; BusinessWire on Shield Technology Partners launch June 2025; SiliconANGLE on Shield $100M Feb 2026; Sourcery on GC Creation $1.5B; MobiHealthNews on GC $8B Fund XII; The Finance Story on Crete $500M; Crypto Briefing on OpenAI / Thrive Tax AI; Cambridge Associates Private Investment Fund Terms 2024.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">06</span>Lever 3 · Operator Partner Structure — Four Documented Models</div>
+  <h1 class="action">Four operator structures are documented across the reference operator set. Majority-with-substantial-rollover (Long Lake / Shield) is the modal AI-Holdco structure; 100%-acquired Berkshire pattern requires permanent capital; alliance is required where state-board rules block direct ownership; minority growth equity is documented elsewhere but not in this archetype.</h1>
+
+  <div class="lever-block">
+    <div class="id">LEVER 3 · OPEN QUESTION</div>
+    <div class="title">Across four documented operator structures, which maximises integration survival on a 4–7 year horizon?</div>
+    <div class="question">Operator partner retention is the dominant determinant of Probability factor in this archetype. The four documented structures span 100%-acquired (Berkshire), majority-with-rollover (Long Lake, Shield), alliance (Crete), and minority growth equity (general PE). The question is which fits a Vintage 1 fund-vintage HoldCo on a 4–7 year horizon.</div>
+  </div>
+
+  <h3 class="sub">Four documented operator structures</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:24%">Structure</th>
+      <th style="width:14%">Acquired stake</th>
+      <th style="width:14%">Rollover</th>
+      <th>Reference operator / pattern</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">100%-acquired (Berkshire)</td>
+        <td class="num">100%</td>
+        <td class="num">0%</td>
+        <td>Berkshire — works only because operator has explicit confidence in the indefinite-hold structure; permanent capital required; not viable for fund-vintage Holdco</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Majority-with-rollover</td>
+        <td class="num">60–90%</td>
+        <td class="num">10–40%</td>
+        <td>Shield Technology Partners (60–90% stake, sellers retain leadership and local brand); Long Lake (variable, often majority, 10–25% rollover, "we acquired your peer and kept their team" referral mechanic)</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Alliance model</td>
+        <td class="num">Partnership (no equity ownership)</td>
+        <td class="num">Founder retains 100% equity, joins alliance</td>
+        <td>Crete / Current — required for CPA vertical because state-board ownership restrictions block non-CPA equity; founder-friendly structure necessitated by regulation</td>
+      </tr>
+      <tr>
+        <td class="lvr">D</td>
+        <td class="name">Minority growth equity</td>
+        <td class="num">25–49%</td>
+        <td class="num">51–75%</td>
+        <td>Standard growth PE pattern; not documented in AI-Holdco archetype reference operators; operator retains control which limits cross-OpCo integration</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Scoring — four criteria</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:24%">Structure</th>
+      <th class="center" style="width:14%">Integration control (30%)</th>
+      <th class="center" style="width:14%">Operator retention (25%)</th>
+      <th class="center" style="width:14%">Capital efficiency (20%)</th>
+      <th class="center" style="width:14%">Cross-OpCo platform (20%)</th>
+      <th class="center">Weighted total</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Majority-with-rollover</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-top">5</td>
+        <td class="center score-top">5</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-top"><b>4.45</b></td>
+      </tr>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">100%-acquired (Berkshire)</td>
+        <td class="center score-top">5</td>
+        <td class="center">3</td>
+        <td class="center score-low">2</td>
+        <td class="center score-top">5</td>
+        <td class="center score-mid"><b>3.65</b></td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Alliance model</td>
+        <td class="center score-low">2</td>
+        <td class="center score-top">5</td>
+        <td class="center score-mid">4</td>
+        <td class="center">3</td>
+        <td class="center score-mid"><b>3.40</b></td>
+      </tr>
+      <tr>
+        <td class="lvr">D</td>
+        <td class="name">Minority growth equity</td>
+        <td class="center score-low">2</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-top">5</td>
+        <td class="center score-low">2</td>
+        <td class="center score-mid"><b>3.20</b></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Reading the analysis</h3>
+  <ul class="body">
+    <li><b>Majority-with-rollover (B) is the modal AI-Holdco structure</b> — used by Long Lake and Shield, the two highest-velocity reference operators in the archetype. Combines integration control with operator retention; capital efficiency at 60–75% means each $X of equity acquires $1.33–1.67X of EV; cross-OpCo platform integration enabled by holding majority stake.</li>
+    <li><b>100%-acquired (A) requires permanent capital</b> — Berkshire's model works because the seller has explicit confidence in indefinite-hold structure and management non-interference culture compounded over 60 years. For a fund-vintage Holdco on a 4–7 year horizon, 100%-acquired without rollover removes operator alignment — operator has cash, no remaining stake, no reason to drive AI uplift.</li>
+    <li><b>Alliance (C) is required where state-board rules block direct ownership</b> — CPA vertical and law firms in most US states. Probability of integration is high but capital efficiency lower because no equity is acquired; HoldCo earns through alliance fees and revenue share. Acceptable when vertical mandates it (Crete precedent); avoid otherwise.</li>
+    <li><b>Minority growth equity (D) does not fit the AI-Holdco thesis</b> — operator retains majority and the cross-OpCo platform integration is voluntary not structural; AI uplift cannot be enforced at the OpCo level.</li>
+  </ul>
+
+  <h3 class="sub">Recommendation</h3>
+  <p class="body"><b>Majority-with-rollover (B) recommended as standard.</b> Specific structural elements documented across the reference operators:</p>
+  <ul class="body">
+    <li><b>Acquired stake 60–75% cash at close.</b> Shield documented at 60–90%; Long Lake variable; the lower end of the range (60%) preserves operator alignment best, the upper end (75–90%) maximises integration control. For Vintage 1 risk profile, 60–70% is the typical entry.</li>
+    <li><b>Rollover equity 20–25% in HoldCo or platform LLC.</b> Operator participates in upside via HoldCo equity; AI uplift becomes their gain too.</li>
+    <li><b>Earn-out 10–20% tied to two gates over 24–36 months:</b> EBITDA retention/growth, and AI uplift KPI achievement (productivity, accuracy, margin target per vertical playbook). The two-gate earn-out aligns operator incentives with the AI thesis specifically — without this, operator can "coast" on legacy EBITDA without engaging AI deployment, and the multiple-arbitrage thesis fails at exit.</li>
+    <li><b>Sub-brand retention and operating CEO continuity for 24+ months post-close.</b> Shield Tech publishes this as core sourcing message. Long Lake's "we acquired your peer and kept their team" is documented referral mechanic.</li>
+  </ul>
+
+  <p class="body"><b>If the vertical selected mandates alliance (CPA),</b> structure C is required and capital efficiency must be modelled accordingly — HoldCo earns through alliance fees and AI uplift revenue share, not equity gain. Reference: Crete / Current's $428M revenue under alliance structure.</p>
+
+  <div class="source">Sources: BusinessWire on Shield Technology Partners launch (60–90% structure); PitchBook Long Lake profile; AI-Native Operating Holdco archetype deep dive (IBBA Market Pulse 2025 on earn-out prevalence — 40%+ of small-business transactions); Becker's Hospital Review and Modern Healthcare on Smarter Tech CEO change (failure mode under no-rollover pattern); Permanent Capital Compounder archetype deep dive on Berkshire operator-retention model.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">07</span>Lever 4 · Advisors and Board — Categories, Not Specific Firms</div>
+  <h1 class="action">Five advisor categories matter at Day-Zero: vertical M&amp;A, operator-in-residence, AI engineering, independent director with Holdco PE precedent, compliance. Board size 5 with 2 founder GPs, 1 anchor LP rep, 1 operator-in-residence, 1 independent — analogous to documented mid-market PE Holdco structures.</h1>
+
+  <div class="lever-block">
+    <div class="id">LEVER 4 · OPEN QUESTION</div>
+    <div class="title">What categories of advisors and board members maximise deal flow and early failure-mode warning, and what board size and composition supports them?</div>
+    <div class="question">The question is at the level of category and architecture, not specific firm or person. Specific names depend on the vertical selected in Lever 1 and the LP archetype selected in Lever 2. What matters Day-Zero is the architectural decision: which advisor categories are filled, what level of commitment (retainer / co-exclusive / consulting), and what board composition supports them.</div>
+  </div>
+
+  <h3 class="sub">Five advisor categories</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:24%">Category</th>
+      <th>Function</th>
+      <th style="width:14%">Profit-math factor</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">1</td>
+        <td class="name">Vertical M&amp;A advisor</td>
+        <td>Proprietary deal flow; market intelligence on multiples and structures; first-look on assets pre-auction</td>
+        <td>Scale (cadence)</td>
+      </tr>
+      <tr>
+        <td class="lvr">2</td>
+        <td class="name">Operator-in-residence</td>
+        <td>Ex-CEO of similar-scale operator in the chosen vertical; AI uplift KPI definition; seller credibility; cultural fit review</td>
+        <td>Probability (integration)</td>
+      </tr>
+      <tr>
+        <td class="lvr">3</td>
+        <td class="name">AI engineering advisor</td>
+        <td>Senior engineer from enterprise-AI productisation background; quarterly review of AI uplift KPI definitions; talent recruiting pipeline</td>
+        <td>Probability (AI uplift verifiability)</td>
+      </tr>
+      <tr>
+        <td class="lvr">4</td>
+        <td class="name">Independent director (Holdco PE precedent)</td>
+        <td>Ex-partner from documented operating-Holdco PE firm; PE-to-PE recap intelligence; LP narrative alignment</td>
+        <td>Multiple (exit), Retained Ownership (Vintage 2)</td>
+      </tr>
+      <tr>
+        <td class="lvr">5</td>
+        <td class="name">Compliance / vertical regulatory</td>
+        <td>Vertical-specific regulatory specialist (CMS for HomeCare, state-licensing for P&amp;C, HIPAA for healthcare RCM, state-board for CPA)</td>
+        <td>Probability (risk surface)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Three architectural options for the advisor configuration</h3>
+  <div class="options-grid three">
+    <div class="option">
+      <div class="opt-lbl">OPTION A</div>
+      <div class="opt-name">All five categories filled</div>
+      <div class="desc">Vertical M&amp;A advisor on retainer or co-exclusive; operator-in-residence as board observer or director with HoldCo equity; AI advisor on quarterly review; independent director with PE Holdco precedent; compliance counsel retained per vertical. <b>Highest probability profile; highest cost (advisor fees + equity dilution).</b></div>
+    </div>
+    <div class="option">
+      <div class="opt-lbl">OPTION B</div>
+      <div class="opt-name">Three of five — M&amp;A, operator-in-residence, AI</div>
+      <div class="desc">Skip independent director and compliance retained until needed. Workable for first 2–3 acquisitions; independent director added before Vintage 2 raise begins; compliance added at first regulated transaction. <b>Mid-range cost and risk profile.</b></div>
+    </div>
+    <div class="option">
+      <div class="opt-lbl">OPTION C</div>
+      <div class="opt-name">M&amp;A only; operator and AI as in-team capability</div>
+      <div class="desc">Vertical M&amp;A advisor on retainer; AI and operator depth covered by founder GPs and AI Engineering Lead in-team. Lowest external cost. <b>Documented failure mode if in-team capability proves shallower than expected — Smarter Tech / NMC pattern emerges when integration leadership cannot translate engineering into operating outcomes.</b></div>
+    </div>
+  </div>
+
+  <h3 class="sub">Board composition options</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:18%">Board size</th>
+      <th style="width:34%">Composition</th>
+      <th>Suitability</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="num">3 seats</td>
+        <td>2 founder GPs + 1 anchor LP rep</td>
+        <td>Founder-controlled; anchor LP minority voice; suitable for very early Vintage 1; lacks operator-in-residence governance role</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="num">5 seats</td>
+        <td>2 founder GPs + 1 anchor LP rep + 1 operator-in-residence + 1 independent (PE Holdco)</td>
+        <td>Standard mid-market PE Holdco board; balanced founder / LP / operator / independent voices; suitable from Vintage 1 first close</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="num">7 seats</td>
+        <td>2 founder GPs + 1 anchor LP rep + 1 operator + 2 independents + 1 strategic LP</td>
+        <td>Heavier governance; suitable from Vintage 2+ when fund AUM and OpCo count justify the overhead</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Recommendation</h3>
+  <p class="body"><b>Option B (three of five categories filled at Day-Zero, fourth and fifth added by trigger) plus 5-seat board.</b> Reasoning:</p>
+  <ul class="body">
+    <li>M&amp;A advisor, operator-in-residence, AI engineering advisor are the three categories most directly tied to documented failure modes — skipping any of these at Day-Zero is the Smarter Tech / NMC failure profile.</li>
+    <li>Independent director with PE Holdco precedent matters most before Vintage 2 raise; can be added 6–12 months ahead of the raise process opening.</li>
+    <li>Compliance counsel is vertical-specific and is added at the first transaction requiring it; placeholder retainer with a multi-vertical counsel firm covers the gap.</li>
+    <li>5-seat board is the documented mid-market PE Holdco standard per Cambridge Associates 2024; smaller boards lose external governance voice, larger boards introduce coordination overhead before scale justifies it.</li>
+  </ul>
+
+  <div class="source">Sources: AI-Native Operating Holdco archetype deep dive (vertical M&amp;A advisor channels — Mertz Taggart, Aventis Advisors, Auxo, Marsh Berry, IT ExchangeNet, etc.); Becker's Hospital Review on Smarter Tech failure pattern (no operator-in-residence); Cambridge Associates Private Investment Fund Terms 2024 (standard PE board sizes); Permanent Capital Compounder archetype deep dive on Berkshire board structure (counter-example — 14-member board because of scale, not because emerging managers should imitate).</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">08</span>Lever 5 · Legal Structure — Three Architectural Decisions</div>
+  <h1 class="action">Three architectural decisions: fund jurisdiction (Delaware LP standard), Holdco entity type (Delaware C-corp for QSBS), and OpCo structure (LLCs except where state regulation requires C-corp / alliance). LPA provisions enable Vintage 2 conversion optionality and minimise Section 206 friction.</h1>
+
+  <div class="lever-block">
+    <div class="id">LEVER 5 · OPEN QUESTION</div>
+    <div class="title">What fund + Holdco + OpCo legal architecture maximises QSBS Section 1202 eligibility, minimises Section 206 friction, and preserves Vintage 2 evergreen conversion optionality?</div>
+    <div class="question">Legal structure decisions are made at Day-Zero and are materially harder to reverse later. QSBS specifically requires C-corp issuance at HoldCo formation — restructuring later forfeits the tax treatment for new issuances. Section 206 risk is locked in by whether the AI Engineering arm operates as an internal department or a separate entity.</div>
+  </div>
+
+  <h3 class="sub">Architectural Decision 1 — Fund jurisdiction and structure</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:22%">Option</th>
+      <th>Consequence</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Delaware Limited Partnership (LP)</td>
+        <td>US LP standard; ERA-exempt SEC status if AUM under $150M; standard LPA templates; US-LP-friendly tax treatment for US LPs; recommended default for US-focused HoldCo</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Cayman Islands LP</td>
+        <td>Offshore preferred by non-US LPs; tax-neutral feeder funds; introduces additional structuring cost ($30–60K legal); not aligned with US-only HoldCo thesis</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Delaware LLC fund</td>
+        <td>Pass-through but loses LP structure familiarity; nonstandard for institutional LPs; not recommended</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="body"><b>Delaware LP (A) recommended</b> — US-focused HoldCo with US LP base benefits from standard structure; ERA exemption keeps regulatory overhead minimal at sub-$150M AUM.</p>
+
+  <h3 class="sub">Architectural Decision 2 — Holdco entity type and QSBS Section 1202 eligibility</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:22%">Option</th>
+      <th>QSBS treatment</th>
+      <th>Other considerations</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Delaware C-corp HoldCo, QSBS eligible at formation</td>
+        <td>Up to 100% federal capital gains exclusion on the first $10M (or 10× basis, whichever greater) per shareholder per issuer</td>
+        <td>Requires aggregate gross assets under $50M at issuance; 5+ year hold required; ≥80% of assets in qualified active trade</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Delaware LLC HoldCo</td>
+        <td>QSBS not available — LLCs do not issue qualified small business stock</td>
+        <td>Pass-through tax efficient for some structures; forfeits QSBS treatment for founders and Engineering team forever</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Out-of-state C-corp (Nevada, Wyoming)</td>
+        <td>QSBS available if active trade requirement met</td>
+        <td>Less familiar to institutional investors; not standard for institutional LP diligence</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="body"><b>Delaware C-corp at formation (A) recommended.</b> Quantitative impact: per shareholder, qualified gain up to $10M federally tax-free under Section 1202 100% exclusion (for stock issued after September 28, 2010). At the top long-term capital gains rate of 23.8% (20% LTCG + 3.8% NIIT), this saves up to <b>$2.38M of federal tax per shareholder per issuer</b>. Across 5 founder and key-engineer shareholders, $11.9M in federal tax savings preserved. The aggregate-gross-assets-under-$50M test is met at Holdco formation; later top-up funding above $50M does not affect QSBS treatment for stock already issued.</p>
+
+  <h3 class="sub">Architectural Decision 3 — OpCo structure and Section 206 posture</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:22%">Option</th>
+      <th>Section 206 posture</th>
+      <th>Consequence</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Wholly-owned OpCo LLCs, AI Engineering as internal Holdco department</td>
+        <td>No related-party services arrangement; Section 206(3) does not arise</td>
+        <td>Single P&amp;L narrative; Pure HoldCo Decision Memo posture; cleanest LP story</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Wholly-owned OpCo LLCs, AI Engineering spun out as separate Delaware C-corp providing services to OpCos</td>
+        <td>Section 206(3) related-party transaction risk on every portco service contract</td>
+        <td>Documented enforcement: Apollo $52.7M (2016), TZP $500K+ (2025), Energy Capital and Insight Venture settled; per Pure HoldCo Decision Memo</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Alliance OpCos (where state regulation requires — CPA vertical)</td>
+        <td>No equity ownership; alliance fees and revenue share; Section 206 inapplicable</td>
+        <td>Required by state-board rules in CPA, law firms; capital efficiency model is different (no LBO equity gain)</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="body"><b>Wholly-owned LLCs with AI Engineering as internal department (A) recommended.</b> Aligns with the Pure HoldCo Decision Memo five-mechanism analysis; preserves single P&amp;L narrative for LPs; eliminates documented Section 206 enforcement surface. Use alliance (C) only where state-board regulation requires it (Crete / CPA precedent).</p>
+
+  <h3 class="sub">LPA provisions that the legal architecture should support</h3>
+  <ul class="body">
+    <li><b>Vintage 2 evergreen conversion option</b> at LP level (Path B trigger per Combinations Memo) — LP-level option, not GP-forced.</li>
+    <li><b>Anchor LP ROFR for Vintage 2</b> at same fee economics.</li>
+    <li><b>Co-invest rights</b> for anchor and strategic LPs (typically 1.5–2× pro-rata).</li>
+    <li><b>Key-person provision</b> — fund deployment pauses if a defined fraction of founder GPs depart.</li>
+    <li><b>Carry waterfall</b> — European (whole-fund); 8% pref; 20% carry; 100% catch-up; standard for emerging managers per Cambridge Associates 2024.</li>
+    <li><b>Management fee</b> — 2% on committed during investment period; 1.5% on invested during harvest.</li>
+    <li><b>GP commit</b> — 1–2% of committed capital; institutional standard.</li>
+  </ul>
+
+  <div class="source">Sources: Internal Revenue Code Section 1202 (statute); IRS Publication 550 on QSBS; SEC Investment Advisers Act Section 206(3); Pure HoldCo Decision Memo (June 14, 2026) on Apollo / TZP / Energy Capital / Insight Venture settlements; Sidley Austin and Davis Polk public alerts on Section 206 enforcement 2024–2025; Cambridge Associates Private Investment Fund Terms 2024.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">09</span>Lever 6 · Capital Structure — Three Allocation Philosophies</div>
+  <h1 class="action">Three allocation philosophies span the documented spectrum: concentrated-platform (single large primary), balanced-diversified (split across primary + multiple bolt-ons), distributed-pilot (heavier paid pilot budget, smaller acquisitions). Balanced-diversified matches the modal AI-Holdco operator pattern and the documented failure-mode avoidance profile.</h1>
+
+  <div class="lever-block">
+    <div class="id">LEVER 6 · OPEN QUESTION</div>
+    <div class="title">Across three allocation philosophies, which fits a 4–7 year exit horizon and at what LBO leverage level?</div>
+    <div class="question">Fund-size envelope is not pre-fixed by this memo; the AI-Native Operating Holdco deep dive documents reference operator fund sizes from $100M (Shield first close) to $1.28B (Long Lake cumulative across vintages). The allocation philosophy operates within whatever Vintage 1 envelope is raised.</div>
+  </div>
+
+  <h3 class="sub">Three allocation philosophies</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:24%">Philosophy</th>
+      <th style="width:36%">Allocation (% of fund)</th>
+      <th>Pattern</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Concentrated-platform</td>
+        <td>50–60% primary platform / 15–20% bolt-on / 10–15% AI engineering / 5% paid pilots / 10% reserve</td>
+        <td>Large primary platform anchors the vertical; bolt-ons are secondary. Higher concentration risk; mirrors GC Long Lake 85% concentration profile in extreme form. Suitable when primary platform target is unusually attractive.</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Balanced-diversified</td>
+        <td>25–35% primary platform / 25–35% bolt-ons / 12–18% AI engineering / 8–12% paid pilots / 12–18% reserve</td>
+        <td>Diversification across 4–7 OpCos in single vertical; AI engineering fully funded; paid pilots support L2 of M&amp;A funnel; operating reserve buffers shocks. Modal pattern across Shield, Crete, Long Lake bolt-on phases.</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Distributed-pilot</td>
+        <td>15–20% primary platform / 15–20% bolt-ons / 15–20% AI engineering / 25–30% paid pilots / 15–20% reserve</td>
+        <td>Heavy paid pilot budget (L2 of M&amp;A funnel) feeds large acquisition pipeline; smaller capital deployment per OpCo. Suitable when team prioritises sourcing optionality over deployment velocity. No documented reference operator follows this pattern at fund-vintage scale.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Scoring — five criteria</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:22%">Philosophy</th>
+      <th class="center" style="width:13%">Scale (25%)</th>
+      <th class="center" style="width:13%">Probability via diversification (25%)</th>
+      <th class="center" style="width:13%">AI uplift fully funded (20%)</th>
+      <th class="center" style="width:13%">Sourcing flow (15%)</th>
+      <th class="center" style="width:13%">Reference operator fit (20%) (Sum cells; weights total 117% — see note)</th>
+      <th class="center">Weighted total</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Balanced-diversified</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-top">5</td>
+        <td class="center score-top">5</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-top">5</td>
+        <td class="center score-top"><b>4.60</b></td>
+      </tr>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Concentrated-platform</td>
+        <td class="center score-top">5</td>
+        <td class="center score-low">2</td>
+        <td class="center">3</td>
+        <td class="center">3</td>
+        <td class="center">3</td>
+        <td class="center score-mid"><b>3.10</b></td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Distributed-pilot</td>
+        <td class="center score-low">2</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-mid">4</td>
+        <td class="center score-top">5</td>
+        <td class="center score-low">2</td>
+        <td class="center score-mid"><b>3.30</b></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="body">Weights: Scale 25%, Probability via diversification 25%, AI uplift fully funded 20%, Sourcing flow 15%, Reference operator fit 15% (totals 100%).</p>
+
+  <h3 class="sub">LBO leverage benchmarks</h3>
+  <p class="body">Per AI-Native Operating Holdco archetype deep dive: typical LBO leverage 50–70% of EV at OpCo level for stable cash-flow verticals; HOA/PM and P&amp;C support upper range, MSP mid-range due to client-concentration risk, HomeCare lower due to CMS reimbursement caps. US LBO market hit record $397.5B in 2025 (Axios Pro January 2026) — credit markets supportive. Bain Global PE Report 2025/2026 caveat: easy multiple expansion via cheap debt has waned; "12 is the new 5" for required EBITDA growth.</p>
+  <ul class="body">
+    <li><b>Conservative 50–55% leverage</b> — preserves OpCo flexibility for AI integration capex; reduces debt service risk during integration period; suitable for emerging-manager Vintage 1 risk profile.</li>
+    <li><b>Standard 60–65% leverage</b> — mid-market PE norm; documented across reference operators.</li>
+    <li><b>Aggressive 70–80% leverage</b> — squeezes deal economics tighter; raises debt service risk if integration is slow; suitable only with extremely stable OpCo cash flow profile.</li>
+  </ul>
+
+  <h3 class="sub">Recommendation</h3>
+  <p class="body"><b>Balanced-diversified allocation (B) at 25–35% / 25–35% / 12–18% / 8–12% / 12–18% structure</b>, with OpCo-level LBO leverage at <b>standard 60–65%</b>. Reasoning:</p>
+  <ul class="body">
+    <li>Balanced-diversified maximises composite score across all criteria except absolute Scale (where concentrated-platform wins at the cost of probability).</li>
+    <li>Diversification across 4–7 OpCos in single vertical is the modal pattern across reference operators (Shield 9 MSPs, Long Lake 18–30 acquisitions, Crete ~30 CPA firms) — and the explicit counter-pattern to the GC Long Lake 85% concentration risk that PitchBook documents as the structural failure surface.</li>
+    <li>Standard 60–65% leverage balances debt service safety with capital efficiency at OpCo level.</li>
+    <li>Operating reserve at 12–18% buffers integration shocks; Berkshire's discipline of holding $397B in T-bills through 2024–2026 is the principle (not the absolute level) — do not deploy because capital is available; deploy because targets meet the diligence threshold.</li>
+  </ul>
+
+  <div class="source">Sources: AI-Native Operating Holdco archetype deep dive (Bain Global PE Report 2025/2026; Axios Pro US LBO volume 2026; Cambridge Associates fund waterfalls); Permanent Capital Compounder archetype deep dive (Berkshire T-bill discipline); Pure HoldCo Decision Memo (L2 paid pilot budget allocation).</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">10</span>Lever 7 · Team and Brand — Composition Architecture and Identity Architecture</div>
+  <h1 class="action">Team composition follows the documented mid-market PE Holdco pattern with one critical addition — a senior AI Engineering Lead with enterprise productisation background. Brand identity follows the documented reference operator pattern of distinct entity branding (Long Lake, Shield Technology Partners, Crete / Current) over founder personal branding.</h1>
+
+  <div class="lever-block">
+    <div class="id">LEVER 7 · OPEN QUESTION</div>
+    <div class="title">What GP team size, AI Engineering Lead profile, vertical leadership model, and brand identity architecture maximise LP credibility, seller trust, and AI talent recruiting?</div>
+    <div class="question">Team composition determines Probability via integration discipline (Smarter Tech / NMC failure case is leadership and integration, not capability). Brand determines Scale via inbound sourcing (the "we acquired your peer and kept their team" Long Lake mechanic depends on a recognisable name).</div>
+  </div>
+
+  <h3 class="sub">Team composition options</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:20%">GP team size</th>
+      <th>Pattern and reference evidence</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Solo GP founder</td>
+        <td>One founder runs capital allocation, M&amp;A, LP relationships, governance. Single point of failure; key-person risk; LP diligence harder; not documented in AI-Holdco reference operator set</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">2 GP partners</td>
+        <td>Founder + complementary partner (operating + finance mix common); documented across mid-market PE Holdco standard; sufficient redundancy; suitable for Vintage 1</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">3+ GP partners</td>
+        <td>Larger team; vertical specialist + AI specialist + finance specialist mix; higher overhead but broader capability coverage; common at $200M+ vintages; less common at Vintage 1 emerging-manager scale</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">AI Engineering Lead profile options</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:24%">Profile</th>
+      <th>Reference context</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Frontier-research background (Anthropic, OpenAI researcher track)</td>
+        <td>Deep ML capability; less production / enterprise productisation experience; suitable for capability-focused archetypes (Path F in Combinations Memo); overkill for AI-Holdco productisation work</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Enterprise-AI productisation (Sierra, Glean, Harvey, Anthropic enterprise track)</td>
+        <td>Production system design; eval and observability; customer-success engineering background; fits AI uplift KPI work inside OpCos; documented as the talent pool reference operators recruit from</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Venture-software / generalist ML</td>
+        <td>Adequate for prototyping; lacks production-grade eval discipline; documented failure mode in Smarter Tech / NMC pattern when productisation discipline is missing</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Vertical leadership model options</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:30%">Model</th>
+      <th>Pattern</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Vertical Lead per active vertical (operator-CEO background)</td>
+        <td>Recruited from $20–80M revenue OpCo CEO pool in the chosen vertical; runs pilot delivery and post-acquisition deployment; seller credibility; AI uplift KPI execution. Matches Shield Tech and Crete patterns.</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Single cross-vertical operations lead</td>
+        <td>Adequate for single-vertical Vintage 1; does not scale to multi-vertical. Lower cost; lower seller credibility per vertical.</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">In-team coverage by GPs (no dedicated Vertical Lead)</td>
+        <td>Documented failure mode if GP capacity proves insufficient; matches the Smarter Tech / NMC "buy first, AI later" pattern when integration leadership is shallow.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Brand identity options</h3>
+  <table class="mck">
+    <thead><tr>
+      <th style="width:5%">#</th>
+      <th style="width:30%">Identity architecture</th>
+      <th>Pattern and reference evidence</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">A</td>
+        <td class="name">Distinct entity brand</td>
+        <td>Documented across all four reference operators: Long Lake Management Holdings, Shield Technology Partners, GC Creation, Crete / Current. Brand independent of founder personal identity; signals institutional seriousness to LPs and sellers; supports referral mechanic ("we acquired your peer and kept their team").</td>
+      </tr>
+      <tr>
+        <td class="lvr">B</td>
+        <td class="name">Founder personal name brand</td>
+        <td>Used by smaller search funds and family-office vehicles; not documented at AI-Holdco scale; constrains team scaling because brand depends on founder presence.</td>
+      </tr>
+      <tr>
+        <td class="lvr">C</td>
+        <td class="name">Co-branded with strategic LP</td>
+        <td>Used in Path D LP archetype (Lever 2); Crete benefits indirectly from Thrive / OpenAI co-branding; constrains independence and exit narrative; suitable only when strategic LP relationship is structural.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Recommendation</h3>
+  <ul class="body">
+    <li><b>GP team: 2 partners (B)</b> — documented modal pattern for mid-market PE Holdco; redundancy without overhead.</li>
+    <li><b>AI Engineering Lead: enterprise productisation profile (B)</b> — matches the talent pool reference operators recruit from; production system discipline is the documented requirement.</li>
+    <li><b>Vertical Lead per active vertical from operator-CEO pool (A)</b> — matches Shield and Crete patterns; the cost is recruiting overhead, the benefit is seller credibility and AI uplift KPI execution.</li>
+    <li><b>Distinct entity brand (A)</b> — documented across all four reference operators; supports referral mechanic and Vintage 2 LP credibility; preserve research-arm public artefacts (rollup-economy.com framework content) under the entity brand as the research arm.</li>
+    <li><b>QSBS-eligible HoldCo equity as part of AI Lead and Vertical Lead compensation</b> — Carta and Sentiro Partners 2026 benchmarks document $260K+ base + $50K equity for Vertical Lead and $300K+ base for AI Engineering Lead; HoldCo equity grant in the 1–3% pool with QSBS Section 1202 eligibility on first $10M of qualified gain.</li>
+  </ul>
+
+  <div class="source">Sources: Operating expense benchmarks per AI-Native Operating Holdco archetype deep dive; Carta 2026 compensation data; Sentiro Partners AI-startup benchmarks 2026; Horizontal AI Platform deep dive on enterprise productisation talent pool (Sierra, Glean, Harvey, Anthropic enterprise track); reference operator brand identity per PitchBook Long Lake, BusinessWire Shield, Sourcery GC Creation, Crete / Current rebrand June 2026.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">11</span>Comparative Scorecard — Seven Levers Across Their Top Options</div>
+  <h1 class="action">For each of the seven levers, the top option from comparative analysis and the runner-up. The composite recommended starting position takes the top option in each lever; the sensitivity column shows what changes if Lever 1 weights shift.</h1>
+
+  <table class="mck">
+    <thead><tr>
+      <th style="width:6%">Lvr</th>
+      <th style="width:18%">Lever</th>
+      <th style="width:24%">Top option from analysis</th>
+      <th style="width:22%">Runner-up</th>
+      <th>Decision sensitivity</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">1</td>
+        <td class="name">Vertical</td>
+        <td>HOA / Property Management (4.30)</td>
+        <td>CPA / Accounting (4.05); MSP (3.85)</td>
+        <td>Multiple-arbitrage 50% weight → P&amp;C tier-2 tops; AI-uplift-evidence 50% → CPA tops</td>
+      </tr>
+      <tr>
+        <td class="lvr">2</td>
+        <td class="name">LP base</td>
+        <td>Institutional-anchor-led (4.70)</td>
+        <td>Strategic-platform-led (4.10)</td>
+        <td>If anchor LP not securable, strategic-operator-led (B) becomes default</td>
+      </tr>
+      <tr>
+        <td class="lvr">3</td>
+        <td class="name">Operator structure</td>
+        <td>Majority-with-rollover (4.45)</td>
+        <td>100%-acquired (3.65); alliance (3.40)</td>
+        <td>If vertical = CPA, alliance is mandated by state-board rules — structural override</td>
+      </tr>
+      <tr>
+        <td class="lvr">4</td>
+        <td class="name">Advisors and board</td>
+        <td>Option B (3 of 5 categories, 5-seat board)</td>
+        <td>Option A (all 5 categories)</td>
+        <td>Option A justified if Vintage 1 fund AUM &gt;$100M; below, overhead exceeds value</td>
+      </tr>
+      <tr>
+        <td class="lvr">5</td>
+        <td class="name">Legal structure</td>
+        <td>Delaware LP + C-corp HoldCo (QSBS) + LLC OpCos</td>
+        <td>Alliance OpCos (only where state regulation requires — CPA)</td>
+        <td>Vertical = CPA forces alliance OpCo structure; capital efficiency model differs</td>
+      </tr>
+      <tr>
+        <td class="lvr">6</td>
+        <td class="name">Capital structure</td>
+        <td>Balanced-diversified (4.60); 60–65% LBO leverage</td>
+        <td>Distributed-pilot (3.30)</td>
+        <td>Concentrated-platform (3.10) suitable only if primary platform target unusually attractive</td>
+      </tr>
+      <tr>
+        <td class="lvr">7</td>
+        <td class="name">Team and brand</td>
+        <td>2 GPs + enterprise-AI Lead + Vertical Lead per vertical + distinct entity brand</td>
+        <td>3 GPs + cross-vertical ops lead</td>
+        <td>Solo GP architecture is the documented failure profile; avoid regardless of weighting</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">How the composite position behaves</h3>
+  <ul class="body">
+    <li><b>All seven top options selected:</b> position aligns with the documented success pattern across Long Lake, Shield, Crete; probability-weighted founder profit in upper range of $200–400M Game Selection envelope; 4–7 year exit horizon achievable.</li>
+    <li><b>Vertical shifts to runner-up under different weighting:</b> CPA selection adds alliance OpCo structure (cascading to Lever 5) and the strongest documented AI uplift evidence (Tax AI); P&amp;C selection accepts higher Multiple factor with weaker reference-operator de-risking. Both are defensible under different weight schemes.</li>
+    <li><b>Failure to secure institutional anchor LP:</b> Lever 2 shifts to strategic-operator-led; Vintage 2 velocity slows; raise sequence stretches by 12–18 months.</li>
+    <li><b>Vertical = CPA forces cascading change:</b> Lever 3 → alliance; Lever 5 → alliance OpCo carve-out; capital efficiency model recalibrated per Crete reference operator data.</li>
+  </ul>
+
+  <div class="source">Aggregate scoring derived from Lever-level analyses Sections 04–10.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">12</span>Composite Recommended Starting Position — Output of the Analysis</div>
+  <h1 class="action">The composite position takes the top option from each lever's comparative analysis. It is the output of the framework, not a starting assumption. If weight schemes shift in Lever 1 or external constraints emerge in Lever 2, the composite shifts in defined ways documented in Section 11.</h1>
+
+  <table class="mck">
+    <thead><tr>
+      <th style="width:6%">Lvr</th>
+      <th style="width:18%">Lever</th>
+      <th>Composite recommended position</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="lvr">1</td>
+        <td class="name">Vertical</td>
+        <td><b>Primary: HOA / Property Management.</b> Highest composite score (4.30) under default weights; direct reference operator at Long Lake; documented AI uplift; light regulatory close. Secondary vertical activated only by trigger after primary cell clears productivity gate; candidates ranked CPA (with alliance structure), MSP, P&amp;C tier-2.</td>
+      </tr>
+      <tr>
+        <td class="lvr">2</td>
+        <td class="name">LP base</td>
+        <td><b>Institutional-anchor-led.</b> One named institutional anchor at meaningful ticket; balance from strategic family offices and operator HNW; LPA with all seven critical provisions (Vintage 2 conversion, ROFR, co-invest, key-person, European waterfall, standard fee, GP commit).</td>
+      </tr>
+      <tr>
+        <td class="lvr">3</td>
+        <td class="name">Operator structure</td>
+        <td><b>Majority-with-rollover.</b> 60–75% cash at close; 20–25% rollover equity in HoldCo / platform LLC; 10–20% earn-out over 24–36 months tied to two gates (EBITDA retention + AI uplift KPI). Sub-brand retention and operating CEO continuity 24+ months.</td>
+      </tr>
+      <tr>
+        <td class="lvr">4</td>
+        <td class="name">Advisors and board</td>
+        <td><b>Three of five advisor categories filled at Day-Zero</b> (vertical M&amp;A, operator-in-residence, AI engineering); independent director added before Vintage 2 raise; compliance retained at first regulated transaction. <b>5-seat board:</b> 2 founder GPs + 1 anchor LP rep + 1 operator-in-residence + 1 independent (Holdco PE precedent).</td>
+      </tr>
+      <tr>
+        <td class="lvr">5</td>
+        <td class="name">Legal structure</td>
+        <td><b>Delaware LP fund + Delaware C-corp HoldCo (QSBS Section 1202 eligible at formation) + wholly-owned LLC OpCos</b> (alliance OpCo only where state regulation requires). AI Engineering as internal HoldCo department, never separate entity. ERA-exempt SEC status.</td>
+      </tr>
+      <tr>
+        <td class="lvr">6</td>
+        <td class="name">Capital structure</td>
+        <td><b>Balanced-diversified allocation</b>: ~30% primary platform, ~30% bolt-ons, ~15% AI engineering, ~10% paid pilots (L2 budget), ~15% reserve. <b>Standard 60–65% OpCo-level LBO leverage</b>. Undeployed capital in T-bills; quarterly LP capital calls aligned with acquisition cadence.</td>
+      </tr>
+      <tr>
+        <td class="lvr">7</td>
+        <td class="name">Team and brand</td>
+        <td><b>2 GP partners</b> (operating + finance mix); <b>AI Engineering Lead from enterprise-AI productisation background</b>; <b>Vertical Lead per active vertical recruited from $20–80M revenue OpCo CEO pool</b>; <b>distinct entity brand</b> with dedicated domain; research-arm public artefacts continue under entity brand.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="h">What this composite position is designed to survive</div>
+    <p>Four documented failure modes from AI-Native Operating Holdco deep dive: (1) "buy first, AI later" execution failure — mitigated by AI Engineering Lead Day-Zero plus AI uplift KPI in operator earn-out (Levers 3+7); (2) AI uplift cannot be independently verified at diligence — mitigated by operator-in-residence and AI advisor on quarterly review (Lever 4); (3) cultural and change-management resistance — mitigated by sub-brand retention and operator-CEO continuity (Lever 3); (4) concentration risk in HoldCo / fund — mitigated by balanced-diversified allocation across 4–7 OpCos rather than single platform (Lever 6).</p>
+  </div>
+
+  <h3 class="sub">What changes the composite under different conditions</h3>
+  <ul class="body">
+    <li><b>If team holds deep specific vertical expertise:</b> Lever 1 weighting should be revised; if expertise is in CPA, the cascade through Levers 3 (alliance) and 5 (alliance OpCo structure) applies and is documented per Crete precedent.</li>
+    <li><b>If multiple-arbitrage maximisation is prioritised over reference-operator de-risking:</b> Lever 1 shifts to P&amp;C tier-2; Lever 4 advisor needs (compliance — state insurance counsel) expand; Lever 7 Vertical Lead recruiting pool changes.</li>
+    <li><b>If institutional anchor LP cannot be secured:</b> Lever 2 shifts to strategic-operator-led (B); Vintage 2 raise stretches by 12–18 months; LP base patience profile differs.</li>
+    <li><b>If Vintage 1 fund AUM materially below $100M:</b> Lever 4 architecture compresses to Option C (M&amp;A only, in-team operator and AI capability); risk profile rises.</li>
+  </ul>
+
+  <div class="source">Composite derived from Lever-level analyses Sections 04–10; sensitivity dependencies from Section 11.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">13</span>Triggers and Stage Progression — Gate-Based, Not Date-Based</div>
+  <h1 class="action">Stage progression is governed by gates that fire when documented conditions are met. Dates are downstream of gates, not vice versa. The trigger architecture preserves optionality on Combinations Memo Paths B (Permanent Capital), C (Data Network Stage 2), and D (full synthesis).</h1>
+
+<div class="tree">
+<span class="root">Vintage 1 — Day-Zero composite position activated</span>
+│
+├── <span class="branch">Day-Zero gates</span>
+│        ├── <span class="leaf">Legal structure established (Delaware LP + C-corp HoldCo, QSBS verified by tax counsel)</span>
+│        ├── <span class="leaf">Vertical declared (composite analysis output — HOA / PM under default weighting)</span>
+│        ├── <span class="leaf">LP base archetype selected and anchor LP identification process active</span>
+│        ├── <span class="leaf">AI Engineering Lead recruitment active in enterprise productisation talent pool</span>
+│        └── <span class="leaf">Vertical M&amp;A advisor retained on retainer or co-exclusive basis</span>
+│
+├── <span class="branch">First-close gate</span>
+│        ├── <span class="leaf">Anchor LP committed at meaningful ticket size (typically 20–30% of fund target)</span>
+│        ├── <span class="leaf">LPA executed with all seven critical provisions</span>
+│        ├── <span class="leaf">Vertical Lead onboarded (operator-CEO pool, $20–80M revenue scale)</span>
+│        └── <span class="leaf">If anchor LP not committed: stretch first close; reassess LP pipeline; consider strategic-operator-led shift</span>
+│
+├── <span class="branch">First-acquisition gate</span>
+│        ├── <span class="leaf">Standard LOI template approved (65/20/15 cash/rollover/earn-out, two-gate earn-out)</span>
+│        ├── <span class="leaf">First primary platform acquisition closed</span>
+│        ├── <span class="leaf">Operator-in-residence on board</span>
+│        ├── <span class="leaf">AI Engineering arm operational; paid pre-acquisition pilots active in M&amp;A funnel L2</span>
+│        └── <span class="leaf">Independent director seated before Vintage 2 raise process</span>
+│
+├── <span class="branch">Pilot gate (productivity ≥1.5×)</span>
+│        ├── <span class="leaf">Primary vertical AI playbook delivers ≥1.5× productivity uplift on first 2–3 OpCos</span>
+│        ├── <span class="leaf">Bolt-on cadence sustained at 1 acquisition per quarter</span>
+│        ├── <span class="leaf">If gate cleared: bolt-on velocity continues; secondary vertical sourcing begins</span>
+│        └── <span class="leaf">If gate not cleared: bolt-on pause; AI Engineering refactor; secondary vertical deferred</span>
+│
+├── <span class="branch">Vintage 2 gate</span>
+│        ├── <span class="leaf">Vintage 1 track record sufficient to support Vintage 2 raise at target size</span>
+│        ├── <span class="leaf">Path B (Permanent Capital migration per Combinations Memo) evaluated against anchor LP signal</span>
+│        ├── <span class="leaf">Secondary vertical activated under composite analysis (next-best from Lever 1 ranking)</span>
+│        └── <span class="leaf">Path C (Data Network Stage 2) monitoring begins per Combinations Memo trigger criteria</span>
+│
+└── <span class="branch">Exit window — Vintage 1 Year 4–7</span>
+         ├── <span class="leaf">PE-to-PE recap or strategic sale at 4× MOIC blended target</span>
+         ├── <span class="leaf">Path B activates if Vintage 1 ≥2.5× MOIC and LP base supports evergreen</span>
+         ├── <span class="leaf">Path C activates if cross-OpCo data trigger fires per Combinations Memo</span>
+         └── <span class="leaf">Path D emerges from B + C if both succeed</span>
+</div>
+
+  <h3 class="sub">What blocks each gate</h3>
+  <ul class="body">
+    <li><b>First-close gate blocked if:</b> anchor LP cannot be secured; LPA legal review extends beyond planned window; QSBS structuring requires additional tax counsel review. Mitigation: maintain 3–4 anchor LP candidates in parallel pipeline; engage institutional fund counsel early.</li>
+    <li><b>First-acquisition gate blocked if:</b> AI Engineering Lead recruitment fails; vertical M&amp;A advisor deal flow is thinner than projected; first LOI structure rejected by sellers. Mitigation: AI Lead backup pipeline; co-exclusive (not lead) M&amp;A advisor arrangement; LOI template stress-tested against 3–5 candidate sellers pre-close.</li>
+    <li><b>Pilot gate blocked if:</b> AI uplift is not verifiable; operator-CEO resistance exceeds AI Engineering deployment capacity; integration costs exceed margin uplift recovery. Mitigation: gate is structural — if not cleared, secondary vertical defers and Vintage 1 returns recalibrate to conservative case.</li>
+    <li><b>Exit window blocked if:</b> credit market reversal compresses LBO multiples; vertical concentration risk emerges; AI uplift commodifies. Mitigation: covered in Combinations Memo Path B / C / D triggers and Pure HoldCo Decision Memo posture.</li>
+  </ul>
+
+  <h3 class="sub">What the composite position locks in versus what it preserves as optionality</h3>
+  <ul class="body">
+    <li><b>Locked in at Day-Zero:</b> AI-Native Operating Holdco archetype (Game Selection); pure HoldCo posture without standing services arm (Pure HoldCo Decision Memo); QSBS-eligible legal structure (this memo Lever 5); composite Lever positions in their winning configuration.</li>
+    <li><b>Preserved as optionality:</b> Vintage 2 evergreen conversion (Combinations Memo Path B); Data Network Stage 2 productisation (Path C); Permanent Capital + Data full synthesis (Path D); secondary vertical staging and selection.</li>
+    <li><b>Rejected and held rejected:</b> standing services arm (Pure HoldCo Decision Memo); Horizontal AI Platform at enterprise scale without Holdco (Combinations Memo Path F); vertical AI sold externally to non-portfolio (E-1).</li>
+  </ul>
+
+  <div class="source">Triggers calibrated from AI-Native Operating Holdco archetype deep dive precondition list; Combinations Memo Decision Tree; Pure HoldCo Decision Memo positioning lock-ins.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">14</span>Appendix · Sources</div>
+
+  <p class="body" style="font-size:11.5px;line-height:1.6">
+    <b>Internal artefacts</b> (bobroff-cap/roll-ups/analysis and /raw): Game Selection Framework (June 12, 2026); AI-Native Operating Holdco Archetype Deep Dive (June 13, 2026); Permanent Capital Compounder Archetype Deep Dive (June 13, 2026); Horizontal AI Platform Archetype Deep Dive (June 13, 2026); Data Network Compounder Archetype Deep Dive (June 13, 2026); Pure HoldCo Decision Memo (June 14, 2026); Archetype Combinations and Sequencing Decision Memo (June 14, 2026); rollup-economy V×C×A×B×M scoring map (live).
+    <b>Reference operator filings and coverage</b>: PitchBook Long Lake profile; PYMNTS and Travel Weekly on Amex GBT take-private May 2026; General Catalyst "Future of Services" essay on Long Lake; Sourcery on GC Creation $1.5B; MobiHealthNews on GC $8B Fund XII; BusinessWire on Shield Technology Partners launch June 2025; SiliconANGLE on Shield $100M Feb 2026; BusinessWire and Crypto Briefing on Crete / Current rebrand; The Finance Story on Crete $500M; Becker's Hospital Review and Modern Healthcare on Smarter Technologies / NMC CEO change December 2025; Berkshire Hathaway 2024 Annual Report; Markel Group 2024 Annual Report; Brookfield Corporation 2024 Investor Day Transcript.
+    <b>Vertical M&amp;A advisor and benchmark sources</b>: Mertz Taggart Q1 2026 home-based care M&amp;A report; FOCUS Bankers home health EBITDA multiples 2026; IBBA Market Pulse Q2 and Q3 2025; BizBuySell 2025 Year in Review and Q3 2025 Insight Report; Aventis Advisors and Solganick MSP 2025; PeakValue MSP 12× multiples 2025; Auxo accounting firm multiples 2026; FirmLever on accounting; Marsh Berry and Insurance Journal Broker Valuations 2026; Capstone Partners Insurance Services Update June 2025; Leader's Edge Brokerage M&amp;A.
+    <b>Fund structure, tax, and waterfall sources</b>: Internal Revenue Code Section 1202 (QSBS statute); IRS Publication 550 on QSBS; SEC Investment Advisers Act Section 206(3); Cambridge Associates Private Investment Fund Terms 2024; Sidley Austin and Davis Polk public alerts on Section 206 enforcement 2024–2025; Carta 2026 compensation benchmarks; Sentiro Partners AI-startup compensation 2026.
+    <b>Capital structure benchmarks</b>: Bain Global PE Report 2025 PDF and 2026 update; Axios Pro US LBO volume 2026 ($397.5B record); AI-Native Operating Holdco deep dive LBO leverage by vertical; Cambridge Associates fund waterfalls.
+    <b>Horizontal AI and Data Network reference points</b> (used as boundary illustrations for talent pool, not as our path): Sacra profiles for Anthropic, OpenAI, Plaid; Verisk 10-K FY2024; Snowflake 10-K FY2024; MSCI 10-K FY2024.
+  </p>
+
+  <div class="source">Strategic Decision Memo · Starting Position Maximization · Prepared June 14, 2026 for internal review. Companion to Pure HoldCo Decision Memo and Archetype Combinations and Sequencing Decision Memo.</div>
+</section>
+
+</body>
+</html>
