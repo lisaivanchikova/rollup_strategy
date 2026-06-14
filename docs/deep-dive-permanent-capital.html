@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Permanent Capital Compounder — Archetype Deep Dive</title>
+<style>
+:root{
+  --deep-slate:#31435B;
+  --petrol-teal:#2E7780;
+  --soft-steel:#A9C5D6;
+  --silver-mist:#DCE5EC;
+  --near-black:#151A1F;
+  --cool-gray:#C9D2DC;
+  --off-white:#FAF9F6;
+  --rule:#D8DEE5;
+  --shade-1:#F4F2EE;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--off-white);color:var(--near-black);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.5;letter-spacing:-0.005em;-webkit-font-smoothing:antialiased}
+.page{max-width:1180px;margin:0 auto;padding:56px 72px 64px;border-bottom:1px solid var(--rule);background:var(--off-white)}
+.page:first-of-type{padding-top:120px}
+.eyebrow{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;margin-bottom:14px}
+.eyebrow .num{color:var(--deep-slate);font-weight:700;margin-right:10px}
+h1.action{font-size:30px;line-height:1.2;font-weight:700;color:var(--deep-slate);letter-spacing:-0.02em;margin-bottom:16px;max-width:980px}
+h3.sub{font-size:13px;font-weight:700;color:var(--deep-slate);text-transform:uppercase;letter-spacing:0.08em;margin:22px 0 10px}
+.lede{font-size:14px;line-height:1.55;color:var(--near-black);max-width:920px;margin-bottom:16px}
+.source{font-size:10.5px;letter-spacing:0.03em;color:#7B8590;border-top:1px solid var(--rule);padding-top:10px;margin-top:30px}
+.cover{min-height:78vh;display:flex;flex-direction:column;justify-content:space-between;padding-top:140px}
+.cover .top-mark{font-size:10px;letter-spacing:0.22em;color:var(--petrol-teal);font-weight:600;text-transform:uppercase}
+.cover h1{font-size:46px;line-height:1.1;font-weight:700;letter-spacing:-0.025em;color:var(--deep-slate);margin:54px 0 22px;max-width:980px}
+.cover .deck{font-size:18px;color:#3F4A57;max-width:880px;line-height:1.55;font-weight:400}
+.cover .meta{display:flex;gap:64px;margin-top:60px;font-size:12px;color:#5A6470}
+.cover .meta .label{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;display:block;margin-bottom:6px}
+.cover .meta .v{font-size:14px;color:var(--near-black);font-weight:600}
+.cover .palette{display:flex;gap:0;margin-top:40px;border-top:1px solid var(--rule);padding-top:18px}
+.cover .palette span{display:block;width:32px;height:6px}
+.bluf{background:var(--silver-mist);border-left:4px solid var(--petrol-teal);padding:22px 26px;margin:18px 0 24px;max-width:980px}
+.bluf .bluf-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:10px}
+.bluf p{font-size:14.5px;line-height:1.55;color:var(--near-black)}
+.findings{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 6px}
+.find-card{background:#fff;border:1px solid var(--rule);padding:16px 18px;border-top:3px solid var(--deep-slate)}
+.find-card .ix{font-size:10px;letter-spacing:0.16em;color:var(--petrol-teal);font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.find-card .tt{font-size:13.5px;font-weight:700;color:var(--deep-slate);line-height:1.3;margin-bottom:8px}
+.find-card .body{font-size:12px;line-height:1.5;color:#3F4A57}
+.tree{margin:16px 0 6px;font-family:'JetBrains Mono','Menlo',monospace;font-size:12px;line-height:1.7;color:var(--near-black);background:#fff;border:1px solid var(--rule);padding:20px 24px;white-space:pre;overflow-x:auto}
+.tree .root{color:var(--deep-slate);font-weight:700}
+.tree .branch{color:var(--petrol-teal);font-weight:600}
+.tree .leaf{color:#3F4A57}
+table.mck{width:100%;border-collapse:collapse;background:#fff;font-size:12px;margin:12px 0 8px}
+table.mck th{background:var(--deep-slate);color:#fff;text-align:left;padding:10px 12px;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;border-right:1px solid #3D506B}
+table.mck th:last-child{border-right:none}
+table.mck td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45}
+table.mck tr:nth-child(even) td{background:var(--shade-1)}
+table.mck td.idx{font-weight:700;color:var(--petrol-teal);width:38px;text-align:center;font-variant-numeric:tabular-nums}
+table.mck td.name{font-weight:700;color:var(--deep-slate);white-space:nowrap}
+table.mck td.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.callout{border:1px solid var(--cool-gray);background:#FDFCFA;padding:16px 20px;margin:14px 0;border-left:3px solid var(--petrol-teal)}
+.callout .h{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:8px}
+.callout p{font-size:12.5px;line-height:1.5;color:var(--near-black);max-width:920px}
+p.body{font-size:13px;line-height:1.6;color:var(--near-black);margin-bottom:10px;max-width:920px}
+p.body b{color:var(--deep-slate)}
+ul.body{font-size:13px;line-height:1.6;color:var(--near-black);margin:8px 0 12px 0;padding-left:20px;max-width:920px}
+ul.body li{margin-bottom:5px}
+ul.body li b{color:var(--deep-slate)}
+@media print{body{font-size:10px}.page{padding:30px 36px;max-width:none;page-break-after:always}.cover{min-height:auto}table.mck th{background:var(--deep-slate)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<section class="page cover">
+  <div>
+    <div class="top-mark">Archetype Deep Dive · 2 of 4 series · Internal Strategy</div>
+    <h1>Permanent Capital Compounder</h1>
+    <div class="deck">
+      A corporate vehicle designed to hold operating businesses indefinitely and compound book value per share across multi-decade horizons. Funded by insurance float, public equity, or evergreen capital. Produces no exit by design; produces inter-generational wealth through book-value compounding.
+    </div>
+  </div>
+  <div>
+    <div class="meta">
+      <div><span class="label">Prepared</span><span class="v">June 13, 2026</span></div>
+      <div><span class="label">Series</span><span class="v">Archetype Deep Dives</span></div>
+      <div><span class="label">Sources</span><span class="v">SEC filings, annual letters, investor days</span></div>
+    </div>
+    <div class="palette">
+      <span style="background:#31435B"></span><span style="background:#2E7780"></span><span style="background:#A9C5D6"></span>
+      <span style="background:#DCE5EC"></span><span style="background:#151A1F"></span><span style="background:#C9D2DC"></span>
+      <span style="background:#FAF9F6;border-right:1px solid #ddd;border-left:1px solid #ddd"></span>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">01</span>Executive Summary</div>
+  <h1 class="action">The archetype produces the largest documented paper wealth in the universe of games but no liquidity event for the founder by design.</h1>
+
+  <div class="callout" style="border-left-color:var(--deep-slate);background:#F4F2EE;margin-bottom:18px">
+    <div class="h" style="color:var(--deep-slate)">How this archetype is defined in our framework</div>
+    <p>
+      A corporate vehicle that holds operating businesses indefinitely and compounds book value per share across multi-decade horizons. The capital base is structurally permanent — funded by insurance float (Berkshire, Markel, Loews-CNA), public equity (Constellation Software), or evergreen private capital (Brookfield) — meaning the operator never faces a redemption clock or a forced exit. The principal acts as a central capital allocator, deploying cash across uncorrelated cash-flow streams: wholly-owned acquisitions, minority public equity stakes, fixed income, or T-bills when no fat-pitch opportunity exists. Subsidiaries remain decentralised and management-continuous — the HQ does not impose synergies or restructuring. Crucially, <b>this archetype produces no exit event for the founder</b>; wealth accumulates as paper share value and is realised only through partial trimming, charitable giving, or estate transition. The economic engine is the spread between cost of permanent capital (often negative when float runs under a 100% combined ratio) and return on deployed capital, compounded for decades. Quantitatively: <b>scalability ceiling unlimited</b> (Berkshire at $1T+), <b>founder ownership 20–40% sustained through retention rather than dilution</b>, <b>capital base required $500M+ to start</b>, <b>time horizon decadal to inter-generational</b>. The combined enabler-fit score is <b>75 out of 125</b> — full US and SMB-acquisition use, partial AI as operational uplift only.
+    </p>
+  </div>
+
+  <div class="bluf">
+    <div class="bluf-label">Bottom Line Up Front</div>
+    <p>Berkshire Hathaway compounded book value per share at approximately 18.3% CAGR from 1965 to 2023 versus 10.2% for the S&amp;P 500 Total Return; the stock returned 19.9% CAGR from 1965 to 2024 versus 10.4% for the S&amp;P. The mechanism is permanent capital — insurance float, public equity, or evergreen funds — deployed across uncorrelated cash-flow streams by a disciplined central allocator with multi-decade horizon. The archetype does not exit. Wealth accumulates in paper share-price appreciation and is realised only when individual shareholders choose to sell.</p>
+  </div>
+
+  <div class="findings">
+    <div class="find-card">
+      <div class="ix">Finding 01</div>
+      <div class="tt">Insurance float at negative cost is the structural advantage.</div>
+      <div class="body">Berkshire's float reached $171B at year-end 2024. GEICO ran an 81.5% combined ratio in 2024 versus 93.8% historical average; consolidated insurance combined ratio 87.1% in 2025. When the combined ratio is below 100%, the insurer is paid to hold the money — float acts as leverage without the cost of debt.</div>
+    </div>
+    <div class="find-card">
+      <div class="ix">Finding 02</div>
+      <div class="tt">The headquarters is intentionally tiny; subsidiaries operate autonomously.</div>
+      <div class="body">Berkshire's Omaha HQ had 27 employees at year-end 2024, supporting a company of ~400,000 subsidiary employees and $1T+ enterprise value. HQ owns capital allocation, insurance reserve oversight, and culture; everything else lives in the OpCo. Overhead under 0.01% of revenue.</div>
+    </div>
+    <div class="find-card">
+      <div class="ix">Finding 03</div>
+      <div class="tt">No exit — founder cash is constrained by design.</div>
+      <div class="body">Buffett salary $100,000 per year for decades; one dividend in Berkshire history ($0.10/share, 1967, later called a mistake); cash extraction via partial share donation to foundations exceeds $50B since 2006. The structure forces alignment between founder and minority shareholders.</div>
+    </div>
+  </div>
+
+  <div class="source">Sources: Berkshire 2024 Annual Report; Brookfield 2024 Investor Day Transcript; Markel 2024 Annual Report; Agency Checklists insurance combined ratio data; Berkshire SEC 13D/A filings on Buffett ownership.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">02</span>The Logic — Pyramid Decomposition</div>
+  <h1 class="action">The archetype is a capital-allocation engine wrapped around a balance sheet that never has to return capital; the apex compounds through patient reinvestment.</h1>
+
+<div class="tree">
+<span class="root">Permanent Capital Compounder — Inter-Generational Wealth</span>
+│
+├── <span class="branch">Apex · Capital Allocator Skill</span>  (irreducibly scarce)
+│        ├── <span class="leaf">Valuation discipline across uncorrelated cash-flow streams</span>
+│        ├── <span class="leaf">Operating talent assessment (betting on the jockey)</span>
+│        └── <span class="leaf">Patience to hold $300B+ in T-bills when no fat pitches available</span>
+│
+├── <span class="branch">Middle · Permanent Capital Base</span>  (three architectures)
+│        ├── <span class="leaf">Insurance float (Berkshire $171B; Markel; Loews-CNA; Fairfax)</span>
+│        ├── <span class="leaf">Public equity float (Berkshire; Constellation; Loews)</span>
+│        └── <span class="leaf">Evergreen / perpetual funds (Brookfield $155B perpetual + $110B float)</span>
+│
+└── <span class="branch">Base · Decentralised OpCos</span>  (operating non-interference)
+         ├── <span class="leaf">HQ &lt; 50 people regardless of consolidated scale</span>
+         ├── <span class="leaf">Subsidiary CEOs retained; minimal HQ second-guessing</span>
+         ├── <span class="leaf">Cash flow channels to HQ for reallocation</span>
+         └── <span class="leaf">~100% reinvestment rate; one dividend in 60 years</span>
+</div>
+
+  <div class="callout">
+    <div class="h">Reading the pyramid</div>
+    <p>The structure inverts the usual capital-allocation pyramid: the top is a single allocator (or small committee) deploying across the entire balance sheet without committee bureaucracy. The middle is permanent capital that allows the allocator to ignore short-term liquidity demands. The base is autonomous OpCos that generate cash without HQ interference. The structure breaks when any of three pieces fails: undisciplined allocator (Sears under Lampert), capital base with redemption rights (failed evergreen attempts), or HQ overreach into subsidiary operations (most attempted Berkshire imitators).</p>
+  </div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">03</span>Business Model</div>
+  <h1 class="action">The vehicle is a capital-allocation engine wrapped around uncorrelated cash-flow streams; value is captured per-share through book-value compounding.</h1>
+
+  <h3 class="sub">How float works — the Berkshire mechanic</h3>
+  <p class="body">Float equals premiums received minus losses and expenses paid out, held by the insurer until claim payment. If the combined ratio is below 100%, the insurer earns underwriting profit on the float, meaning the cost of float is negative — the insurer is paid to hold the money. GEICO ran an <b>81.5% combined ratio for full-year 2024</b> versus its historical 93.8% average. Berkshire's insurance segment generated <b>$9.02B underwriting profit in 2024</b> (+66% YoY): GEICO $7.8B, BHRG ~$2.7B, BH Primary ~$855M. That $171B float can be invested in equities, controlled subsidiaries, or short-term Treasuries — and the returns accrue to shareholders. This is <b>leverage that does not behave like debt</b> because there is no maturity date and (under disciplined underwriting) a negative cost.</p>
+
+  <h3 class="sub">Sources of permanent capital — three architectures</h3>
+  <table class="mck">
+    <thead><tr><th>Architecture</th><th>Mechanism</th><th>Representative operators</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Insurance float</td><td>Premiums collected now, claims paid later; interim cash invested</td><td>Berkshire, Markel, Loews (CNA), White Mountains, Fairfax</td></tr>
+      <tr><td class="name">Public equity float</td><td>Listed shares — no LP redemption pressure; market-traded equity is permanent from the issuer's perspective</td><td>Berkshire, Loews, Brookfield, Constellation Software</td></tr>
+      <tr><td class="name">Evergreen / perpetual funds</td><td>Brookfield reported ~$155B perpetual capital + $110B flexible insurance float; 86% of fee-bearing capital long-term in nature</td><td>Brookfield Corporation</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Revenue mix (Berkshire 2024 illustrative)</h3>
+  <p class="body">Total operating earnings of <b>$47.4B in 2024</b> (up from $37.4B in 2023):</p>
+  <ul class="body">
+    <li>Insurance underwriting: ~$9.0B</li>
+    <li>Insurance investment income: ~$22B (interest on Treasuries plus dividends)</li>
+    <li>Railroad (BNSF): ~$5B</li>
+    <li>Berkshire Hathaway Energy: ~$3.7B</li>
+    <li>Manufacturing, Service and Retail: ~$13B</li>
+  </ul>
+
+  <h3 class="sub">Three representative compounders</h3>
+  <ul class="body">
+    <li><b>Berkshire Hathaway</b>. Bought as a failing textile mill in 1965 (assets had fallen from $55.5M in 1955 to $28.9M in 1964; nine-year cumulative losses $10.1M). Today: market cap &gt;$1T, $397.4B cash (Q1 2026), $171B float, $314.6B public equity portfolio. CAGR 1965–2024: 19.9% stock versus 10.4% S&amp;P 500 TR.</li>
+    <li><b>Markel Corporation (now Markel Group)</b>. Founded 1930, IPO 1986. Three-engine model: specialty insurance, Markel Ventures (&gt;20 wholly-owned operating businesses), public-equity portfolio managed by Tom Gayner. Markel explicitly stopped using book value per share as its headline metric in 2024 because non-insurance operating businesses are not held at fair value; management now uses 5-year CAGR in intrinsic value per share.</li>
+    <li><b>Brookfield Corporation</b>. Canadian, alternative-asset-flavoured. Three pools as of 2024: ~$155B perpetual capital, $110B flexible insurance float, plus a scaling asset-management business. Wealth Solutions generated $1.7B in Distributable Earnings in 2024 (+24% YoY), with insurance assets at $143B and $20B in annuity sales; targets $200B in insurance assets and &gt;$2B DE by end of 2026.</li>
+  </ul>
+
+  <div class="source">Sources: Berkshire Hathaway 2024 Annual Report (SEC); Brookfield Corporation 2024 Investor Day Transcript; Markel Group 2024 Annual Report; Rational Walk Berkshire analyses; Finmasters on Buffett insurance float.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">04</span>The Replication Unit</div>
+  <h1 class="action">Two layers replicate: the acquisition itself, and (for insurance-based compounders) the new line of insurance that throws off additional float.</h1>
+
+  <h3 class="sub">Layer 1 — the acquisition unit</h3>
+  <p class="body">Each new acquired subsidiary is a replication unit. The marginal task is: identify a business with durable economics plus trustworthy management → negotiate a one-time purchase price → leave management in place → channel free cash flow to HQ for reallocation. Berkshire averages 1–3 large acquisitions per decade in addition to bolt-ons inside existing subsidiaries.</p>
+
+  <h3 class="sub">Layer 2 — the float vertical unit</h3>
+  <p class="body">For insurance-based compounders, a more powerful replication unit is <b>a new line of insurance</b> that throws off additional float. Berkshire built float by acquiring National Indemnity (1967), GEICO (1976/1996), General Re (1998), and growing BHRG. Each new insurance vertical equals a new permanent capital pool. Markel similarly added specialty lines via acquisition.</p>
+
+  <h3 class="sub">Cost to deploy capital into one more position</h3>
+  <p class="body">Marginal cost is the <b>due-diligence time of the principal capital allocator</b> (Buffett historically, now Abel / Combs / Weschler). Berkshire's overhead does not scale linearly with AUM — the same 27-person HQ supports $1T+ of enterprise value. The bottleneck is <b>scarcity of fat-pitch opportunities at scale</b>, not deployment cost.</p>
+
+  <h3 class="sub">Portable versus HQ-resident assets</h3>
+  <table class="mck">
+    <thead><tr><th>HQ (typically 30–50 people)</th><th>Subsidiary (where the operating business lives)</th></tr></thead>
+    <tbody>
+      <tr><td>Capital allocation authority</td><td>Operating P&amp;L responsibility</td></tr>
+      <tr><td>Insurance underwriting reserve oversight</td><td>Hiring/firing below CEO level</td></tr>
+      <tr><td>Reinvestment decision framework</td><td>Capex within budget</td></tr>
+      <tr><td>Cultural reinforcement / annual letter</td><td>Brand, pricing, marketing</td></tr>
+      <tr><td>Tax and consolidated reporting</td><td>Customer relationships</td></tr>
+      <tr><td>M&amp;A negotiation</td><td>Product roadmap</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Diseconomies of scale</h3>
+  <ul class="body">
+    <li><b>Berkshire's own size constraint</b>. Buffett has acknowledged for over a decade that returns must compress as capital base grows. A $1B opportunity that 10x's adds 0.1% to a $1T company. The "elephant gun" needs ever-bigger targets — which is why <b>$397B sits in T-bills</b> in Q1 2026.</li>
+    <li><b>Markel's small-cap edge</b>. Markel Ventures specifically targets businesses too small for PE auction processes, where price discipline can still find double-digit unlevered returns. As Markel grew, deal sizes had to grow with it.</li>
+    <li><b>Brookfield mitigation</b>. Brookfield avoids the size problem by running platforms (BIP, BEP) that can deploy at infrastructure scale ($1B+ tickets) where most acquirers cannot compete.</li>
+  </ul>
+
+  <div class="source">Sources: Berkshire 10-K filings on HQ staffing; Rational Walk on Markel Ventures structure; Brookfield platform disclosures.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">05</span>Unit Economics</div>
+  <h1 class="action">Cost of float is the defining metric; ROE on float compounds tax-deferred for decades because the holding period is indefinite.</h1>
+
+  <h3 class="sub">Cost of float — combined ratio benchmarks</h3>
+  <table class="mck">
+    <thead><tr><th>Vehicle</th><th style="width:24%">Combined ratio</th><th>Source / period</th></tr></thead>
+    <tbody>
+      <tr><td>Berkshire Hathaway (consolidated insurance)</td><td class="num">87.1%</td><td>2025 full year</td></tr>
+      <tr><td>GEICO (full year 2024)</td><td class="num">81.5%</td><td>vs. historical 93.8% average</td></tr>
+      <tr><td>US P&amp;C industry average</td><td class="num">~99–102%</td><td>Cyclical; III, AM Best</td></tr>
+      <tr><td>Lloyd's of London (historical cycle)</td><td class="num">90–110%</td><td>Lloyd's annual reports</td></tr>
+    </tbody>
+  </table>
+  <p class="body">A combined ratio of <b>87–92% across cycles</b> differentiates a great float-based compounder from a mediocre insurer.</p>
+
+  <h3 class="sub">Acquisition multiples paid</h3>
+  <ul class="body">
+    <li><b>Precision Castparts (2015)</b>: $37.2B EV including debt; ~12.5× EBITDA, ~16.1× EPS on FY2017 estimates. Largest in Berkshire history at the time.</li>
+    <li><b>BNSF (2010)</b>: ~$36.5B EV; estimated ~9–10× EBITDA.</li>
+    <li><b>See's Candies (1972)</b>: $25M for $4M pretax profit → ~6.25× pretax earnings (~10× net) — extraordinarily cheap on subsequent cash flows.</li>
+    <li><b>Marmon (2008–2013, staged)</b>: ~$9B for 100% over time; ~9–10× EBITDA.</li>
+  </ul>
+  <p class="body">Compounders typically <b>avoid auction processes</b> and accept that they will not pay the lowest multiple — they pay a fair price and earn returns through (a) avoiding overpaying, (b) decades of compounded reinvested cash flow, (c) long holding periods that amortise transaction costs over generations.</p>
+
+  <h3 class="sub">Holding period — indefinite by design</h3>
+  <ul class="body">
+    <li>Coca-Cola: owned continuously since 1988 (37 years)</li>
+    <li>American Express: owned continuously since 1991 (34 years); prior position via Buffett Partnership 1964</li>
+    <li>Wells Fargo: held 1989–2022 (33 years)</li>
+    <li>See's Candies: 1972–present (53 years)</li>
+    <li>GEICO: stake from 1951; full ownership since 1996</li>
+  </ul>
+  <p class="body">Average dispositions &lt;5% of portfolio per year; turnover well below mutual-fund norms.</p>
+
+  <h3 class="sub">Float-to-equity ratio and reinvestment</h3>
+  <p class="body">Berkshire float ($171B) relative to shareholder equity (~$650B at year-end 2024) is ~26%. The ratio was much higher in the 1990s–2000s when float grew faster than retained equity. <b>~100% of operating cash flow is reinvested</b>; one dividend ever (1967, $0.10/share); buybacks resumed selectively post-2018.</p>
+
+  <div class="source">Sources: Berkshire 2024 Annual Report; Agency Checklists; Dr. David Kass blog on Precision Castparts; Wikipedia See's Candies; SBO Financial See's teardown.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">06</span>Go-to-Market — How Capital Gets Deployed</div>
+  <h1 class="action">The customer is the seller of a private business who values legacy, autonomy, and certainty above peak auction price; the channel is reputation-driven inbound.</h1>
+
+  <h3 class="sub">The "buyer" persona — the seller</h3>
+  <p class="body">The compounder's primary customer is the <b>seller of a private business</b> — typically a founder, family, or trustee:</p>
+  <ul class="body">
+    <li>Owns 70–100% of a quality business throwing off $50M–$500M+ EBITDA</li>
+    <li>Cares about the business surviving past their exit (legacy concern)</li>
+    <li>Distrusts PE's "buy, leverage, strip, sell in 5 years" reputation</li>
+    <li>Does not want an auction (privacy, employee morale, supplier relationships)</li>
+    <li>Will accept a slightly lower price for certainty of close, indefinite hold, and management continuity</li>
+  </ul>
+
+  <h3 class="sub">Deal sourcing channels</h3>
+  <ul class="body">
+    <li><b>Reputation-driven inbound</b> — Berkshire receives unsolicited inquiries weekly. Mrs. B (Rose Blumkin, Nebraska Furniture Mart, 1983) walked in to sell on a handshake. Iscar (2006) came via founder Eitan Wertheimer's letter.</li>
+    <li><b>Banker channels</b> — for large deals (Precision Castparts, BNSF), Goldman, Morgan Stanley, and Lazard handle introductions, but Berkshire historically refuses bidding processes.</li>
+    <li><b>Direct outreach</b> — Markel Ventures team prospects family-owned businesses directly in fragmented industries.</li>
+    <li><b>Anchor investments</b> — preferred-equity rescue deals (Goldman 2008, GE 2008, Occidental 2019, Bank of America 2011) sourced through CEO relationships in moments of distress.</li>
+  </ul>
+
+  <h3 class="sub">Typical deal cycle length</h3>
+  <ul class="body">
+    <li>Berkshire's famous <b>"five-minute decision"</b> is real for businesses Buffett knows; full diligence is often &lt;60 days.</li>
+    <li>Mid-market Markel Ventures deals: 90–180 days.</li>
+    <li>Brookfield infrastructure deals: 6–18 months (regulatory complexity).</li>
+    <li>Compared to PE auctions of 4–6 months with multiple rounds, compounders trade speed for price discipline.</li>
+  </ul>
+
+  <h3 class="sub">Pricing model on acquisitions</h3>
+  <ul class="body">
+    <li><b>Cash preferred</b> (Berkshire used cash for BNSF, Precision Castparts, See's, virtually all major deals).</li>
+    <li><b>Stock used sparingly</b> — Buffett regretted using Berkshire stock for General Re (1998) and Dexter Shoes (1993). Stock is "the most expensive currency" when used to overpay.</li>
+    <li><b>Mixed cash/stock</b> for very large deals.</li>
+    <li><b>Preferred equity plus warrants</b> for distressed deals (Goldman 2008: 10% preferred + warrants on $5B).</li>
+  </ul>
+
+  <div class="callout">
+    <div class="h">Why sellers pick this archetype</div>
+    <p>Permanent home for the business — no flip in 5 years. Management autonomy — Charles Huggins ran See's for decades after acquisition. Cultural continuity — employees keep their jobs; brand stays intact. Speed and certainty — no financing contingencies, no LBO underwriting risk. Reputation insurance — selling to Berkshire signals quality to suppliers, customers, employees. These non-price attributes command a roughly 5–15% discount to peak auction price — and that is the compounder's structural cost advantage.</p>
+  </div>
+
+  <div class="source">Sources: Berkshire annual letters (acquisition criteria boxes); Brookfield investor day decks; Heavybit / industry research on M&amp;A advisor channels.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">07</span>Capital Structure and Founder Economics</div>
+  <h1 class="action">Founder cash extraction is constrained by design; wealth accumulates as paper share value and transfers across generations via tax-deferred stepped-up basis.</h1>
+
+  <h3 class="sub">Initial capital required</h3>
+  <p class="body">Berkshire began as a near-failing New England textile mill with assets that had shrunk from $55.5M (1955) to $28.9M (1964), with nine years of cumulative losses of $10.1M. Buffett Partnership Limited began buying shares in 1962 at $7.50, took control in 1965. Effective initial equity base: <b>~$22M of Berkshire book value in 1965</b>. Markel was a much older insurance company before becoming a compounder — IPO 1986 at ~$130M market cap. Loews started with the Tisch brothers' $125,000 investment in a Lakewood, NJ hotel (1946).</p>
+
+  <p class="body">The lesson: starting capital can be modest if the allocator is disciplined and the time horizon is long. <b>Compounding 18–20% from $22M for 60 years produces ~$1T</b>.</p>
+
+  <h3 class="sub">Decade-by-decade book value compounding (Berkshire)</h3>
+  <table class="mck">
+    <thead><tr><th>Period</th><th>Berkshire book value CAGR</th><th>S&amp;P 500 TR CAGR</th></tr></thead>
+    <tbody>
+      <tr><td>1965–1974</td><td class="num">~20%</td><td class="num">~3%</td></tr>
+      <tr><td>1975–1984</td><td class="num">~25%</td><td class="num">~14%</td></tr>
+      <tr><td>1985–1994</td><td class="num">~25%</td><td class="num">~14%</td></tr>
+      <tr><td>1995–2004</td><td class="num">~17%</td><td class="num">~12%</td></tr>
+      <tr><td>2005–2014</td><td class="num">~10%</td><td class="num">~7%</td></tr>
+      <tr><td>2015–2024</td><td class="num">~10–11%</td><td class="num">~13%</td></tr>
+      <tr><td><b>1965–2024 (full)</b></td><td class="num"><b>~18.3% book / 19.9% stock</b></td><td class="num"><b>~10.4%</b></td></tr>
+    </tbody>
+  </table>
+  <p class="body">Note the <b>decelerating curve</b> — early decades benefit from concentrated bets in mispriced small/mid-cap businesses; later decades reflect mature, large-cap, S&amp;P-correlated returns.</p>
+
+  <h3 class="sub">Founder ownership at each milestone</h3>
+  <ul class="body">
+    <li><b>Buffett at peak</b>: ~38% of Berkshire Class A around 1990.</li>
+    <li><b>Buffett 2024</b>: ~37.5% of Class A; ~30.2% of voting power; ~14.4% of economic interest (after major charitable donations beginning 2006).</li>
+    <li><b>Tisch family</b>: ~20% of Loews collectively across family members.</li>
+    <li><b>Markel family</b>: progressively diluted since 1986 IPO; family role institutionalised into culture rather than ownership.</li>
+  </ul>
+
+  <h3 class="sub">Founder cash extraction options</h3>
+  <ul class="body">
+    <li><b>Salary</b>: $100,000/year for decades (literally; per proxy statements).</li>
+    <li><b>Dividends</b>: zero since 1967 ($0.10 anomaly).</li>
+    <li><b>Buybacks</b>: indirect liquidity for the founder, but at fair-to-cheap prices.</li>
+    <li><b>Partial share sales</b>: Buffett's primary cash mechanism has been donating shares to foundations; over $50B donated since 2006.</li>
+  </ul>
+
+  <h3 class="sub">Succession mechanics (Berkshire)</h3>
+  <ul class="body">
+    <li><b>CEO</b>: Greg Abel (formerly Berkshire Hathaway Energy CEO), confirmed Jan 1, 2026; first non-Buffett CEO since 1965.</li>
+    <li><b>Vice Chairman, Insurance</b>: Ajit Jain (continues).</li>
+    <li><b>Investment portfolio</b>: Todd Combs and Ted Weschler (managing portions since 2010/2011).</li>
+    <li><b>Board oversight</b>: Howard Buffett as non-executive chair to preserve culture.</li>
+  </ul>
+  <p class="body">Abel inherits <b>$381.7B cash + $314.6B equity portfolio + $171B float</b> with full capital-allocation authority. Early moves include restarting buybacks and investing his after-tax salary into Berkshire Class A shares — signalling continuation of Buffett's alignment principles.</p>
+
+  <div class="source">Sources: Berkshire 2025 Annual Letter; CNBC May 2026 succession coverage; Berkshire SC 13D/A 2024 (Buffett ownership); investor day disclosures.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">08</span>Risks and Failure Modes</div>
+  <h1 class="action">The structure is robust over decades but fails predictably along five paths: undisciplined allocation, insurance underwriting losses, successor mediocrity, breakup pressure, and asset stripping.</h1>
+
+  <ul class="body">
+    <li><b>1. Capital allocation drift / undisciplined late-cycle deployment.</b> Faced with growing cash and shrinking opportunity, the allocator overpays for marginal deals. Buffett has held $300–397B in cash through 2024–2026 specifically to avoid this — a discipline cost most allocators cannot bear. <b>Lampert at Sears Holdings</b> is the cautionary tale: deployed capital into a structurally broken retailer because he had the capital to deploy.</li>
+    <li><b>2. Insurance underwriting losses that compound.</b> General Re reserve failures (1999–2002) cost Berkshire <b>$1.31B in additional reserves in 2002 alone</b> for prior-year mistakes (Buffett 2002 letter). Gen Re had been "overly competitive in going after and retaining business" and "did not reserve correctly." Lloyd's of London 1988–1992 spiral losses remain the worst-case industry precedent.</li>
+    <li><b>3. Successor mediocrity.</b> The risk that a successor lacks the capital-allocation discipline of the founder. Market currently discounts Berkshire ~10–15% on this concern. Historical analogues: GE under Welch's late tenure and Immelt; ITT after Geneen; Teledyne after Singleton (Singleton himself returned 20.4% CAGR 1963–1990).</li>
+    <li><b>4. Activist / shareholder pressure to break up.</b> A compounder's value is in the gestalt — the float, the allocation flexibility, the cross-subsidisation. Activist breakup advocates can extract short-term value but destroy the compounding engine. Loews trades at a persistent ~20–30% discount to sum-of-parts; activists periodically agitate.</li>
+    <li><b>5. Asset-stripping by misaligned management — the Sears scenario.</b> Eddie Lampert acquired Sears Holdings in 2005 ($11B Kmart-Sears merger); peak market cap ~$30B in 2007 (nearly 2× Amazon at the time). Bankruptcy October 2018. Lampert stripped real estate (Seritage Growth Properties spin-off 2015), brands (Lands' End spin-off 2014, Craftsman sale to Stanley Black &amp; Decker 2017), while neglecting operating reinvestment. Lampert personally extracted ~$1.4B; creditors owed $11B; tens of thousands of employees lost jobs.</li>
+  </ul>
+
+  <h3 class="sub">Quantitative warning signs of drift</h3>
+  <ul class="body">
+    <li>Combined ratios creeping above 100% to grow premium</li>
+    <li>Acquisition multiples above 12× EBITDA on mature operating businesses</li>
+    <li>Increasing reliance on financial engineering (spin-offs, securitisation, buybacks at premium prices)</li>
+    <li>Senior management cash compensation rising relative to share ownership</li>
+    <li>Declining insider ownership %</li>
+  </ul>
+
+  <h3 class="sub">Preconditions for success</h3>
+  <ul class="body">
+    <li>Capital allocator skill — the central CEO or allocation committee must be in the top 1% globally; irreducibly scarce.</li>
+    <li>Patient capital base — public equity that tolerates 0–10% years; insurance float without run-rate redemption pressure.</li>
+    <li>Operating non-interference culture — HQ disciplined to not over-manage subsidiaries.</li>
+    <li>Decentralised accountability — subsidiary CEOs with clear P&amp;L and minimal HQ overhead allocations.</li>
+    <li>Founder / board alignment — the structure survives a generation only with explicit succession planning and ownership concentration.</li>
+  </ul>
+
+  <div class="source">Sources: Berkshire 2002 Shareholder Letter (General Re); Institutional Investor on Sears/Lampert; Berkeley Law on Sears bankruptcy; Brian Langis on Singleton/Teledyne; Tontine Coffee-House on General Re.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">09</span>When This Game Is Playable</div>
+  <h1 class="action">The game requires top-1% capital-allocator skill, patient capital base, and decadal commitment; the structure is incompatible with any need for liquidity or fund-clock pressure.</h1>
+
+  <h3 class="sub">Required team capabilities</h3>
+  <ul class="body">
+    <li><b>Capital allocation discipline</b> — sitting on $397B for years requires unusual character; most public CEOs cannot do this without being fired.</li>
+    <li><b>Valuation skill</b> — ability to estimate intrinsic value across industries (insurance, railroads, utilities, consumer brands, software) with reasonable accuracy.</li>
+    <li><b>Deal flow access</b> — either through bankers (large deals), founder networks (mid-market), or platform deal teams (Brookfield model).</li>
+    <li><b>Operating talent assessment</b> — the wholly-owned subsidiary CEO matters more than the price paid.</li>
+    <li><b>Insurance underwriting depth</b> (if float-based) — actuarial sophistication, reserve discipline, cycle awareness.</li>
+  </ul>
+
+  <h3 class="sub">Required capital base — three viable starting points</h3>
+  <ul class="body">
+    <li><b>Insurance float access</b> — start with a small insurance company (Markel ~$130M market cap 1986) and grow float through underwriting discipline plus acquisitions.</li>
+    <li><b>Public equity</b> — IPO at modest scale (Berkshire was $22M book in 1965; Constellation Software was C$300M IPO in 2006).</li>
+    <li><b>Multi-decade patient LPs</b> — Brookfield's path; harder because requires institutional fundraising and a fee-paying model alongside the principal compounding.</li>
+  </ul>
+
+  <h3 class="sub">Required market conditions</h3>
+  <ul class="body">
+    <li>Pockets of mispriced assets — compounders thrive when markets are inefficient at the size at which they operate.</li>
+    <li>Sellers preferring permanent home over auction — requires founder-owned business pool with non-price preferences.</li>
+    <li>Insurance pricing cycles that allow underwriting profits — soft markets make float compounding difficult.</li>
+    <li>Tax regimes that allow deferral of capital gains — US C-corp structure is suboptimal but workable.</li>
+  </ul>
+
+  <h3 class="sub">Required time horizon</h3>
+  <ul class="body">
+    <li><b>Decadal minimum</b> — the 18–20% CAGR results require multiple cycles to manifest. Early years (Berkshire 1965–1975) show much lumpier returns.</li>
+    <li><b>Inter-generational ideal</b> — the magic of compounding requires 30–60 year horizons. Buffett's 60-year tenure is the empirical record.</li>
+    <li><b>No exit by design</b> — the structure is fundamentally incompatible with a forced exit. Founders / LPs must accept that liquidity comes only via secondary trading of shares, never via fund-level distribution.</li>
+  </ul>
+
+  <h3 class="sub">Disqualifying conditions</h3>
+  <ul class="body">
+    <li>Need-for-liquidity in the capital base — LP capital with redemption rights cannot fund this structure.</li>
+    <li>Fund clock pressure — closed-end fund mechanics force exits and prevent compounding.</li>
+    <li>Undisciplined capital allocator — overpaying once at moderate scale destroys decades of compounding; the math is unforgiving.</li>
+    <li>Activist-vulnerable governance — without insider voting control or strong board alignment, breakup pressure can force value destruction.</li>
+    <li>Highly cyclical core float business with no underwriting discipline — guarantees periodic underwriting losses that erode the float advantage.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="h">Quantification of "no exit, inter-generational wealth"</div>
+    <p>The archetype produces zero return-of-capital events for holders. Yet $1,000 invested in Berkshire in 1965 grows at 19.9% CAGR over 60 years to ~$55 million; the same $1,000 in S&amp;P 500 TR at 10.4% grows to ~$400,000 — a ~140× relative outperformance, all in unrealised gains until the holder chooses to sell. Singleton's Teledyne: $1 in 1963 → $180.94 in 1990 (27 years), a 180× return, all via stock-price appreciation and 87% share-count reduction from 1972 to 1987. No dividends, no exit, pure compounding. Inter-generational wealth transfers via tax-deferred unrealised appreciation, voluntary partial liquidation at the shareholder's discretion, charitable giving at appreciated value, and inheritance with basis step-up.</p>
+  </div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">10</span>Appendix · Sources</div>
+
+  <p class="body" style="font-size:11.5px;line-height:1.6">
+    Berkshire Hathaway 2024 Annual Report (SEC) · Berkshire 2025 Annual Report · Berkshire 2002 Shareholder Letter (Yale archive on General Re) · Rational Walk — Berkshire 2024 Annual Report analysis · Hampden Group — Berkshire 2024 results commentary · Agency Checklists — Berkshire 2025 insurance combined ratio · Finmasters — Buffett's Insurance Float · Markel Group 2024 Annual Report · Markel Group 2024 results press release · Rational Walk — A Closer Look at Markel Ventures · Brookfield Corporation 2024 Investor Day Transcript · Brookfield Corporation 2024 Results press release · Brookfield Wealth Solutions Year End 2024 · Loews Corporation — Wikipedia / Tisch family · LegalClarity — Who Owns Loews · Yahoo Finance — Loews diversified holdings · Investors Friend — Why Buffett Bought Berkshire in 1965 · Rational Walk Newsletter — Berkshire's Great Transformation · Berkshire 2025 Shareholder Letter (succession) · CNBC May 2026 — Greg Abel succession · Berkshire SC 13D/A 2024 — Buffett ownership · Dr. David Kass Blog — Precision Castparts valuation · Leeham News — PCP blockbuster deal · Berkshire August 2015 PCP press release · Brian Langis — Henry Singleton, The Buyback King · SSRN — An Unconventional Conglomerateur: Henry Singleton and Teledyne · FS Blog — Henry Singleton: Distant Force · Quartr — Henry Singleton: Crafting the Teledyne Empire · Institutional Investor — Eddie Lampert and Sears · Berkeley Law — Sears Bankruptcy · Restructuring Newsletter — ESL Investments and Sears · Tontine Coffee-House — Berkshire and Insurance Part II: General Re · Wikipedia — See's Candies · SBO Financial — See's Candies teardown · Berkshire HQ staff size (SEC summary) · Bloomberg — Berkshire $325B cash pile · Yahoo Finance — Berkshire cash pile post-Buffett · The Motley Fool — Berkshire dividend policy / 1967 dividend · NEI Investments — Oracle of Omaha and Long-Term Investing · Net Interest — Replicating Buffett (Marc Rubinstein) · ValueWalk — Value of Corporate Culture: Berkshire Hathaway.
+  </p>
+
+  <div class="source">Document 2 of 4 in the Archetype Deep Dive series. Prepared June 13, 2026 for internal review.</div>
+</section>
+
+</body>
+</html>
