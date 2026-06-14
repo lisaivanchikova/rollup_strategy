@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI-Native Operating Holdco — Archetype Deep Dive</title>
+<style>
+:root{
+  --deep-slate:#31435B;
+  --petrol-teal:#2E7780;
+  --soft-steel:#A9C5D6;
+  --silver-mist:#DCE5EC;
+  --near-black:#151A1F;
+  --cool-gray:#C9D2DC;
+  --off-white:#FAF9F6;
+  --rule:#D8DEE5;
+  --shade-1:#F4F2EE;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--off-white);color:var(--near-black);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.5;letter-spacing:-0.005em;-webkit-font-smoothing:antialiased}
+.page{max-width:1180px;margin:0 auto;padding:56px 72px 64px;border-bottom:1px solid var(--rule);background:var(--off-white)}
+.page:first-of-type{padding-top:120px}
+.eyebrow{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;margin-bottom:14px}
+.eyebrow .num{color:var(--deep-slate);font-weight:700;margin-right:10px}
+h1.action{font-size:30px;line-height:1.2;font-weight:700;color:var(--deep-slate);letter-spacing:-0.02em;margin-bottom:16px;max-width:980px}
+h3.sub{font-size:13px;font-weight:700;color:var(--deep-slate);text-transform:uppercase;letter-spacing:0.08em;margin:22px 0 10px}
+.lede{font-size:14px;line-height:1.55;color:var(--near-black);max-width:920px;margin-bottom:16px}
+.source{font-size:10.5px;letter-spacing:0.03em;color:#7B8590;border-top:1px solid var(--rule);padding-top:10px;margin-top:30px}
+.cover{min-height:78vh;display:flex;flex-direction:column;justify-content:space-between;padding-top:140px}
+.cover .top-mark{font-size:10px;letter-spacing:0.22em;color:var(--petrol-teal);font-weight:600;text-transform:uppercase}
+.cover h1{font-size:46px;line-height:1.1;font-weight:700;letter-spacing:-0.025em;color:var(--deep-slate);margin:54px 0 22px;max-width:980px}
+.cover .deck{font-size:18px;color:#3F4A57;max-width:880px;line-height:1.55;font-weight:400}
+.cover .meta{display:flex;gap:64px;margin-top:60px;font-size:12px;color:#5A6470}
+.cover .meta .label{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;display:block;margin-bottom:6px}
+.cover .meta .v{font-size:14px;color:var(--near-black);font-weight:600}
+.cover .palette{display:flex;gap:0;margin-top:40px;border-top:1px solid var(--rule);padding-top:18px}
+.cover .palette span{display:block;width:32px;height:6px}
+.bluf{background:var(--silver-mist);border-left:4px solid var(--petrol-teal);padding:22px 26px;margin:18px 0 24px;max-width:980px}
+.bluf .bluf-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:10px}
+.bluf p{font-size:14.5px;line-height:1.55;color:var(--near-black)}
+.findings{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 6px}
+.find-card{background:#fff;border:1px solid var(--rule);padding:16px 18px;border-top:3px solid var(--deep-slate)}
+.find-card .ix{font-size:10px;letter-spacing:0.16em;color:var(--petrol-teal);font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.find-card .tt{font-size:13.5px;font-weight:700;color:var(--deep-slate);line-height:1.3;margin-bottom:8px}
+.find-card .body{font-size:12px;line-height:1.5;color:#3F4A57}
+.tree{margin:16px 0 6px;font-family:'JetBrains Mono','Menlo',monospace;font-size:12px;line-height:1.7;color:var(--near-black);background:#fff;border:1px solid var(--rule);padding:20px 24px;white-space:pre;overflow-x:auto}
+.tree .root{color:var(--deep-slate);font-weight:700}
+.tree .branch{color:var(--petrol-teal);font-weight:600}
+.tree .leaf{color:#3F4A57}
+table.mck{width:100%;border-collapse:collapse;background:#fff;font-size:12px;margin:12px 0 8px}
+table.mck th{background:var(--deep-slate);color:#fff;text-align:left;padding:10px 12px;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;border-right:1px solid #3D506B}
+table.mck th:last-child{border-right:none}
+table.mck td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45}
+table.mck tr:nth-child(even) td{background:var(--shade-1)}
+table.mck td.idx{font-weight:700;color:var(--petrol-teal);width:38px;text-align:center;font-variant-numeric:tabular-nums}
+table.mck td.name{font-weight:700;color:var(--deep-slate);white-space:nowrap}
+table.mck td.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.callout{border:1px solid var(--cool-gray);background:#FDFCFA;padding:16px 20px;margin:14px 0;border-left:3px solid var(--petrol-teal)}
+.callout .h{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:8px}
+.callout p{font-size:12.5px;line-height:1.5;color:var(--near-black);max-width:920px}
+p.body{font-size:13px;line-height:1.6;color:var(--near-black);margin-bottom:10px;max-width:920px}
+p.body b{color:var(--deep-slate)}
+ul.body{font-size:13px;line-height:1.6;color:var(--near-black);margin:8px 0 12px 0;padding-left:20px;max-width:920px}
+ul.body li{margin-bottom:5px}
+ul.body li b{color:var(--deep-slate)}
+@media print{body{font-size:10px}.page{padding:30px 36px;max-width:none;page-break-after:always}.cover{min-height:auto}table.mck th{background:var(--deep-slate)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<section class="page cover">
+  <div>
+    <div class="top-mark">Archetype Deep Dive · 3 of 4 series · Internal Strategy</div>
+    <h1>AI-Native Operating Holdco</h1>
+    <div class="deck">
+      A holding company acquires operating SMBs in fragmented service verticals — homecare, MSPs, accounting, P&amp;C insurance, property management, RCM — and installs AI inside each company to lift margins or productivity. Operating companies remain decentralised; the holdco supplies capital, engineering, integration playbook, and shared functions. Exit via recapitalisation or strategic sale.
+    </div>
+  </div>
+  <div>
+    <div class="meta">
+      <div><span class="label">Prepared</span><span class="v">June 13, 2026</span></div>
+      <div><span class="label">Series</span><span class="v">Archetype Deep Dives</span></div>
+      <div><span class="label">Sources</span><span class="v">PitchBook, Bain PE Report, IBBA, BusinessWire</span></div>
+    </div>
+    <div class="palette">
+      <span style="background:#31435B"></span><span style="background:#2E7780"></span><span style="background:#A9C5D6"></span>
+      <span style="background:#DCE5EC"></span><span style="background:#151A1F"></span><span style="background:#C9D2DC"></span>
+      <span style="background:#FAF9F6;border-right:1px solid #ddd;border-left:1px solid #ddd"></span>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">01</span>Executive Summary</div>
+  <h1 class="action">The archetype runs a multiple arbitrage between fragmented SMB acquisition multiples and scaled platform exit multiples; AI is the value-creation lever inside each acquired company.</h1>
+
+  <div class="callout" style="border-left-color:var(--deep-slate);background:#F4F2EE;margin-bottom:18px">
+    <div class="h" style="color:var(--deep-slate)">How this archetype is defined in our framework</div>
+    <p>
+      A holding company acquires operating SMBs in fragmented service verticals — homecare agencies, MSPs, accounting firms, P&amp;C insurance brokerages, property managers, RCM firms, dental practices — and installs AI inside each acquired business to raise margins, productivity, or both. Operating companies remain <b>decentralised</b>; the holdco supplies capital, AI engineering, an integration playbook, and shared functions (procurement, finance, HR). The defining economic mechanism is <b>multiple arbitrage</b> between two markets: the SMB market where the target trades at 3–6× EBITDA before AI uplift, and the scaled platform market where the same business, post-uplift and aggregated with peers, trades at 8–14× EBITDA. Exit is recapitalisation by a next-tier sponsor, strategic sale of the holdco, or sale of individual verticals. Of the fourteen archetypes in the universe, this is the <b>only one that structurally engages all three of US-market, SMB-acquisition, and AI-deployment capabilities at full strength</b>. Quantitatively: <b>exit multiples 8–14× EBITDA post-uplift</b>, <b>capital required $200–500M sponsor fund + debt</b>, <b>founder economics ~20–35% blended (sponsor equity plus GP carry)</b>, <b>scalability ceiling $1–5B platform EV</b>, <b>time horizon 7–12 years per fund vintage</b>. The combined enabler-fit score is <b>100 out of 125</b> — the highest in the universe.
+    </p>
+  </div>
+
+  <div class="bluf">
+    <div class="bluf-label">Bottom Line Up Front</div>
+    <p>The strategy buys $1M–$20M EBITDA service businesses at 4–8× EBITDA in fragmented verticals, installs AI to lift margins 200–500 bps and growth, and exits the scaled platform at 8–14× EBITDA. The arbitrage is highest in insurance brokerage (sub-$5M EBITDA 7.5–12× → platform 16–18×) and MSPs (sub-$1M 4–8× → platform 11–14×). Long Lake, General Catalyst's Creation portfolio, Shield Technology Partners, and Current (formerly Crete) are the most-documented operators; Smarter Technologies / NMC is the most-documented execution failure.</p>
+  </div>
+
+  <div class="findings">
+    <div class="find-card">
+      <div class="ix">Finding 01</div>
+      <div class="tt">The multiple-arbitrage thesis is real and quantifiable across five verticals.</div>
+      <div class="body">P&amp;C brokerage gap 6–8 turns; MSP gap 4–10 turns; CPA gap 3–7 turns; home care 2–4 turns; HOA 3–5 turns. New Mountain sold Citrin Cooperman to Blackstone in 2025 at ~15× EBITDA — first known PE-to-PE accounting sale at platform multiple.</div>
+    </div>
+    <div class="find-card">
+      <div class="ix">Finding 02</div>
+      <div class="tt">AI uplift is operator-claimed; independent verification is not yet public.</div>
+      <div class="body">Long Lake reports 25–30% per-FTE productivity gains in HOA OpCos; Current reports 31% time savings on tax prep; GC Creation claims doubling of EBITDA margins in 12 months. Against this: MIT 2025 found 95% of corporate AI initiatives fail to produce measurable returns; PitchBook notes recent AI-services exits priced "well within the twos" rather than 4× MOIC.</div>
+    </div>
+    <div class="find-card">
+      <div class="ix">Finding 03</div>
+      <div class="tt">Execution failures are visible at the CEO level within 12 months.</div>
+      <div class="body">Smarter Technologies / NMC formed May 2025 combining SmarterDx, Thoughtful.ai, Access Healthcare into AI-powered RCM platform under New Mountain. CEO Jeremy Delinsky stepped down December 2, 2025 via LinkedIn after 7 months; succeeded by President Michael Gao MD. Public framing: integration and leadership-fit failure under a tight time horizon.</div>
+    </div>
+  </div>
+
+  <div class="source">Sources: PitchBook Long Lake / GC Creation profiles; BusinessWire Shield Tech and Crete launches; Becker's Hospital Review, Modern Healthcare on Smarter Technologies CEO change; IBBA Market Pulse Q2/Q3 2025; Insurance Journal and Aventis Advisors vertical multiples.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">02</span>The Logic — Pyramid Decomposition</div>
+  <h1 class="action">Value is created at three layers: operational uplift inside each OpCo via AI, scale advantages across the platform, and multiple expansion at exit.</h1>
+
+<div class="tree">
+<span class="root">AI-Native Operating Holdco — Multiple Arbitrage Thesis</span>
+│
+├── <span class="branch">Apex · Exit Multiple Expansion</span>  (the prize)
+│        ├── <span class="leaf">SMB acquisition multiples: 4–8× EBITDA</span>
+│        ├── <span class="leaf">Platform exit multiples: 10–16× EBITDA post-AI uplift</span>
+│        └── <span class="leaf">Arbitrage requires verifiable EBITDA uplift at diligence</span>
+│
+├── <span class="branch">Middle · Replication Engine</span>  (the playbook)
+│        ├── <span class="leaf">Vertical-specific AI integration playbook (codified)</span>
+│        ├── <span class="leaf">Central engineering team (5–15 ML + 2–5 ops per vertical)</span>
+│        ├── <span class="leaf">Acquisition cadence: 1 per quarter to 1 per month</span>
+│        └── <span class="leaf">Deployment time per OpCo: months to days as playbook matures</span>
+│
+└── <span class="branch">Base · OpCo Operational Uplift</span>  (the value-creation lever)
+         ├── <span class="leaf">25–30% per-FTE productivity (Long Lake HOA)</span>
+         ├── <span class="leaf">31% time savings on labor-intensive tasks (Current tax prep)</span>
+         ├── <span class="leaf">200–500 bps EBITDA margin uplift on labour-cost-heavy verticals</span>
+         └── <span class="leaf">Cultural acceptance and change management are binding constraints</span>
+</div>
+
+  <div class="callout">
+    <div class="h">Reading the pyramid</div>
+    <p>The thesis collapses if any layer fails. No verifiable uplift means no multiple expansion. No replication playbook means each OpCo is treated as a one-off and fund-level returns dilute toward standard mid-market PE (2× MOIC). No multiple expansion at exit means the strategy degenerates into a buy-and-hold operator vehicle without the platform premium.</p>
+  </div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">03</span>Business Model</div>
+  <h1 class="action">The holdco buys established cash-flowing SMBs, installs AI inside each, and runs the consolidated entity as a multi-OpCo platform.</h1>
+
+  <h3 class="sub">What the holdco buys</h3>
+  <ul class="body">
+    <li><b>Vertical</b>: HOA management, MSPs/IT services, accounting/CPA firms, P&amp;C insurance brokerages, home health/home care, property management, revenue cycle management, professional consulting, dental/medical practices.</li>
+    <li><b>Size</b>: $1M–$20M EBITDA for individual bolt-ons; $5M–$50M EBITDA for platform companies. Thoreau-scale platforms assemble already-large assets ($1B+ each).</li>
+    <li><b>Owner profile</b>: 55–70 years old, often founder/operator, no internal succession. ~40% of US small businesses are Boomer-owned; 60%+ lack a written succession plan. ~$10T in private business assets coming to market by 2030 (Silver Tsunami).</li>
+    <li><b>Operating profile</b>: 8–35% EBITDA margins pre-AI; recurring or quasi-recurring revenue; local market position; high labour intensity relative to revenue — the lever AI can move.</li>
+  </ul>
+
+  <h3 class="sub">What the holdco produces</h3>
+  <p class="body"><b>Two intertwined outputs</b>: AI-augmented OpCos retaining their legacy customer relationships and licensing footprint, but with AI agents embedded in tax prep, HOA presentation drafting, MSP ticket triage, RCM coding, broker placement; and scaled platforms with multiple acquired OpCos under one holdco, sharing AI infrastructure, brand architecture, and back-office services.</p>
+
+  <h3 class="sub">Margin uplift evidence</h3>
+  <ul class="body">
+    <li><b>Long Lake HOA</b>: 25–30% per-FTE productivity gains; sales pipeline 10× larger via AI lead generation (General Catalyst "The Future of Services" essay). AI deployment time compressed from over a year to days as playbook matures.</li>
+    <li><b>Current (formerly Crete) Tax AI</b>: 31% average time savings on tax prep; 98% accuracy across 7,000 returns in 2025 season; one accountant went from 180 hours to 15. OpenAI / Thrive Tax AI accuracy improvement from 25% to 97% in weeks via reinforcement on human corrections.</li>
+    <li><b>Shield Tech</b>: 9 MSP partners collectively serve &gt;1,500 customers; surpassed $100M ARR in 2025.</li>
+    <li><b>GC Creation portfolio</b>: claims doubling of EBITDA margins within 12 months; some companies hitting $100M EBITDA in &lt;2 years.</li>
+  </ul>
+  <p class="body"><b>Caveat</b>: these are operator self-reports; no independent diligence is yet public. MIT 2025 study found 95% of corporate AI projects fail to deliver measurable returns; 42% of companies abandoned most AI initiatives in 2025; Gartner reports 85% of AI/ML projects fail to deliver expected value. The contrast between operator claims and aggregate adoption data is the central diligence question for this archetype.</p>
+
+  <h3 class="sub">Three representative operators</h3>
+  <ul class="body">
+    <li><b>Long Lake Management Holdings</b>. Founded 2023. Raised $1.28B from General Catalyst, Thrive Capital, Alpha Wave Global, Lightscape Partners. ~18–30 acquisitions across HOA, residential services, business services, infrastructure services. May 2026: announced $6.3B acquisition of NYSE-listed Amex GBT at $9.50/share (60% premium), with GC and Alpha Wave equity-supporting the take-private. Targets 3–5 year hold to outperform S&amp;P 500 via AI deployment across Amex GBT's marketplace.</li>
+    <li><b>GC Creation (General Catalyst Creation Strategy)</b>. $1.5B dedicated vehicle inside GC's $8B Fund XII raise. Led by MD Marc Bhargava. Targets the $16T global services economy with AI-native NewCo companies that acquire legacy service providers in their vertical. Long Lake is the flagship Creation portfolio company.</li>
+    <li><b>Shield Technology Partners</b>. Launched June 2025 by Thrive Holdings + ZBS Partners. $100M initial + $100M Feb 2026 = $200M committed. Nine MSP partners as of Feb 2026; &gt;1,500 customers; $100M+ ARR. Acquires 60–90% stakes; sellers retain leadership and local brand. December 2025: OpenAI took equity in Thrive Holdings; Shield gains direct OpenAI talent and model access.</li>
+  </ul>
+
+  <div class="source">Sources: PitchBook Long Lake profile; PYMNTS, Travel Weekly on Amex GBT take-private; General Catalyst "The Future of Services" essay; Sourcery on GC Creation; SiliconANGLE, BusinessWire on Shield; Current/Crete rebrand press June 2026.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">04</span>The Replication Unit</div>
+  <h1 class="action">The scaling unit is the vertical-specific deployment playbook; each new OpCo is a marginal application of the playbook, each new vertical is a new playbook to write.</h1>
+
+  <h3 class="sub">The atomic unit</h3>
+  <p class="body">Two candidates: <b>per-acquisition</b> at the OpCo level (each acquired SMB is the unit of integration and AI deployment), and <b>per-AI-playbook deployment cycle</b> within a single vertical (Long Lake's compression from over a year to days reflects optimisation of the cycle itself, not just the count). The true scaling unit is the <b>vertical-specific deployment playbook</b> — the codified set of AI agents, integrations, change-management materials, and pricing/comp models for a single vertical.</p>
+
+  <h3 class="sub">Cost to deploy one more OpCo (post first-three-in-vertical)</h3>
+  <ul class="body">
+    <li><b>Transaction fee</b>: ~2% of EV to advisors / bankers / legal; structuring + diligence $300K–$1.5M per transaction.</li>
+    <li><b>Integration team time</b>: 5–15 engineers + ops per vertical playbook; supported on multiple OpCos in parallel.</li>
+    <li><b>AI installation work</b>: $500K–$3M upfront engineering per playbook; near-zero marginal cost per OpCo once playbook exists.</li>
+    <li><b>Total marginal cost per new OpCo</b>: $500K–$1.5M, small relative to EBITDA acquired.</li>
+  </ul>
+
+  <h3 class="sub">Portable across acquisitions</h3>
+  <ul class="body">
+    <li>AI integration playbook (prompts, agents, eval suites, training data)</li>
+    <li>Shared engineering team and central data platform</li>
+    <li>Procurement leverage (software, insurance, healthcare benefits)</li>
+    <li>Fund capital and acquisition financing</li>
+    <li>Brand for sourcing (sellers prefer a known acquirer)</li>
+    <li>LP relationships and debt market access</li>
+  </ul>
+
+  <h3 class="sub">Stays local</h3>
+  <ul class="body">
+    <li>Operating team and front-line staff (retained, not replaced)</li>
+    <li>Customer relationships, contracts, SLAs</li>
+    <li>Local regulatory licensing (CPA, insurance, Medicare certification, state homecare licensure)</li>
+    <li>Customer-facing brand (Shield, Current, Long Lake retain local sub-brands)</li>
+    <li>Real estate, vendor contracts, sometimes local IT systems during integration</li>
+  </ul>
+
+  <h3 class="sub">Diseconomies of scale</h3>
+  <ul class="body">
+    <li><b>Coordination overhead exceeds AI uplift</b> when central team must support &gt;15–20 OpCos across multiple verticals. Long Lake stayed primarily in HOA + adjacent residential/services for its first ~18 acquisitions plausibly because of this constraint.</li>
+    <li><b>Cultural fragmentation</b>. AI deployment that worked in OpCo #1 hits resistance in OpCo #10 with different culture; 75% of employees lack confidence using AI; 65% fear AI will eliminate their roles (industry surveys 2025).</li>
+    <li><b>Multi-vertical playbook dilution</b>. GC Creation operates across legal, IT, and other services; the deeper question is whether one engineering team can hold three playbooks. Thoreau's choice to consolidate five already-large healthcare-tech assets ($30B aggregate) is a different solution.</li>
+  </ul>
+
+  <div class="source">Sources: General Catalyst on Long Lake deployment compression; Bloomberg, Axios Pro on Thoreau structure; MIT 2025 enterprise AI failure study; CIO Magazine on adoption resistance.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">05</span>Unit Economics</div>
+  <h1 class="action">Pre-AI EBITDA margins by vertical run 15–35%; AI uplift adds 200–500 bps in labour-cost-heavy verticals; exit-multiple arbitrage delivers 4× MOIC potential when uplift is verified.</h1>
+
+  <h3 class="sub">Pre-AI EBITDA margins by vertical</h3>
+  <table class="mck">
+    <thead><tr><th>Vertical</th><th style="width:24%">Pre-AI EBITDA margin</th><th>Acquisition multiple (sub-$5M EBITDA)</th></tr></thead>
+    <tbody>
+      <tr><td>Home care</td><td class="num">17–20%</td><td class="num">4–8×</td></tr>
+      <tr><td>MSP</td><td class="num">18–25%</td><td class="num">4–8× sub-$1M; 6–8× $1M+</td></tr>
+      <tr><td>CPA / Accounting</td><td class="num">25–35%</td><td class="num">4–6× small; 6–8× growth</td></tr>
+      <tr><td>P&amp;C brokerage</td><td class="num">25–35% scaled; 15–25% small</td><td class="num">7.5–12×</td></tr>
+      <tr><td>HOA management</td><td class="num">15–25%</td><td class="num">~5–7×</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Multiple arbitrage gap by vertical</h3>
+  <table class="mck">
+    <thead><tr><th>Vertical</th><th>SMB multiple</th><th>Platform exit multiple</th><th>Gap (turns)</th></tr></thead>
+    <tbody>
+      <tr><td>P&amp;C brokerage (sub-$5M EBITDA)</td><td class="num">7.5–12×</td><td class="num">16–18×</td><td class="num">~6–8</td></tr>
+      <tr><td>MSP ($1–5M EBITDA)</td><td class="num">4–8×</td><td class="num">11.2× avg, up to 14–20×</td><td class="num">~4–10</td></tr>
+      <tr><td>CPA / Accounting</td><td class="num">4–8×</td><td class="num">10–12×; Citrin sold at 15×</td><td class="num">~3–7</td></tr>
+      <tr><td>Home care</td><td class="num">4–8×</td><td class="num">7.5–9.5× certified</td><td class="num">~2–4</td></tr>
+      <tr><td>HOA / residential services</td><td class="num">5–7×</td><td class="num">10×+ aspirational</td><td class="num">~3–5</td></tr>
+    </tbody>
+  </table>
+  <p class="body">Arbitrage is highest in insurance brokerage (most consolidated comp set) and MSPs (most active PE buyer interest, with multiples up 0.25–0.50× in 2025 per IBBA). Lowest in home care, where Medicare reimbursement caps create natural compression.</p>
+
+  <h3 class="sub">Illustrative unit economics ($5M EBITDA MSP target)</h3>
+  <ul class="body">
+    <li>Acquisition price: $5M × 6× = $30M.</li>
+    <li>Debt at 60% of EV (HoldCo + OpCo) = $18M; equity = $12M.</li>
+    <li>AI deployment cost: $1M one-time.</li>
+    <li>18 months later, EBITDA = $5M + 400 bps margin uplift on $25M revenue = $5M + $1M = $6M (20% EBITDA growth).</li>
+    <li>Exit at platform multiple of 11× = $66M EV. After debt repayment $18M, equity = $48M.</li>
+    <li><b>Equity return: 4× MOIC on 4-year hold ≈ 41% IRR</b>.</li>
+  </ul>
+  <p class="body">This is the operator's pitch. Contra is multiple-compression risk and uplift-verification risk.</p>
+
+  <h3 class="sub">Fund-level economics</h3>
+  <ul class="body">
+    <li>Management fee: 1.5–2.5% on committed/invested capital.</li>
+    <li>Carry: 20% above 8% LP preferred return; European waterfall in most modern funds.</li>
+    <li>For Long Lake's ~$1.28B raised: ~$20–30M/year management fee; potential GP carry $40M–$200M per fund cycle.</li>
+    <li>For GC Creation $1.5B: similar fee economics; venture-style vehicle so fund life is ~10 years.</li>
+  </ul>
+
+  <div class="source">Sources: IBBA Market Pulse Q2/Q3 2025; BizBuySell Insight Report Q3 2025; FOCUS Bankers, Mertz Taggart on home care; Aventis Advisors, Solganick on MSP; Auxo, FirmLever on accounting; Insurance Journal, Capstone Partners on brokerage; Cambridge Associates on fund waterfalls.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">06</span>Go-to-Market — Sourcing and Exit</div>
+  <h1 class="action">The seller is the founder-operator with no successor; sourcing runs through vertical trade associations and proprietary outreach; exit runs through PE-to-PE or strategic sale.</h1>
+
+  <h3 class="sub">The seller persona</h3>
+  <ul class="body">
+    <li>55–70 years old, often founder.</li>
+    <li>Owns 50–100% of the equity.</li>
+    <li>$1M–$10M EBITDA business; $5M–$50M revenue.</li>
+    <li>No internal successor (~60% of SMB owners) or successor lacks capital.</li>
+    <li>Distrust of generic PE ("strip and flip" reputation).</li>
+    <li>Wants: liquidity, partial rollover equity to participate in upside, retention of team and brand, retention of family member roles, dignified exit timeline (often 2–5 years post-close).</li>
+  </ul>
+
+  <h3 class="sub">Sourcing channels ranked by efficacy</h3>
+  <ul class="body">
+    <li><b>1. Vertical trade associations and conferences.</b> NAHC (home care), CompTIA / ChannelCon (MSPs), AICPA (accounting), CIAB (insurance brokerages), CAI (community associations) — sponsor presence, named partners.</li>
+    <li><b>2. Founder-friendly reputation / proprietary outreach.</b> Shield's 60–90% structure with brand retention is itself a sourcing message. Long Lake's "we acquired your peer and kept their team" is the most powerful referral source.</li>
+    <li><b>3. Vertical-specific M&amp;A advisors and brokers.</b> Mertz Taggart in home health, Cherry Bekaert in CPA, Marsh Berry in insurance, IT ExchangeNet in MSPs.</li>
+    <li><b>4. Regional bankers and accountants.</b> Lower-middle-market specialists with deal-flow visibility.</li>
+    <li><b>5. IBBA-affiliated business brokers.</b> Mostly main-street segment ($350K median sale price; BizBuySell Q3 2025), relevant at the Boomer transition margin.</li>
+    <li><b>6. PE-to-PE transactions for platform-scale assets.</b> Citrin Blackstone deal; Thoreau acquiring five existing PE-backed assets from New Mountain.</li>
+  </ul>
+
+  <h3 class="sub">Deal cycle and pricing</h3>
+  <p class="body">LOI to close on $5M–$30M EBITDA target: 4–8 months typical; longer if regulatory (homecare CMS, brokerage state licensing transfer, CPA state-board approval). Diligence cost $300K–$1.5M. Earn-out structure on 40%+ of small business transactions per IBBA Market Pulse 2025; seller financing averages 30–40% of purchase price in main-street deals.</p>
+
+  <p class="body">Typical purchase price mix: 60–75% cash at close (debt-financed), 10–25% rollover equity in the holdco or platform LLC, 10–20% earn-out tied to EBITDA retention or growth over 2–3 years.</p>
+
+  <h3 class="sub">Exit side — how the holdco gets sold</h3>
+  <ul class="body">
+    <li><b>1. Sponsor-to-sponsor recap.</b> Citrin Cooperman sold by New Mountain to Blackstone in 2025 at ~15× EBITDA — proof transaction that PE-to-PE works in services.</li>
+    <li><b>2. Strategic sale.</b> Larger industry consolidator buys the platform (e.g., Hub International at $29B post-money in P&amp;C brokerage).</li>
+    <li><b>3. Take-public.</b> Less common given holdco complexity; Amex GBT going private is the opposite direction.</li>
+    <li><b>4. Continuation vehicle.</b> GP-led secondary keeps the asset under management with new LP base.</li>
+    <li><b>5. Asset-by-asset sale.</b> Sell individual verticals separately if they have more strategic value to vertical-specific buyers.</li>
+  </ul>
+
+  <div class="source">Sources: IBBA Market Pulse Q2/Q3 2025; BizBuySell 2025 Year in Review; Insurance Journal on Hub International; International Accounting Bulletin on Citrin-Blackstone.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">07</span>Capital Structure and Founder Economics</div>
+  <h1 class="action">Sponsor fund $50M–$1.5B; GP economics combine sponsor equity 5–15% plus 20% carry above 8% pref; hold periods 7–12 years per fund vintage.</h1>
+
+  <h3 class="sub">Sponsor fund size to start</h3>
+  <ul class="body">
+    <li><b>Minimum credible first fund</b>: $50–200M.</li>
+    <li><b>Shield Tech</b>: launched with $100M first close → $200M Feb 2026 add-on within 8 months.</li>
+    <li><b>Long Lake</b>: reached $1.28B over ~2.5 years (founding 2023 → 2026); first close likely $200–400M.</li>
+    <li><b>Current (Crete)</b>: $500M for AI roll-up deployment.</li>
+    <li><b>GC Creation</b>: $1.5B dedicated allocation.</li>
+    <li><b>Thoreau</b>: $30B raised across Lexington / CPPIB / ICG / Middle East backers.</li>
+  </ul>
+
+  <h3 class="sub">Debt-to-equity ratio</h3>
+  <ul class="body">
+    <li>Typical LBO leverage 50–70% of EV at OpCo level.</li>
+    <li>Holdco-level PIK or preferred to stack more leverage on top in stable cash-flow verticals.</li>
+    <li>US LBO market hit record $397.5B in 2025 (Axios Pro Jan 2026), exceeding 2007 — credit markets supportive.</li>
+    <li>Caveat: Bain Global PE Report 2025/2026 highlights that easy multiple expansion via cheap debt has waned; "12 is the new 5" for required EBITDA growth.</li>
+  </ul>
+
+  <h3 class="sub">Sponsor / principal economics</h3>
+  <ul class="body">
+    <li><b>GP equity</b> in the management company: typically 5–15% of holdco equity at funding.</li>
+    <li><b>GP carry</b>: 20% on fund returns above 8% preferred return.</li>
+    <li><b>Typical successful fund GP carry payout</b>: $50M–$200M for the GP team on a $500M–$1B fund returning 2–3× MOIC.</li>
+    <li><b>Founder dilution path</b>: less aggressive than VC (no priced rounds during hold); main dilution from successor funds, hire-on of new partners, minority co-invest economics.</li>
+  </ul>
+
+  <h3 class="sub">Hold periods and exit multiples</h3>
+  <ul class="body">
+    <li>7–12 years per fund vintage (standard PE).</li>
+    <li>Per OpCo: 3–7 years from acquisition to exit, often blended in a single platform sale.</li>
+    <li>Long Lake targets 3–5 year horizons to outperform the S&amp;P 500 per Amex GBT press materials.</li>
+    <li>For the platform asset: 1.5–3× MOIC GP-level on successful funds.</li>
+    <li>For AI-services arbitrage specifically: PitchBook noted recent transactions exiting "well within the twos" for short-hold AI-services platforms — 2.x MOIC rather than 4× — because hold periods were short and AI uplift diligence limited.</li>
+  </ul>
+
+  <div class="source">Sources: Cambridge Associates fund terms 2024; Bain Global PE Report 2025/2026; Axios Pro US LBO volume 2026; PitchBook AI-services exit pricing.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">08</span>Risks and Failure Modes</div>
+  <h1 class="action">Five recurring failure modes: buy-first-AI-later execution failure, unverifiable AI uplift, OpCo cultural resistance, fund concentration risk, vertical regulatory exposure.</h1>
+
+  <ul class="body">
+    <li><b>1. "Buy first, AI later" execution failure.</b> Smarter Technologies (New Mountain) was formed May 2025 combining SmarterDx, Thoughtful.ai, and Access Healthcare into an AI-powered RCM platform. CEO Jeremy Delinsky stepped down December 2 via LinkedIn after 7 months; succeeded by President Michael Gao MD. Public framing: integration / leadership-fit difficulty under a tight time horizon. Even $1B+ raised and named AI-native portfolio companies cannot guarantee 12-month integration timelines.</li>
+    <li><b>2. AI uplift cannot be independently verified at diligence.</b> PitchBook's observation that recent AI-services exits priced "well within the twos" suggests buyers are discounting unverified margin claims. The structural risk: if uplift is real but unobservable to buyers, the platform exits at SMB multiples (5–7×) rather than platform multiples (10–14×) and the entire arbitrage collapses.</li>
+    <li><b>3. Cultural and change-management resistance inside OpCos.</b> MIT 2025 study: 95% of corporate AI initiatives fail to produce measurable returns; Gartner reports 85% of AI/ML projects fail; 42% of companies abandoned most AI initiatives in 2025; 75% of employees lack confidence using AI; 65% fear AI will eliminate their roles. When an OpCo's frontline operators resist deployment, the playbook stalls.</li>
+    <li><b>4. Concentration risk in the holdco / fund.</b> GC's Long Lake position is a substantial single-asset exposure per CNBC; if Long Lake's AI thesis fails, fund-level returns decline disproportionately. Thoreau's bet is concentrated in five healthcare-tech assets; if any one stumbles, $30B of valuation is sensitive. Concentration is structural — you cannot run a 50-position portfolio of 10× engineering-investment-per-asset.</li>
+    <li><b>5. Regulatory exposure varies by vertical.</b> Home care: CMS reimbursement, state licensing, labour-classification (W-2 vs 1099). MSP / cybersecurity: liability for client breaches; SEC cyber-disclosure rules. CPA: state-by-state ownership rules limiting non-CPA equity (the structural reason Crete uses an "alliance" model rather than direct equity). P&amp;C brokerage: state licensing transfer in M&amp;A; producer fiduciary obligations. Healthcare RCM: HIPAA, PHI handling, payor scrutiny.</li>
+  </ul>
+
+  <h3 class="sub">Multiple-compression risk scenarios</h3>
+  <ul class="body">
+    <li><b>Credit cycle reversal.</b> A 200 bps rise in cost of debt compresses LBO equity returns ~30%. Bain 2025 notes the easy multiple expansion era is gone.</li>
+    <li><b>AI-uplift commodification.</b> If every roll-up can deploy the same OpenAI-powered playbook (per Thrive/OpenAI's MSP and CPA work spreading), then AI uplift becomes the new baseline and no longer creates multiple arbitrage. Compression accelerates.</li>
+  </ul>
+
+  <h3 class="sub">Preconditions for the playbook to work</h3>
+  <ul class="body">
+    <li>SMB owner trust in the acquirer (sourcing).</li>
+    <li>Integration team capability (delivery).</li>
+    <li>Codified AI playbook with measurable KPIs (replication).</li>
+    <li>Debt market open at &lt;8% all-in (capital structure).</li>
+    <li>LP appetite for the vehicle structure (fund management).</li>
+    <li>Vertical has labour-intensity that AI can address (margin lever).</li>
+  </ul>
+
+  <div class="source">Sources: Becker's Hospital Review, Modern Healthcare on Smarter Technologies CEO change; PitchBook on AI-services exits; MIT 2025 study; Gartner enterprise AI adoption data; Bain Global PE Report 2025/2026.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">09</span>When This Game Is Playable</div>
+  <h1 class="action">The game requires M&amp;A diligence muscle, operating integration capability, AI engineering depth, sustained LP capital — and a vertical where labour intensity is the margin lever.</h1>
+
+  <h3 class="sub">Required team capabilities</h3>
+  <ul class="body">
+    <li><b>M&amp;A diligence and origination.</b> Vertical-specific deal sourcing and QofE expertise; senior partners with bank/PE pedigree.</li>
+    <li><b>Operating integration.</b> Post-close ops team that can install the playbook in 30–90 days; finance, HR, IT integration skill.</li>
+    <li><b>AI engineering.</b> 5–15 ML/applied-AI engineers per vertical, with eval and reinforcement-learning experience.</li>
+    <li><b>LP relationship and capital formation.</b> Sustained ability to raise $200M+ per fund vintage.</li>
+    <li><b>Vertical operating experience.</b> Many holdcos hire ex-CEOs from the target vertical as platform CEOs.</li>
+  </ul>
+
+  <h3 class="sub">Required capital base</h3>
+  <ul class="body">
+    <li>$50–200M minimum first fund (Shield Tech's $100M floor is plausibly the lower bound).</li>
+    <li>$500M–$1.5B for a multi-vertical platform (Current $500M; Long Lake $1.28B; GC Creation $1.5B).</li>
+    <li>$20B+ for healthcare-tech-scale rollups (Thoreau $30B target).</li>
+    <li>Debt capacity at OpCo level: 50–60% of EV at $1M+ EBITDA targets; less for $200K–$1M micro-acquisitions.</li>
+  </ul>
+
+  <h3 class="sub">Required market conditions</h3>
+  <ul class="body">
+    <li><b>Fragmented vertical with willing sellers.</b> Boomer succession crisis means supply of $1–10M EBITDA targets is high through 2030.</li>
+    <li><b>AI applicability proven in the vertical.</b> Tax prep, HOA admin, MSP triage, RCM coding all have demonstrated AI productivity claims. Verticals with low AI applicability (high-touch physical services) are harder.</li>
+    <li><b>Debt market open.</b> 2025 LBO volume at record $397.5B suggests open; Bain notes spread tightening.</li>
+    <li><b>LP appetite for AI-tagged buyout / hybrid vehicles.</b> 40% of VC exits in 2025 are AI-tagged; LP rotation toward AI is structural through 2026.</li>
+  </ul>
+
+  <h3 class="sub">Required time horizon</h3>
+  <ul class="body">
+    <li>7–12 years per fund vintage.</li>
+    <li>3–7 years per OpCo hold.</li>
+    <li>18–36 months from acquisition to first credible margin-uplift datapoint (long enough that fund-level patience is required).</li>
+  </ul>
+
+  <h3 class="sub">Disqualifying conditions</h3>
+  <ul class="body">
+    <li>Vertical already consolidated to top 3 players &gt;60% market share — no acquisition runway.</li>
+    <li>Regulatory framework prohibiting non-licensee ownership (CPA, law firms in most states) — only structurally complex workarounds (the "alliance" model) available.</li>
+    <li>AI applicability unproven in vertical — labour cost is not the dominant cost and AI cannot meaningfully reduce it.</li>
+    <li>LP capital unwilling to underwrite &gt;5-year payback periods.</li>
+    <li>Credit market spreads &gt;800 bps over base — leveraged returns collapse.</li>
+    <li>Team lacks one of: vertical operating credibility, AI engineering depth, M&amp;A origination muscle. Missing any one is fatal; missing two means the playbook cannot run.</li>
+  </ul>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">10</span>Appendix · Sources</div>
+
+  <p class="body" style="font-size:11.5px;line-height:1.6">
+    Long Lake / Amex GBT: PYMNTS, PitchBook profile, Travel Weekly, General Catalyst Future of Services essay, Dealroom AI Take-Private Playbook. GC Creation: MobiHealthNews on GC $8B fund, Sourcery on $1.5B AI Roll-Up Engine, Capital Founders Playbook. Shield Technology Partners: BusinessWire Thrive / ZBS launch, SiliconANGLE Feb 2026 $100M, MSP Summit OpenAI rolls into Shield, Omdia AI Capital Meets MSP Rollups. Crete / Current: CPA Practice Advisor rebrand, BusinessWire June 2026, The Finance Story on $500M, Crypto Briefing on OpenAI/Thrive Tax AI. Smarter Technologies / Thoreau: Becker's Hospital Review CEO change, Modern Healthcare, Healthcare Dive, Bloomberg on Thoreau $30B, MedCity News, Axios Pro on Lexington / CPPIB / ICG. Khosla AI roll-ups: TechCrunch May 2025. SMB benchmark multiples: IBBA Market Pulse Q2 2025 (PR Newswire), IBBA Q3 2025 highlights, BizBuySell 2025 Year in Review, BizBuySell Q3 2025 Insight Report. Vertical multiples: FOCUS Bankers home health EBITDA multiples 2026, Mertz Taggart Q1 2026 home-based care M&amp;A report, Aventis Advisors MSP valuation multiples, Solganick MSP M&amp;A 2025, PeakValue MSP 12× multiples 2025, Auxo accounting firm multiples 2026, FirmLever, Insurance Journal Broker Valuations 2026, Leader's Edge Brokerage M&amp;A, Capstone Partners Insurance Services Update June 2025. Fund economics: Bain Global PE Report 2025 PDF and 2026 update, Chronograph Bain takeaways, Cambridge Associates Private Investment Fund Terms 2024, Not Very Private Equity, Debtwire HoldCo debt &amp; preferred equity, Corporate Finance Institute LBO Model, HBS Online LBO Model overview. Silver Tsunami: Sunbelt Business Brokers Baby Boomer Exits, Fox Business Silver Tsunami, Headway $10 Trillion Transfer. AI failure rate: Complex Discovery MIT 2025 study, The Data Experts enterprise AI failure crisis, CIO 4 Critical Misconceptions. Exit data: PitchBook as window widens PE rush to exit, Yahoo Finance / PitchBook 40% AI exit value.
+  </p>
+
+  <div class="source">Document 3 of 4 in the Archetype Deep Dive series. Prepared June 13, 2026 for internal review.</div>
+</section>
+
+</body>
+</html>
