@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Strategic Decision Memo · Archetype Combinations and Sequencing</title>
+<style>
+:root{
+  --deep-slate:#31435B;
+  --petrol-teal:#2E7780;
+  --soft-steel:#A9C5D6;
+  --silver-mist:#DCE5EC;
+  --near-black:#151A1F;
+  --cool-gray:#C9D2DC;
+  --off-white:#FAF9F6;
+  --rule:#D8DEE5;
+  --shade-1:#F4F2EE;
+  --pass:#2E7780;
+  --conditional:#C5874A;
+  --marginal:#A65A3B;
+  --fail:#7A3030;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--off-white);color:var(--near-black);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.55;letter-spacing:-0.005em;-webkit-font-smoothing:antialiased}
+.page{max-width:1180px;margin:0 auto;padding:56px 72px 64px;border-bottom:1px solid var(--rule);background:var(--off-white)}
+.page:first-of-type{padding-top:120px}
+.eyebrow{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;margin-bottom:14px}
+.eyebrow .num{color:var(--deep-slate);font-weight:700;margin-right:10px}
+h1.action{font-size:30px;line-height:1.2;font-weight:700;color:var(--deep-slate);letter-spacing:-0.02em;margin-bottom:18px;max-width:980px}
+h2.section{font-size:22px;line-height:1.25;font-weight:700;color:var(--deep-slate);margin:24px 0 12px;letter-spacing:-0.015em}
+h3.sub{font-size:13px;font-weight:700;color:var(--deep-slate);text-transform:uppercase;letter-spacing:0.08em;margin:20px 0 10px}
+h4.minor{font-size:14px;font-weight:700;color:var(--deep-slate);margin:14px 0 6px}
+p.body{font-size:13.5px;line-height:1.6;color:var(--near-black);margin-bottom:10px;max-width:960px}
+p.body b{color:var(--deep-slate)}
+ul.body{font-size:13.5px;line-height:1.6;color:var(--near-black);margin:8px 0 14px 20px;max-width:960px}
+ul.body li{margin-bottom:5px}
+ul.body li b{color:var(--deep-slate)}
+.source{font-size:10.5px;letter-spacing:0.03em;color:#7B8590;border-top:1px solid var(--rule);padding-top:10px;margin-top:30px}
+.cover{min-height:78vh;display:flex;flex-direction:column;justify-content:space-between;padding-top:140px}
+.cover .top-mark{font-size:10px;letter-spacing:0.22em;color:var(--petrol-teal);font-weight:600;text-transform:uppercase}
+.cover h1{font-size:42px;line-height:1.1;font-weight:700;letter-spacing:-0.025em;color:var(--deep-slate);margin:54px 0 22px;max-width:980px}
+.cover .deck{font-size:17px;color:#3F4A57;max-width:880px;line-height:1.55;font-weight:400}
+.cover .meta{display:flex;gap:64px;margin-top:60px;font-size:12px;color:#5A6470}
+.cover .meta .label{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;display:block;margin-bottom:6px}
+.cover .meta .v{font-size:14px;color:var(--near-black);font-weight:600}
+.cover .palette{display:flex;gap:0;margin-top:40px;border-top:1px solid var(--rule);padding-top:18px}
+.cover .palette span{display:block;width:32px;height:6px}
+.bluf{background:var(--silver-mist);border-left:4px solid var(--petrol-teal);padding:22px 26px;margin:18px 0 24px;max-width:980px}
+.bluf .bluf-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:10px}
+.bluf p{font-size:14.5px;line-height:1.55;color:var(--near-black)}
+.callout{border:1px solid var(--cool-gray);background:#FDFCFA;padding:16px 22px;margin:14px 0;border-left:3px solid var(--petrol-teal);max-width:980px}
+.callout .h{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:8px}
+.callout p{font-size:12.8px;line-height:1.55;color:var(--near-black)}
+table.mck{width:100%;border-collapse:collapse;background:#fff;font-size:12px;margin:14px 0 12px}
+table.mck th{background:var(--deep-slate);color:#fff;text-align:left;padding:10px 12px;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;border-right:1px solid #3D506B}
+table.mck th:last-child{border-right:none}
+table.mck td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.5}
+table.mck tr:nth-child(even) td{background:var(--shade-1)}
+table.mck td.path{font-weight:700;color:var(--deep-slate);width:38px;text-align:center}
+table.mck td.name{font-weight:700;color:var(--deep-slate)}
+table.mck td.center{text-align:center;font-weight:600}
+.verdict{display:inline-block;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;padding:3px 10px;border-radius:2px;font-weight:700;white-space:nowrap}
+.verdict.pass{background:#E1F0EE;color:var(--pass)}
+.verdict.cond{background:#F5E8D5;color:var(--conditional)}
+.verdict.marg{background:#F0D9CE;color:var(--marginal)}
+.verdict.fail{background:#EDD4D4;color:var(--fail)}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.dot.pass{background:var(--pass)}
+.dot.cond{background:var(--conditional)}
+.dot.marg{background:var(--marginal)}
+.dot.fail{background:var(--fail)}
+.scorecard td.center{font-size:11px;letter-spacing:0.04em;text-transform:uppercase;font-weight:700}
+.matrix{display:grid;grid-template-columns:200px 1fr 1fr;gap:0;border:1px solid var(--rule);background:#fff;margin:18px 0;font-size:12.5px}
+.matrix .head{background:var(--deep-slate);color:#fff;padding:12px 14px;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;border-right:1px solid #3D506B}
+.matrix .head:last-child{border-right:none}
+.matrix .row-h{background:var(--silver-mist);padding:14px;font-weight:700;color:var(--deep-slate);border-bottom:1px solid var(--rule);border-right:1px solid var(--rule)}
+.matrix .cell{padding:14px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);line-height:1.55}
+.matrix .cell:last-child{border-right:none}
+.path-block{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--petrol-teal);padding:22px 26px;margin:18px 0;max-width:980px}
+.path-block .id{font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:6px}
+.path-block .title{font-size:18px;font-weight:700;color:var(--deep-slate);margin-bottom:12px;line-height:1.3}
+.path-block.fail{border-left-color:var(--fail)}
+.path-block.fail .id{color:var(--fail)}
+.path-block.cond{border-left-color:var(--conditional)}
+.path-block.cond .id{color:var(--conditional)}
+.path-block.pass{border-left-color:var(--pass)}
+.path-block.pass .id{color:var(--pass)}
+.scoreline{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 16px;font-size:11.5px}
+.scoreline .s{display:flex;flex-direction:column;background:var(--shade-1);padding:8px 12px;border-left:3px solid var(--deep-slate);min-width:130px}
+.scoreline .s .lbl{font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:#6B7785;font-weight:600;margin-bottom:3px}
+.scoreline .s .val{font-weight:700;color:var(--deep-slate);font-size:12px}
+.tree{margin:16px 0 6px;font-family:'JetBrains Mono','Menlo',monospace;font-size:12px;line-height:1.7;color:var(--near-black);background:#fff;border:1px solid var(--rule);padding:20px 24px;white-space:pre;overflow-x:auto}
+.tree .root{color:var(--deep-slate);font-weight:700}
+.tree .branch{color:var(--petrol-teal);font-weight:600}
+.tree .leaf{color:#3F4A57}
+.flavor-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:10px;margin:14px 0}
+.flavor{background:#fff;border:1px solid var(--rule);padding:14px 18px;border-left:3px solid var(--soft-steel)}
+.flavor .fh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.flavor .fn{font-weight:700;color:var(--deep-slate);font-size:13px}
+.flavor .desc{font-size:12.5px;color:#3F4A57;line-height:1.55}
+@media print{body{font-size:10px}.page{padding:30px 36px;max-width:none;page-break-after:always}.cover{min-height:auto}table.mck th{background:var(--deep-slate)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.path-block{page-break-inside:avoid}.callout{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<section class="page cover">
+  <div>
+    <div class="top-mark">Strategic Decision Memo · Internal Strategy</div>
+    <h1>Archetype Combinations and Sequencing — Which Games to Play, in What Order, and Why</h1>
+    <div class="deck">
+      The team has selected the AI-Native Operating Holdco archetype as the primary game. Three other archetypes from the Game Selection Framework — Permanent Capital Compounder, Horizontal AI Platform, Data Network Compounder — remain unexamined as potential complements or alternatives. This memo evaluates every viable combination, scores each against five structural criteria, and recommends a sequenced position with explicit triggers for stage progression.
+    </div>
+  </div>
+  <div>
+    <div class="meta">
+      <div><span class="label">Prepared</span><span class="v">June 14, 2026</span></div>
+      <div><span class="label">Series</span><span class="v">Strategic Decision Memos</span></div>
+      <div><span class="label">Sources</span><span class="v">Archetype deep dives, SEC filings, public company disclosures</span></div>
+    </div>
+    <div class="palette">
+      <span style="background:#31435B"></span><span style="background:#2E7780"></span><span style="background:#A9C5D6"></span>
+      <span style="background:#DCE5EC"></span><span style="background:#151A1F"></span><span style="background:#C9D2DC"></span>
+      <span style="background:#FAF9F6;border-right:1px solid #ddd;border-left:1px solid #ddd"></span>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">01</span>The Question</div>
+  <h1 class="action">Now that AI-Native Operating Holdco is the chosen base archetype, which of the three remaining archetypes are complementary, which are sequential stages of the same game, and which are mutually exclusive alternatives?</h1>
+
+  <div class="bluf">
+    <div class="bluf-label">Bottom Line Up Front</div>
+    <p>The four archetypes are not four equal alternatives — they live on three different strategic axes. Permanent Capital is a <b>capital structure</b> choice that can be layered on Holdco; Data Network is a <b>product layer</b> that can be added once data is accumulated; Horizontal AI is a <b>distribution model</b> that creates conflict with Holdco at one extreme and complements it at the other. Of six viable paths, one is recommended for the founding vintage (Solo Holdco), one conditional starting at Stage 2 (Holdco + Data Network productisation), one deferred to Vintage 2+ (Holdco + Permanent Capital). The Horizontal AI dimension is decomposed into five flavors evaluated independently — two recommended as non-revenue brand/talent assets, three rejected.</p>
+  </div>
+
+  <h3 class="sub">What we are deciding</h3>
+  <ul class="body">
+    <li>The current Operating Model v4.0 specifies Solo Holdco with fund-vintage capital — pure Path A.</li>
+    <li>Three open questions surfaced by Nicolas: <b>(1)</b> can Holdco and Data Network be sequential stages of one model? <b>(2)</b> is Horizontal AI + Data Network a different game we should consider? <b>(3)</b> is a mix of all three coherent or capability-destroying?</li>
+    <li>Lisa adds: <b>(4)</b> add Permanent Capital to the combinatorial space; <b>(5)</b> in Horizontal AI, do not pre-judge — consider variants such as standalone team-built tools or industry-benchmark products that do not compete with portfolio AI.</li>
+  </ul>
+
+  <h3 class="sub">What we are not re-litigating</h3>
+  <p class="body">The choice of AI-Native Operating Holdco as the base archetype is taken as decided per the Game Selection Framework (June 12, 2026, score 100/125, highest in the universe of fourteen archetypes). The choice of pure-Holdco posture without a standing services arm is taken as decided per the Pure HoldCo Decision Memo (June 14, 2026, five documented failure mechanisms). This memo asks the orthogonal question: given those decisions, what else fits?</p>
+
+  <div class="source">Sources: Game Selection Framework (bobroff-cap/roll-ups/analysis), Pure HoldCo Decision Memo (bobroff-cap/roll-ups/analysis), Operating Model v4.0 (bobroff-cap/roll-ups/raw).</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">02</span>Reframing — Three Axes, Not Four Equal Archetypes</div>
+  <h1 class="action">The four archetypes appear coordinate but are not — they describe three distinct strategic dimensions, which is why their combinatorial space collapses from fifteen to six.</h1>
+
+  <p class="body">If the four archetypes are treated as mutually exclusive operating models, the combinatorial space is 2^4 − 1 = 15 possible combinations. This produces a memo that is unreadable and an analysis that is structurally wrong. The reduction comes from recognising that the four archetypes occupy three different categorical positions:</p>
+
+  <table class="mck">
+    <thead><tr><th style="width:30%">Archetype</th><th style="width:24%">What it actually is</th><th>Combination logic</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="name">AI-Native Operating Holdco</td>
+        <td><b>Operating model</b> — what we do day-to-day (acquire SMBs, install AI, run a multi-OpCo platform)</td>
+        <td>This is the base layer. Every viable path begins with Holdco as the operating spine.</td>
+      </tr>
+      <tr>
+        <td class="name">Permanent Capital Compounder</td>
+        <td><b>Capital structure</b> — how we raise and hold money (fund vintage vs evergreen)</td>
+        <td>Layered onto Holdco. Berkshire <i>is</i> a Holdco — with permanent capital. Markel <i>is</i> a Holdco — with permanent capital plus insurance float. Long Lake <i>is</i> a Holdco — with fund-vintage capital. Same operating spine, different capital chassis.</td>
+      </tr>
+      <tr>
+        <td class="name">Horizontal AI Platform</td>
+        <td><b>Distribution model</b> — how AI reaches markets (internal to portfolio vs external to non-portfolio customers)</td>
+        <td>Compatible with Holdco only in specific flavors; one flavor (vertical-AI-sold-externally) is structurally incompatible and was rejected by the Pure HoldCo Decision Memo. Other flavors evaluated below.</td>
+      </tr>
+      <tr>
+        <td class="name">Data Network Compounder</td>
+        <td><b>Product layer</b> — what we build on top of accumulated data (sell aggregated dataset access)</td>
+        <td>Sequential stage on top of Holdco, not parallel game. Requires data accumulation that only Holdco can produce. Requires 15–30 OpCos in a single vertical before the dataset has critical mass.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="h">Why this matters operationally</div>
+    <p>Treating these as four equal archetypes leads to false dichotomies ("should we be Holdco <i>or</i> Permanent Capital?"). The right question is "should our Holdco use fund-vintage <i>or</i> permanent capital structure, and at what stage?". Same for Data Network — not "Holdco <i>or</i> Data Network" but "at what point in the Holdco lifecycle does Data Network productisation become viable?".</p>
+  </div>
+
+  <h3 class="sub">Empirical evidence that the axes are independent</h3>
+  <ul class="body">
+    <li><b>Berkshire (Holdco + Permanent Capital, no Data Network, no Horizontal AI)</b> — $1T+ market cap, $171B float, 60+ subsidiaries; ran for 60 years on this configuration. Source: Berkshire 2024 Annual Report.</li>
+    <li><b>Markel (Holdco + Permanent Capital + insurance underwriting)</b> — Markel Ventures &gt;20 wholly-owned subsidiaries; insurance float; founded 1930, IPO 1986. Source: Markel Group 2024 Annual Report.</li>
+    <li><b>Verisk (Data Network on top of acquired insurance businesses)</b> — $2.88B FY24 revenue, 54.7% adjusted EBITDA margin; began as insurance company, built data network through ~70 acquisitions over two decades. Source: Verisk 10-K FY2024.</li>
+    <li><b>Plaid (Pure Data Network, no Holdco, no Permanent Capital)</b> — $546M ARR, fund-vintage VC capital. Source: Sacra Plaid profile.</li>
+    <li><b>Long Lake (Pure Holdco, fund-vintage capital, no Data Network, no Horizontal AI)</b> — $1.28B raised, ~30 acquisitions. Source: PitchBook Long Lake profile, May 2026 Amex GBT take-private press materials.</li>
+    <li><b>Sierra (Pure Horizontal AI, no Holdco, fund-vintage capital)</b> — $150M ARR, $15.8B valuation at Series E, no acquisitions. Source: CMSWire, CNBC May 2026.</li>
+  </ul>
+  <p class="body">Each operator occupies a different position in the 3D space (operating × capital × product layer). They do not compete for the same square — they instantiate different combinations.</p>
+
+  <div class="source">Sources: Berkshire 2024 Annual Report; Markel Group 2024 Annual Report; Verisk 10-K FY2024; Sacra Plaid; PitchBook Long Lake; CMSWire on Sierra Series E.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">03</span>The Six Viable Paths from the Three-Axis Framing</div>
+  <h1 class="action">Of the fifteen combinatorial possibilities, six are operationally coherent. Three are deferred to later vintages, one is rejected as a structural conflict with Holdco, two are rejected as capability-mismatched alternative games.</h1>
+
+  <table class="mck">
+    <thead><tr><th style="width:6%">Path</th><th style="width:30%">Configuration</th><th style="width:30%">What this means in practice</th><th>When playable</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="path">A</td>
+        <td class="name">Solo Holdco, fund-vintage capital</td>
+        <td>Current Operating Model v4.0. Acquire OpCos, install AI internally, exit via PE-to-PE recap or strategic sale.</td>
+        <td><b>Vintage 1 baseline</b> — already chosen</td>
+      </tr>
+      <tr>
+        <td class="path">B</td>
+        <td class="name">Holdco + Permanent Capital migration</td>
+        <td>Begin Vintage 1 with closed-end fund. After demonstrating returns, migrate Vintage 2+ to evergreen vehicle (publicly listed Holdco, insurance float, or perpetual capital). Berkshire / Markel architecture.</td>
+        <td><b>Stage 3, Vintage 2+</b></td>
+      </tr>
+      <tr>
+        <td class="path">C</td>
+        <td class="name">Holdco + Data Network as Stage 2 productisation</td>
+        <td>After 15–30 OpCos in a single vertical accumulate proprietary cross-OpCo data, productise the dataset and sell access via API/dashboard to non-competing buyers (industry researchers, regulators, insurers). Verisk-style staged emergence.</td>
+        <td><b>Stage 2, Year 4–6</b></td>
+      </tr>
+      <tr>
+        <td class="path">D</td>
+        <td class="name">Holdco + Permanent Capital + Data Network</td>
+        <td>Full Markel-Verisk synthesis. Permanent capital base + decades of OpCo operation + productised data layer. Compound book value across multi-decade horizon.</td>
+        <td><b>Stage 3+, Vintage 2+</b></td>
+      </tr>
+      <tr>
+        <td class="path">E</td>
+        <td class="name">Holdco + Horizontal AI (5 flavors)</td>
+        <td>Build or distribute AI products externally alongside Holdco. Five flavors with distinct economics — vertical AI sold to non-portfolio, internal M&amp;A tool productised, industry benchmark/research, foundation-model platform, open-source tool.</td>
+        <td><b>Flavor-dependent</b> — see Section 09</td>
+      </tr>
+      <tr>
+        <td class="path">F</td>
+        <td class="name">Horizontal AI only — no Holdco</td>
+        <td>Abandon roll-up M&amp;A strategy entirely; build a Sierra / Decagon / Glean-style enterprise AI platform with venture capital.</td>
+        <td><b>Different game</b> — not playable with current team and capital</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Combinations not analysed and why</h3>
+  <ul class="body">
+    <li><b>Solo Permanent Capital, Solo Data Network, Solo Horizontal AI</b> — these are baseline alternatives without Holdco. Each requires capital and capability sets distant from ours. Solo Permanent Capital begins with insurance float access or public-equity vehicle ($500M+ start); Solo Data Network requires either pre-existing data position or expensive aggregation phase ($50–200M pure SaaS, $250M–$1B+ acquisition-led per Data Network deep dive); Solo Horizontal AI requires $200M+ minimum and frontier-lab-tier engineering. All three are <b>strategically irrelevant</b> for a Holdco-anchored team and are addressed only by reference in Path F.</li>
+    <li><b>Permanent Capital + Data Network without Holdco</b> — possible in principle (a pure insurance-funded data company) but no operator runs this configuration. The closest is Verisk, which began as insurance and grew into Data Network, but always retained operating insurance. Without Holdco, no data flows accumulate.</li>
+    <li><b>All four together (Holdco + Permanent + Data + Horizontal)</b> — only Brookfield comes close (Holdco + Permanent + light Horizontal via fund-management products + Data through Wealth Solutions analytics). Brookfield runs ~7,000 employees and $1T+ AUM. Out of scope for a $50M fund.</li>
+  </ul>
+
+  <div class="source">Sources: Operating Model v4.0; Game Selection Framework; deep dives on all four archetypes (bobroff-cap/roll-ups/analysis).</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">04</span>Evaluation Framework — Five Structural Questions</div>
+  <h1 class="action">Each path is scored against the five questions that determine whether a configuration is operationally coherent, capital-feasible, and supported by reference-operator evidence.</h1>
+
+  <table class="mck">
+    <thead><tr><th style="width:8%">Q</th><th style="width:24%">Dimension</th><th>The test</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="path">Q1</td>
+        <td class="name">Capital required</td>
+        <td>Does the configuration fit within $50M Vintage 1 fund capacity, or does it require capital we do not have? Pass = fits. Conditional = fits with milestones. Fail = capital mismatch &gt;2×.</td>
+      </tr>
+      <tr>
+        <td class="path">Q2</td>
+        <td class="name">Team capability fit</td>
+        <td>Does our team (M&amp;A diligence + AI Engineering + integration ops) execute the configuration without hiring an entire additional discipline at scale?</td>
+      </tr>
+      <tr>
+        <td class="path">Q3</td>
+        <td class="name">Sequencing with Holdco</td>
+        <td>Does this configuration enable Holdco, sit alongside it without resource contention, or compete with it for management bandwidth?</td>
+      </tr>
+      <tr>
+        <td class="path">Q4</td>
+        <td class="name">P&amp;L architecture</td>
+        <td>Does this produce a single consolidated P&amp;L narrative for LPs, or does it fracture into multiple sub-entities that LPs must underwrite separately? Single P&amp;L = clean LP story.</td>
+      </tr>
+      <tr>
+        <td class="path">Q5</td>
+        <td class="name">Reference operator evidence</td>
+        <td>Are there documented reference operators executing this configuration at our scale today? Pass = multiple operators, &gt;3 years of evidence. Conditional = 1–2 operators or precedent in adjacent shapes. Fail = no operator runs this — be the first only with conviction.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Verdict semantics</h3>
+  <ul class="body">
+    <li><span class="dot pass"></span><b>STRONG</b> — clear pass on the dimension, no constraints.</li>
+    <li><span class="dot cond"></span><b>CONDITIONAL</b> — passes if specific preconditions hold (capital milestone, team build-out, sequencing trigger).</li>
+    <li><span class="dot marg"></span><b>MARGINAL</b> — meaningful risk; requires explicit mitigation; pursue only with conviction.</li>
+    <li><span class="dot fail"></span><b>FAIL</b> — does not meet the test at current scale; revisit if scale changes.</li>
+  </ul>
+
+  <p class="body">Path-level verdict is not the arithmetic mean of dimension scores. A FAIL on any one of Q1, Q2, or Q5 typically dominates and blocks the path; FAIL on Q3 or Q4 indicates the configuration is workable but suboptimal.</p>
+
+  <div class="source">Framework derived from Pure HoldCo Decision Memo's five-mechanism analysis (June 14, 2026) extended to combinatorial-archetype scope.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">05</span>Path A · Solo Holdco, Fund-Vintage Capital</div>
+  <h1 class="action">The chosen baseline. Vintage 1 of a closed-end fund acquiring OpCos in fragmented service verticals, installing AI internally, exiting via PE-to-PE recap. Already locked in Operating Model v4.0.</h1>
+
+  <div class="path-block pass">
+    <div class="id">PATH A · BASELINE</div>
+    <div class="title">Solo Holdco, fund-vintage capital — the configuration already approved in Operating Model v4.0</div>
+    <div class="scoreline">
+      <div class="s"><span class="lbl">Q1 · Capital</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+      <div class="s"><span class="lbl">Q2 · Team fit</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+      <div class="s"><span class="lbl">Q3 · Sequencing</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+      <div class="s"><span class="lbl">Q4 · P&amp;L</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+      <div class="s"><span class="lbl">Q5 · Reference</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+    </div>
+    <p class="body" style="margin-bottom:6px"><b>Verdict:</b> <span class="verdict pass">Recommend Vintage 1</span></p>
+  </div>
+
+  <h3 class="sub">Why this passes every dimension</h3>
+  <ul class="body">
+    <li><b>Q1 Capital:</b> $50M Vintage 1 fund supports first-vertical roll-up (HomeCare or analogue Hell-Yes vertical per scoring map) with 4–7 acquisitions, AI Engineering arm fully funded internally, paid pre-acquisition pilots covered by L2 budget. Shield Tech reached $100M+ ARR with $200M committed — our $50M targets a single vertical first.</li>
+    <li><b>Q2 Team fit:</b> Configuration matches the team's M&amp;A + AI Engineering + integration capability mix. No additional discipline required at Vintage 1.</li>
+    <li><b>Q3 Sequencing:</b> This IS the Stage 1 operating spine. Every other path layers on top.</li>
+    <li><b>Q4 P&amp;L:</b> Single consolidated Fund + Holdco + OpCos P&amp;L. Cleanest LP narrative per Pure HoldCo Decision Memo (June 14, 2026).</li>
+    <li><b>Q5 Reference:</b> Long Lake ($1.28B raised, ~30 acquisitions, Amex GBT $6.3B take-private May 2026); GC Creation ($1.5B inside Fund XII); Shield Technology Partners ($200M, 9 MSPs, $100M+ ARR Feb 2026); Current / Crete ($500M, ~30 CPA firms). Four documented reference operators at adjacent scale; pattern is well-established.</li>
+  </ul>
+
+  <h3 class="sub">What this path does not address</h3>
+  <p class="body">Path A is sufficient for Vintage 1 but does not answer what comes next. The fund-vintage clock (7–12 years) forces exit, which means the multiple-arbitrage thesis must clear at the end of the vintage. Paths B–D address what happens at Vintage 2+ when the operating engine is proven; Path E addresses whether anything non-Holdco runs in parallel during Vintage 1.</p>
+
+  <div class="source">Sources: Operating Model v4.0; Pure HoldCo Decision Memo; AI-Native Operating Holdco deep dive (PitchBook Long Lake, SiliconANGLE Shield, MobiHealthNews GC Creation, BusinessWire Current/Crete).</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">06</span>Path B · Holdco + Permanent Capital Migration</div>
+  <h1 class="action">Vintage 1 runs as closed-end fund. After demonstrating multiple-arbitrage returns, Vintage 2+ migrates to evergreen capital structure — publicly listed Holdco, insurance float, or perpetual private vehicle. The Berkshire / Markel architecture, but staged.</h1>
+
+  <div class="path-block cond">
+    <div class="id">PATH B · DEFERRED</div>
+    <div class="title">Holdco + Permanent Capital migration starting Vintage 2 or later</div>
+    <div class="scoreline">
+      <div class="s"><span class="lbl">Q1 · Capital</span><span class="val"><span class="dot marg"></span>MARGINAL</span></div>
+      <div class="s"><span class="lbl">Q2 · Team fit</span><span class="val"><span class="dot cond"></span>CONDITIONAL</span></div>
+      <div class="s"><span class="lbl">Q3 · Sequencing</span><span class="val"><span class="dot cond"></span>CONDITIONAL</span></div>
+      <div class="s"><span class="lbl">Q4 · P&amp;L</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+      <div class="s"><span class="lbl">Q5 · Reference</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+    </div>
+    <p class="body" style="margin-bottom:6px"><b>Verdict:</b> <span class="verdict cond">Defer to Vintage 2+, trigger on Vintage 1 success</span></p>
+  </div>
+
+  <h3 class="sub">Why this is structurally attractive</h3>
+  <p class="body">Permanent capital removes the fund-vintage exit clock. Berkshire compounded book value per share at ~18.3% CAGR over 60 years (1965–2024) because it never had to sell. The same Holdco operating engine becomes worth dramatically more when held indefinitely: the math of compounding 12% per year for 25 years versus exiting at year 7–12 differs by an order of magnitude in cumulative wealth, even at modest CAGRs. Markel Group is the documented mid-scale precedent — IPO 1986 at ~$130M market cap, today a multi-billion-dollar permanent-capital compounder with Markel Ventures running &gt;20 wholly-owned operating businesses alongside specialty insurance.</p>
+
+  <h3 class="sub">Why it cannot be Vintage 1</h3>
+  <ul class="body">
+    <li><b>Capital structure mismatch.</b> $50M closed-end fund cannot itself become permanent capital — that requires either an IPO ($100M+ market cap floor with multi-year operating record), an insurance company acquisition ($150M+ starting reserves for credible underwriting), or a multi-year evergreen LP raise. The Permanent Capital Compounder deep dive notes Loews Corp started with the Tisch brothers' $125,000 in a Lakewood, NJ hotel — proof that starting capital can be modest, but the compounding ran over <i>decades</i> before becoming a permanent-capital vehicle. We do not have decades; we have one vintage.</li>
+    <li><b>LP base mismatch.</b> Closed-end LPs subscribe to a 7–12 year vintage with explicit exit liquidity. Asking those LPs to convert to permanent equity mid-vintage is a structural conflict and typically requires GP repurchase, not a continuation vehicle.</li>
+    <li><b>Reference operators all started from operating businesses with float access.</b> Berkshire was a struggling textile mill with embedded book value. Markel was a specialty insurer already underwriting before IPO. Loews acquired CNA Financial in 1974 for $1B+ when its core was already $300M+ market cap. None of them started as a fund and migrated — they started as an operating chassis.</li>
+  </ul>
+
+  <h3 class="sub">Realistic migration path</h3>
+  <ul class="body">
+    <li><b>Vintage 1 (Years 0–6):</b> Run Path A as planned. Deploy $50M into first vertical; reach 4–7 OpCos; demonstrate AI uplift; complete first exits or interim recap at attractive multiples.</li>
+    <li><b>Vintage 2 (Years 6–10):</b> Raise $200–500M with proven track record. Begin negotiating evergreen vehicle structure with LPs who explicitly want long-hold exposure. Markel's transition from insurer to Holdco took similar time.</li>
+    <li><b>Vintage 3+ (Years 10+):</b> Migrate to publicly listed Holdco or perpetual vehicle. By this stage the operating record justifies a public market valuation; LP base can include long-duration capital.</li>
+  </ul>
+
+  <div class="source">Sources: Berkshire 2024 Annual Report; Markel Group 2024 Annual Report; Brookfield Corporation 2024 Investor Day Transcript; Loews Corporation historical filings; Permanent Capital Compounder deep dive.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">07</span>Path C · Holdco + Data Network as Stage 2 Productisation</div>
+  <h1 class="action">After 15–30 OpCos in a single vertical accumulate proprietary cross-OpCo data, productise the dataset and sell access via API or dashboard to non-competing buyers. Verisk-style staged emergence from operating business into data network.</h1>
+
+  <div class="path-block cond">
+    <div class="id">PATH C · CONDITIONAL STAGE 2</div>
+    <div class="title">Holdco + Data Network productisation at Stage 2, conditional on reaching 15+ OpCos in a single vertical</div>
+    <div class="scoreline">
+      <div class="s"><span class="lbl">Q1 · Capital</span><span class="val"><span class="dot cond"></span>CONDITIONAL</span></div>
+      <div class="s"><span class="lbl">Q2 · Team fit</span><span class="val"><span class="dot marg"></span>MARGINAL</span></div>
+      <div class="s"><span class="lbl">Q3 · Sequencing</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+      <div class="s"><span class="lbl">Q4 · P&amp;L</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+      <div class="s"><span class="lbl">Q5 · Reference</span><span class="val"><span class="dot cond"></span>CONDITIONAL</span></div>
+    </div>
+    <p class="body" style="margin-bottom:6px"><b>Verdict:</b> <span class="verdict cond">Conditional Stage 2 — explicit trigger required</span></p>
+  </div>
+
+  <h3 class="sub">The mechanic that makes this attractive</h3>
+  <p class="body">Data Network economics are the strongest in the four-archetype universe: gross margins 74–90%, EBITDA margins 50–55% in mature operators, NRR 125–160% on consumption pricing (Snowflake 131% FY24, MSCI ~82% gross margin, Verisk 54.7% adjusted EBITDA). The defining mechanic is the two compounding asymmetries — <b>time on supply</b> (integrations take years to build) and <b>switching cost on demand</b> (customers build models on top of the schema) — producing multi-decade defensibility when combined with regulatory or trust moats. If we can stand up a data position naturally from Holdco operations, we capture this economic engine without the $50–200M pure-SaaS data buildout cost.</p>
+
+  <h3 class="sub">Why Stage 2, not Stage 1</h3>
+  <ul class="body">
+    <li><b>Critical mass requirement.</b> Verisk's ISO data pool was built over decades of insurer contributions; Plaid required &gt;5,000 bank integrations before the network effect dominated competitive dynamics. The Data Network deep dive identifies <b>integration cardinality</b> as the unit of replication — Plaid 12,000+ institutions, Datavant 70,000+ partners, CoStar ~6M properties physically tracked. Our cross-OpCo dataset reaches meaningful scale only at 15–30 OpCos per vertical, which is Stage 2 territory.</li>
+    <li><b>Selling externally requires a buyer set distinct from portfolio competitors.</b> Verisk sells ISO ratemaking data to insurers (its data contributors), but in a regulated context where state insurance commissioners require Verisk filings for rate approvals. CoStar sells CRE data to investors, brokers, lenders — not to other CRE operators that compete with itself. For Path C to work, the buyer set must be researchers, regulators, capital allocators, or adjacent industries — never the operators of our portfolio's competitive set.</li>
+    <li><b>Engineering bandwidth.</b> Data Network requires a separate engineering function from AI uplift work — data pipeline, schema, normalisation, regulatory positioning, API surface. Vintage 1 cannot fund both teams at once; this becomes affordable only when Holdco operating cash flow plus Vintage 2 capital covers both.</li>
+  </ul>
+
+  <h3 class="sub">Why this is fundamentally different from a standing services arm</h3>
+  <p class="body">The Pure HoldCo Decision Memo rejected a standing services arm via five mechanisms (multiple compression, Section 206 conflict, bargaining position erosion, engineering bandwidth split, LP disclosure burden). Data Network productisation behaves differently on three of those:</p>
+  <ul class="body">
+    <li><b>Multiple compression — does not apply.</b> A data product is valued independently of operating businesses; investors do not blend a 20× ARR data multiple into a 12× EBITDA Holdco multiple, they value the data subsidiary separately. The blended multiple goes <i>up</i> when a high-multiple SaaS asset sits inside a Holdco — see Markel Ventures versus parent Markel Group.</li>
+    <li><b>Section 206 — substantially weakened.</b> Selling aggregated benchmark data uniformly to a broad buyer set (not bespoke services to individual portfolio competitors) is not a related-party service arrangement. The Bloomberg / Verisk / MSCI precedents do not face routine Section 206 friction because data products at scale do not concentrate counterparty risk in any single related party.</li>
+    <li><b>Bargaining position erosion — does not apply.</b> Data buyers (researchers, regulators, ETF issuers) are not competitors of our portfolio operators. Selling research-grade aggregated data to a state insurance commissioner does not erode our HomeCare OpCos' market position with patients.</li>
+    <li><b>Engineering bandwidth split — applies, must be staged.</b> Same mechanism applies; mitigated by deferring to Stage 2 when Holdco cash flow supports parallel team build.</li>
+    <li><b>LP disclosure burden — applies but modest.</b> A consolidated data subsidiary under Holdco is one entity, not a separate operating company. LP narrative is "we built a data product on top of our operating data" — coherent and well-received.</li>
+  </ul>
+
+  <h3 class="sub">Trigger for activation</h3>
+  <ul class="body">
+    <li>Holdco operates 15+ OpCos in a single vertical with consistent data capture.</li>
+    <li>Cross-OpCo dataset has documented coverage / freshness / linkage advantage over public benchmarks.</li>
+    <li>External buyer interest (informal interview signal from researchers, regulators, or insurance carriers — for the HomeCare vertical, plausibly CMS, MedPAC, or insurance carriers underwriting home-care liability).</li>
+    <li>Holdco cash flow plus Vintage 2 raise can fund an additional 5–10 person data-engineering team without competing with vertical roll-up bandwidth.</li>
+  </ul>
+
+  <div class="source">Sources: Data Network Compounder deep dive (Snowflake 10-K FY2024, Verisk 10-K FY2024, MSCI 10-K FY2024, Sacra Plaid profile); Pure HoldCo Decision Memo (services arm rejection mechanisms).</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">08</span>Path D · Holdco + Permanent Capital + Data Network</div>
+  <h1 class="action">The full Markel-Verisk synthesis. Permanent capital base, decades of OpCo accumulation, productised data layer on top. The strongest economic configuration in the universe but only available to operators with multi-decade tenure.</h1>
+
+  <div class="path-block cond">
+    <div class="id">PATH D · DEFERRED TO VINTAGE 2+</div>
+    <div class="title">Holdco + Permanent Capital + Data Network — combine Paths B and C at Vintage 2+ if both prove out</div>
+    <div class="scoreline">
+      <div class="s"><span class="lbl">Q1 · Capital</span><span class="val"><span class="dot marg"></span>MARGINAL</span></div>
+      <div class="s"><span class="lbl">Q2 · Team fit</span><span class="val"><span class="dot marg"></span>MARGINAL</span></div>
+      <div class="s"><span class="lbl">Q3 · Sequencing</span><span class="val"><span class="dot cond"></span>CONDITIONAL</span></div>
+      <div class="s"><span class="lbl">Q4 · P&amp;L</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+      <div class="s"><span class="lbl">Q5 · Reference</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+    </div>
+    <p class="body" style="margin-bottom:6px"><b>Verdict:</b> <span class="verdict cond">Defer to Vintage 2+ — emerges naturally if B and C both succeed</span></p>
+  </div>
+
+  <h3 class="sub">Why this is the destination, not the starting point</h3>
+  <p class="body">Markel Group is the documented Path-D operator: permanent capital from insurance underwriting, &gt;20 wholly-owned operating subsidiaries in Markel Ventures, data and analytics products in insurance, and explicit reframing in 2024 from book-value-per-share to <b>intrinsic-value-per-share</b> precisely because the non-insurance OpCos are not marked to fair value in book-value reporting. This is the configuration that compounds across decades — Markel founded 1930, IPO 1986, still expanding the platform. Verisk arrived at this position by spinning out of insurance company ISO over decades. Path D is not pursued — it <i>emerges</i> if Paths B and C both succeed in their respective stages.</p>
+
+  <h3 class="sub">Why it cannot be started early</h3>
+  <ul class="body">
+    <li><b>Triple-team capability requirement.</b> Holdco operations team + permanent-capital fundraising and IR + data product engineering. Three distinct functions that compete for management bandwidth.</li>
+    <li><b>Capital base requirement.</b> Permanent capital needs decades of compounding or insurance float (Berkshire $171B float at year-end 2024) or an IPO at scale. Combining with data buildout adds an additional $50–200M of pure SaaS capital or equivalent acquisition-led data buildout.</li>
+    <li><b>Reference operators are decades old.</b> Markel 96 years. Verisk's data lineage goes back to 1971 (ISO predecessor). Berkshire 60+ years. Path D rewards founders willing to commit decadal timelines — it does not reward acceleration.</li>
+  </ul>
+
+  <h3 class="sub">What Path D looks like at Vintage 4–5 if everything works</h3>
+  <p class="body">A publicly listed Holdco with $1–3B market cap, 80–150 OpCos across 5–7 verticals, insurance float or evergreen capital base, AI Engineering arm of 30–60 engineers across operations and a data product subsidiary throwing off 25–40% margin on subscription revenue. This is the upper bound of what our team can be in 15–25 years. It is unrealistic at Vintage 1 and unproductive to optimise for now beyond keeping options open.</p>
+
+  <div class="source">Sources: Markel Group 2024 Annual Report (intrinsic-value-per-share reframing); Verisk 10-K FY2024; Berkshire 2024 Annual Report; Permanent Capital Compounder deep dive; Data Network Compounder deep dive.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">09</span>Path E · Holdco + Horizontal AI Platform — Five Flavors Evaluated Separately</div>
+  <h1 class="action">Horizontal AI Platform is not one option — it is a category with five flavors of distinct economics. Two flavors are recommended as non-revenue brand or talent assets, three are rejected on capital, conflict, or capability grounds.</h1>
+
+  <p class="body">The Pure HoldCo Decision Memo rejected a single flavor of Horizontal AI — selling our vertical-specific AI to non-portfolio operators in the same verticals. That rejection's five mechanisms (multiple compression, Section 206 conflict, bargaining position erosion, engineering bandwidth split, LP disclosure burden) are specific to <i>that flavor</i> and do not transfer wholesale to all variants. Each flavor must be evaluated against the mechanisms that actually apply.</p>
+
+  <div class="flavor-grid">
+    <div class="flavor" style="border-left-color:var(--fail)">
+      <div class="fh"><div class="fn">E-1 · Vertical AI sold externally to non-portfolio operators</div><span class="verdict fail">REJECT</span></div>
+      <div class="desc">Selling our HomeCare AI to other HomeCare operators outside the acquisition pipeline. <b>Q1 PASS</b> (low marginal capital), <b>Q2 CONDITIONAL</b>, <b>Q3 FAIL</b> (Sec 206 conflict, bargaining erosion), <b>Q4 FAIL</b> (separate P&amp;L, LP disclosure), <b>Q5 FAIL</b> (no Holdco reference operator does this — Long Lake, Shield, Current, Crete all keep AI internal). Already rejected June 14 services memo. Inclusion here for completeness.</div>
+    </div>
+
+    <div class="flavor" style="border-left-color:var(--conditional)">
+      <div class="fh"><div class="fn">E-2 · Internal M&amp;A operating tool, productised externally</div><span class="verdict cond">CONDITIONAL — natural exhaust only</span></div>
+      <div class="desc">Build sourcing / diligence / integration tools for our own M&amp;A pipeline (we will build them regardless), then license to other roll-up operators. <b>Q1 STRONG</b> ($200–500K incremental for productisation). <b>Q2 CONDITIONAL</b> (M&amp;A team already builds these for internal use; productisation adds 1–2 engineers). <b>Q3 CONDITIONAL</b> (parallel to Holdco; small bandwidth cost). <b>Q4 CONDITIONAL</b> (small separate revenue line; absorbs into Holdco P&amp;L as SaaS subsidiary). <b>Q5 CONDITIONAL</b> (PitchBook is the data exemplar; Affinity began as a VC tool; documented pattern but small absolute outcomes — Affinity 2024 revenue undisclosed, founded 2014, Series C $80M valuation 2021 per Bloomberg). Verdict: pursue only if the M&amp;A tool is so good that buyers ask for it unsolicited.</div>
+    </div>
+
+    <div class="flavor" style="border-left-color:var(--conditional)">
+      <div class="fh"><div class="fn">E-3 · Industry benchmark / research / content product</div><span class="verdict cond">CONDITIONAL — brand and deal-flow asset</span></div>
+      <div class="desc">Build a research tool, industry benchmark, content platform — analogous to a16z's content empire (a16z.com, podcasts, newsletter, Future), USV's blog (Fred Wilson 20+ years daily), YC's Startup School and free library, Bessemer's State of the Cloud report. <b>Q1 STRONG</b> ($500K–$2M annual content / engineering). <b>Q2 MARGINAL</b> (requires content / research / editorial talent distinct from M&amp;A and AI Engineering). <b>Q3 STRONG</b> (parallel to Holdco; brand and deal-flow accelerant). <b>Q4 STRONG</b> (zero or minimal revenue; cost line absorbed into Holdco overhead as marketing / brand). <b>Q5 STRONG</b> (a16z, YC, USV, Bessemer all run this configuration at varied scales). <b>Important caveat:</b> none of these are directly monetised as standalone businesses. a16z content is brand and deal flow, not revenue. YC's free resources are funnel for the accelerator. Pursue only if scoped as a brand asset, not a P&amp;L line.</div>
+    </div>
+
+    <div class="flavor" style="border-left-color:var(--fail)">
+      <div class="fh"><div class="fn">E-4 · Foundation model / horizontal AI SaaS at enterprise scale</div><span class="verdict fail">REJECT — capital mismatch</span></div>
+      <div class="desc">Build a Sierra / Decagon / Glean-style enterprise AI platform. <b>Q1 FAIL</b> — Horizontal AI deep dive documents $200–600M minimum capital to reach $100M ARR for application-layer platforms; Sierra raised ~$285M pre-Series E; Harvey raised &gt;$1B total; Decagon $481M to $4.5B; frontier-model labs $5–20B+. Our $50M fund is below the floor. <b>Q2 FAIL</b> — requires 50–200 PhD-level ML researchers (frontier) or 30+ ML engineers plus enterprise CRO at Series B (application). Capability set incompatible with M&amp;A and integration-ops mix. <b>Q3 FAIL</b> — would consume the entire fund and team, abandoning Holdco. <b>Q4 N/A</b>. <b>Q5 N/A</b>. Reject without further analysis.</div>
+    </div>
+
+    <div class="flavor" style="border-left-color:var(--conditional)">
+      <div class="fh"><div class="fn">E-5 · Open-source tool released by AI Engineering arm</div><span class="verdict cond">CONDITIONAL — talent and brand asset</span></div>
+      <div class="desc">Release engineering tools or evals built for internal use as open source. <b>Q1 STRONG</b> (zero marginal capital). <b>Q2 STRONG</b> (same engineering team). <b>Q3 STRONG</b> (parallel to Holdco). <b>Q4 STRONG</b> (no revenue, no separate P&amp;L). <b>Q5 STRONG</b> (Anthropic released Claude Code SDK and MCP standard; OpenAI released Whisper, Triton; Meta released PyTorch and Llama; Databricks acquired MosaicML in part for OSS reputation; common pattern in AI engineering). Reasons to pursue: talent recruiting (engineers want to be seen contributing to OSS), brand signalling to LPs that the AI Engineering arm is serious, free engineering review from external community. Reasons not to: maintenance burden, intellectual property exposure on proprietary playbook details. Pursue narrowly and selectively, not as strategic priority.</div>
+    </div>
+  </div>
+
+  <h3 class="sub">Aggregate verdict on Path E</h3>
+  <p class="body">Two flavors (E-3 industry research / content, E-5 OSS) are recommended as <b>non-revenue assets</b> that serve brand, deal flow, and talent. Two flavors (E-1 vertical AI sold externally, E-4 horizontal SaaS at enterprise scale) are <b>rejected</b> on grounds already documented. One flavor (E-2 internal tool productised) is <b>conditional</b> on natural opportunity only — do not engineer the product to be sold.</p>
+
+  <div class="callout">
+    <div class="h">Where these intersect with our standing position</div>
+    <p>The team already does versions of E-3 implicitly — internal frameworks (Game Selection Framework, V×C×A×B×M scoring map at rollup-economy.com) are public-facing artefacts that signal seriousness. Continuing this with explicit framing as "the Holdco's research arm" requires no new operational commitment. Lusin × Glocap-style paid pilots that produce reusable methodology can plausibly feed into E-3 as case studies.</p>
+  </div>
+
+  <div class="source">Sources: Horizontal AI Platform deep dive (Sacra, Sierra/Anthropic/OpenAI public disclosures); Pure HoldCo Decision Memo five-mechanism analysis; public press on Affinity, a16z content operation, YC programs, Bessemer State of the Cloud, Anthropic / OpenAI OSS contributions.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">10</span>Path F · Horizontal AI Only — No Holdco</div>
+  <h1 class="action">Abandon Holdco entirely and build a Sierra / Glean / Harvey-style enterprise AI platform with venture capital. A different game with a different team and capital structure.</h1>
+
+  <div class="path-block fail">
+    <div class="id">PATH F · REJECTED</div>
+    <div class="title">Horizontal AI Platform without Holdco — capability and capital mismatch with current team</div>
+    <div class="scoreline">
+      <div class="s"><span class="lbl">Q1 · Capital</span><span class="val"><span class="dot fail"></span>FAIL</span></div>
+      <div class="s"><span class="lbl">Q2 · Team fit</span><span class="val"><span class="dot fail"></span>FAIL</span></div>
+      <div class="s"><span class="lbl">Q3 · Sequencing</span><span class="val"><span class="dot fail"></span>FAIL</span></div>
+      <div class="s"><span class="lbl">Q4 · P&amp;L</span><span class="val"><span class="dot cond"></span>N/A</span></div>
+      <div class="s"><span class="lbl">Q5 · Reference</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+    </div>
+    <p class="body" style="margin-bottom:6px"><b>Verdict:</b> <span class="verdict fail">Reject — different game, not compatible with current team and capital</span></p>
+  </div>
+
+  <h3 class="sub">Why this is rejected at a glance</h3>
+  <ul class="body">
+    <li><b>Capital floor.</b> Sierra reached $150M ARR at $15.8B valuation having raised ~$285M pre-Series E. Decagon raised $481M to $4.5B. Harvey raised &gt;$1.2B total. Glean cumulative raises through Series F reached $400–800M. Frontier-model labs $5–20B+ (Anthropic ~$64B raised). Our $50M is below the application-layer minimum by an order of magnitude.</li>
+    <li><b>Team composition.</b> Required team: founder-CEO with operator credibility in the buyer's world (Bret Taylor → Salesforce CX network; Harvey founders → BigLaw network; Cresta → Stanford ML), 30+ ML engineers, 20–50 forward-deployed engineers, enterprise CRO by Series B. Our team is M&amp;A, integration ops, and AI Engineering for portfolio companies — different talent stack.</li>
+    <li><b>Strategic identity.</b> Pursuing Path F means abandoning the Holdco thesis entirely. This is not adding an option — it is choosing a different game.</li>
+    <li><b>Documented base rate.</b> Only 11–14% of enterprise AI agent pilots reach production (IDC). 86–89% of enterprise pilots fail to scale. The Horizontal AI deep dive documents 80% of AI startups projected to fail by end-2026; 3,800 AI startups shut in 2025. The reverse acqui-hire is the modal failure exit (Adept $400M raised → Amazon talent absorption; Inflection $1.5B+ → Microsoft $650M; Character.AI → Google).</li>
+  </ul>
+
+  <h3 class="sub">When this could be revisited</h3>
+  <p class="body">Only if the founding team materially changes (acquisition of a senior enterprise CRO with $50M+ in enterprise pipeline already pre-committed) and an LP base materially distinct from current commitments emerges willing to underwrite frontier-AI capital intensity. Neither condition exists today; both would require explicit team and fund restructuring outside the current Operating Model v4.0.</p>
+
+  <div class="source">Sources: Horizontal AI Platform deep dive (Sacra on Sierra, Anthropic, OpenAI; TechCrunch and Bloomberg on Decagon, Harvey, Glean funding); IDC enterprise AI pilot research 2026; VaaSBlock enterprise AI deployment gap 2026; getcoai on Adept reverse acquihire; Semafor on Inflection.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">11</span>Comparative Scorecard — All Six Paths Across Five Dimensions</div>
+  <h1 class="action">Path A is the unambiguous Vintage 1 winner. Path C (Holdco + Data Network at Stage 2) and Paths B + D (Permanent Capital migration) emerge naturally if Vintage 1 succeeds. Two of five Horizontal AI flavors are recommended as non-revenue assets; Path F is a different game.</h1>
+
+  <table class="mck scorecard">
+    <thead><tr>
+      <th style="width:5%">Path</th>
+      <th style="width:22%">Configuration</th>
+      <th style="width:11%">Q1 Capital</th>
+      <th style="width:11%">Q2 Team fit</th>
+      <th style="width:11%">Q3 Sequencing</th>
+      <th style="width:11%">Q4 P&amp;L architecture</th>
+      <th style="width:11%">Q5 Reference</th>
+      <th>Overall verdict</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="path">A</td><td class="name">Solo Holdco, fund vintage</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td><span class="verdict pass">Recommend Vintage 1</span></td>
+      </tr>
+      <tr>
+        <td class="path">B</td><td class="name">Holdco + Permanent Capital migration</td>
+        <td class="center"><span class="dot marg"></span>MARGINAL</td>
+        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
+        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td><span class="verdict cond">Defer to Vintage 2+</span></td>
+      </tr>
+      <tr>
+        <td class="path">C</td><td class="name">Holdco + Data Network Stage 2</td>
+        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
+        <td class="center"><span class="dot marg"></span>MARGINAL</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
+        <td><span class="verdict cond">Conditional Stage 2, explicit trigger</span></td>
+      </tr>
+      <tr>
+        <td class="path">D</td><td class="name">Holdco + Permanent + Data</td>
+        <td class="center"><span class="dot marg"></span>MARGINAL</td>
+        <td class="center"><span class="dot marg"></span>MARGINAL</td>
+        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td><span class="verdict cond">Defer to Vintage 2+ — emerges from B+C</span></td>
+      </tr>
+      <tr>
+        <td class="path">E-1</td><td class="name">Vertical AI sold externally</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
+        <td class="center"><span class="dot fail"></span>FAIL</td>
+        <td class="center"><span class="dot fail"></span>FAIL</td>
+        <td class="center"><span class="dot fail"></span>FAIL</td>
+        <td><span class="verdict fail">Reject — services memo</span></td>
+      </tr>
+      <tr>
+        <td class="path">E-2</td><td class="name">Internal M&amp;A tool productised</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
+        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
+        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
+        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
+        <td><span class="verdict cond">Conditional — natural exhaust only</span></td>
+      </tr>
+      <tr>
+        <td class="path">E-3</td><td class="name">Industry benchmark / research / content</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot marg"></span>MARGINAL</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td><span class="verdict cond">Conditional — brand asset, not revenue</span></td>
+      </tr>
+      <tr>
+        <td class="path">E-4</td><td class="name">Foundation / horizontal SaaS at scale</td>
+        <td class="center"><span class="dot fail"></span>FAIL</td>
+        <td class="center"><span class="dot fail"></span>FAIL</td>
+        <td class="center"><span class="dot fail"></span>FAIL</td>
+        <td class="center">N/A</td>
+        <td class="center">N/A</td>
+        <td><span class="verdict fail">Reject — capital and capability mismatch</span></td>
+      </tr>
+      <tr>
+        <td class="path">E-5</td><td class="name">Open-source tool from AI Engineering arm</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td><span class="verdict cond">Conditional — talent and brand</span></td>
+      </tr>
+      <tr>
+        <td class="path">F</td><td class="name">Horizontal AI only — no Holdco</td>
+        <td class="center"><span class="dot fail"></span>FAIL</td>
+        <td class="center"><span class="dot fail"></span>FAIL</td>
+        <td class="center"><span class="dot fail"></span>FAIL</td>
+        <td class="center">N/A</td>
+        <td class="center"><span class="dot pass"></span>STRONG</td>
+        <td><span class="verdict fail">Reject — different game</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">How to read this table</h3>
+  <ul class="body">
+    <li>Paths with multiple STRONG and one CONDITIONAL or MARGINAL → recommend with explicit triggers (A, E-3 brand asset, E-5 OSS).</li>
+    <li>Paths with one or two FAILs that dominate → reject regardless of other dimensions (E-1, E-4, F).</li>
+    <li>Paths gated by sequencing and capital — defer with explicit Stage 2 / Vintage 2 triggers (B, C, D).</li>
+    <li>"N/A" reflects path-blocking failures earlier that make subsequent dimensions irrelevant.</li>
+  </ul>
+
+  <div class="source">Scorecard derived from path-by-path analysis Sections 05–10; reference dimensions from Evaluation Framework Section 04.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">12</span>Final Positioning — Recommended Sequence Across Vintages</div>
+  <h1 class="action">Path A operates Vintage 1. Paths E-3 and E-5 run in parallel as brand / talent assets at zero strategic cost. Path C activates at Stage 2 (Year 4–6) if the data trigger fires. Paths B and D defer to Vintage 2+, emerging from operating success rather than from forward commitment.</h1>
+
+  <h3 class="sub">Stage 1 — Vintage 1, Years 0–4</h3>
+  <ul class="body">
+    <li><b>Operating spine:</b> Path A as specified in Operating Model v4.0. First vertical (Hell-Yes per V×C×A×B×M scoring map) launches Q3 2026; 4–7 OpCos targeted; AI Engineering arm fully internal; paid pre-acquisition pilots covered.</li>
+    <li><b>Non-revenue assets in parallel:</b> Path E-3 (industry benchmark, framework content, research output — extending what is already at <code>rollup-economy.com</code> and the Game Selection Framework). Path E-5 narrowly scoped (release internally-built evals or playbook tools as OSS when they have no IP-sensitive content). Neither requires significant incremental capital or team.</li>
+    <li><b>Explicitly not pursued at this stage:</b> Paths B, C, D defer. Path E-1, E-4, F rejected. Path E-2 reserved for opportunistic activation only.</li>
+  </ul>
+
+  <h3 class="sub">Stage 2 — Vintage 1 mid-cycle, Years 4–6</h3>
+  <ul class="body">
+    <li><b>Path C activates conditionally</b> if the data trigger fires: 15+ OpCos in a single vertical, documented cross-OpCo data advantage, external buyer interest (researchers, regulators, adjacent industries), and Holdco operating cash flow plus Vintage 2 raise capacity for parallel 5–10 person data team. If trigger fires, stand up the data subsidiary inside Holdco. If trigger does not fire, continue Stage 1 operating model into Vintage 2.</li>
+    <li><b>Vintage 2 raise begins.</b> $200–500M target. Track record from Vintage 1 plus AI Engineering arm credibility plus (if applicable) early Path C signals.</li>
+  </ul>
+
+  <h3 class="sub">Stage 3 — Vintage 2+, Years 6–12+</h3>
+  <ul class="body">
+    <li><b>Path B activates conditionally</b> as Vintage 2 structure: if LP base wants long-duration exposure and operating record supports it, negotiate evergreen vehicle / public listing / insurance float access. Markel-Berkshire architecture begins to emerge.</li>
+    <li><b>Path D emerges naturally</b> if both B and C succeeded — the publicly-listed Holdco with operating subsidiaries plus productised data layer plus permanent capital base. This is not engineered; it is the inheritance of having played A → C → B in sequence successfully.</li>
+  </ul>
+
+  <h3 class="sub">What this means for outside positioning</h3>
+  <p class="body">External narrative for Vintage 1: "AI-Native Operating Holdco — fund-vintage capital, single chosen vertical, paid pre-acquisition pilots feeding acquisition pipeline, no external AI sales. Research arm and OSS contributions support brand and talent." This is honest, defensible, and matches every reference operator's posture at our scale (Long Lake, Shield, Current at comparable early-stage). It does not promise future stages — Stage 2 and beyond are options purchased by Vintage 1 execution, not commitments.</p>
+
+  <div class="callout">
+    <div class="h">What changes from current Operating Model v4.0</div>
+    <p>Nothing about the Vintage 1 operating plan changes. The contribution of this memo is to <b>label the existing baseline as Path A</b>, identify Paths E-3 and E-5 as zero-cost parallel activities consistent with what the team already does, and explicitly defer Paths B, C, D as Stage 2+ options with named triggers rather than open questions. Path E-1 and E-4 stay rejected; F remains a different game.</p>
+  </div>
+
+  <div class="source">Sequence derived from Sections 05–10 path analyses; triggers calibrated to deep-dive evidence on reference-operator vintage progression.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">13</span>Decision Tree — Triggers for Stage Progression</div>
+  <h1 class="action">Three explicit triggers govern when to move from Stage 1 to Stage 2, and Stage 2 to Stage 3. Each trigger names the operational signal, the financial test, and the structural change required.</h1>
+
+<div class="tree">
+<span class="root">Vintage 1 Stage 1 — Path A in motion</span>
+│
+├── <span class="branch">Vintage 1 Stage 2 trigger (Year 4–6)</span>
+│        ├── <span class="leaf">Operational: 15+ OpCos in primary vertical</span>
+│        ├── <span class="leaf">Data signal: documented cross-OpCo data advantage over public benchmarks</span>
+│        ├── <span class="leaf">Buyer signal: ≥2 informal interview commitments from non-competing buyers</span>
+│        ├── <span class="leaf">Capital signal: Vintage 2 raise process opens at $200M+ target</span>
+│        └── <span class="leaf">If all four → activate Path C; else continue Stage 1 into Vintage 2</span>
+│
+├── <span class="branch">Vintage 2 Stage 3 trigger (Year 6–10)</span>
+│        ├── <span class="leaf">Track record: Vintage 1 exits delivered ≥2.5× MOIC blended</span>
+│        ├── <span class="leaf">LP signal: ≥1 anchor LP commits $50M+ to evergreen vehicle</span>
+│        ├── <span class="leaf">Structure: legal counsel confirms permanent-capital migration viable without breaking Vintage 1 LP agreements</span>
+│        └── <span class="leaf">If all three → activate Path B; else continue closed-end vintage structure</span>
+│
+└── <span class="branch">Vintage 3+ Path D synthesis (Year 10+)</span>
+         ├── <span class="leaf">Both B and C are operational and producing</span>
+         ├── <span class="leaf">Holdco is publicly listed or has equivalent permanent capital base</span>
+         ├── <span class="leaf">Data subsidiary throws off ≥$30M ARR with ≥40% EBITDA margin</span>
+         └── <span class="leaf">Markel-Verisk-style platform; multi-decade compounding posture confirmed</span>
+</div>
+
+  <h3 class="sub">What blocks each trigger</h3>
+  <ul class="body">
+    <li><b>Path C blocked if:</b> data does not accumulate (OpCos use different systems), buyer set turns out to be portfolio competitors only (Section 206 concern returns), or engineering bandwidth cannot be added without compromising vertical roll-up.</li>
+    <li><b>Path B blocked if:</b> Vintage 1 returns are below 2× MOIC (LPs decline permanent-capital extension), legal structure conflict with existing LP agreements, or team does not have public-market-CEO bench depth.</li>
+    <li><b>Path D blocked if:</b> either B or C remains incomplete, or if scaling adds operational complexity faster than data and capital advantages accrue. Path D is not a target — it is a possible inheritance.</li>
+  </ul>
+
+  <h3 class="sub">What the team commits to today</h3>
+  <ul class="body">
+    <li><b>Path A — committed.</b> Operating Model v4.0 as the active plan.</li>
+    <li><b>Path E-3 — committed at zero incremental cost.</b> Continue framework / research / benchmark content. Position as Holdco research arm.</li>
+    <li><b>Path E-5 — committed selectively.</b> Release OSS evals and tools as they reach reusable state, with IP review.</li>
+    <li><b>Path C — committed to monitoring.</b> Establish data capture standards across OpCos from Vintage 1 day one, so that if the trigger fires at Year 4–6 the dataset is ready, not greenfield.</li>
+    <li><b>Paths B, D — committed to optionality.</b> Vintage 1 LP agreements structured to allow Vintage 2 conversion to evergreen if conditions met.</li>
+    <li><b>Paths E-1, E-2, E-4, F — not committed.</b> Reject or hold for opportunistic activation only.</li>
+  </ul>
+
+  <div class="source">Triggers calibrated from reference-operator stage-progression evidence in Sections 05–10; structural constraints from Permanent Capital and Data Network deep dives.</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow"><span class="num">14</span>Appendix · Sources</div>
+
+  <p class="body" style="font-size:11.5px;line-height:1.6">
+    <b>Source archetype deep dives</b> (June 13, 2026, bobroff-cap/roll-ups/analysis/): AI-Native Operating Holdco · Permanent Capital Compounder · Horizontal AI Platform · Data Network Compounder.
+    <b>Prior decision memos</b> (June 14, 2026, bobroff-cap/roll-ups/analysis/): Pure HoldCo Decision Memo (five-mechanism rejection of standing services arm).
+    <b>Operating Model</b> (June 14, 2026, bobroff-cap/roll-ups/raw/): Operating Model v4.0.
+    <b>Reference operator filings and disclosures</b>: Berkshire Hathaway 2024 Annual Report (SEC); Berkshire 2025 Annual Letter; Markel Group 2024 Annual Report; Brookfield Corporation 2024 Investor Day Transcript; Verisk 10-K FY2024 (SEC); Snowflake 10-K FY2024 (SEC); MSCI 10-K FY2024 (SEC); CoStar Group 10-K FY2024 (SEC).
+    <b>Horizontal AI operator data</b>: Sacra profiles (Anthropic, OpenAI, Plaid); CNBC and TechCrunch funding-round coverage (Sierra $950M Series E May 2026; Harvey $200M at $11B March 2026; Decagon $250M at $4.5B Jan 2026; Cresta Series D $125M); CMSWire on Sierra $15.8B; Bloomberg on Decagon valuation; SemiAnalysis on Anthropic Bedrock economics; ICONIQ 2026 AI margin dataset; IDC enterprise AI pilot research 2026; VaaSBlock enterprise AI deployment gap report 2026; getcoai on Adept Amazon reverse acqui-hire; Heavybit on acqui-hire model.
+    <b>Holdco reference operators</b>: PitchBook Long Lake profile; PYMNTS, Travel Weekly on Amex GBT take-private May 2026; BusinessWire on Shield Technology Partners $100M and $100M tranches; SiliconANGLE on Shield $100M Feb 2026; BusinessWire and Crypto Briefing on Current / Crete $500M and Thrive Tax AI; MobiHealthNews and Sourcery on GC Creation $1.5B AI Roll-Up Engine; Becker's Hospital Review and Modern Healthcare on Smarter Technologies CEO change December 2025.
+    <b>Data Network operators</b>: Sacra Plaid; TechCrunch on Plaid Series E April 2025; Snowflake quarterly disclosures on NRR; Verisk and MSCI annual filings on subscription economics; CoStar physical-coverage figures (CoStar press materials); Datavant 70,000-partner figure (Datavant blog and press).
+    <b>Permanent Capital operators</b>: Berkshire SC 13D/A filings (Buffett ownership); CNBC May 2026 on Abel succession; Rational Walk on Markel Ventures structure; Tontine Coffee-House on General Re reserves; Loews Corporation historical disclosures (Tisch family origin); Constellation Software IPO history.
+    <b>Brand / research / OSS reference comparables</b>: a16z content operation (a16z.com and Future imprint); USV blog (Fred Wilson); YC Startup School and library; Bessemer State of the Cloud annual report; Anthropic Claude Code SDK and MCP standard release; OpenAI Whisper / Triton OSS releases; Meta PyTorch and Llama releases; Affinity public funding history (Series C ~$80M Bloomberg coverage 2021); PitchBook company history (founded 2007).
+  </p>
+
+  <div class="source">Strategic Decision Memo · Archetype Combinations and Sequencing · Prepared June 14, 2026 for internal review. Companion to the Pure HoldCo Decision Memo and Operating Model v4.0.</div>
+</section>
+
+</body>
+</html>
