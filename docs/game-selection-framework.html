@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Game Selection Framework — AI-Native Roll-Up Studio</title>
+<style>
+:root{
+  --deep-slate:#31435B;
+  --petrol-teal:#2E7780;
+  --soft-steel:#A9C5D6;
+  --silver-mist:#DCE5EC;
+  --near-black:#151A1F;
+  --cool-gray:#C9D2DC;
+  --off-white:#FAF9F6;
+  --rule:#D8DEE5;
+  --shade-1:#F4F2EE;
+  --shade-2:#EDEFF2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--off-white);color:var(--near-black);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.5;letter-spacing:-0.005em;-webkit-font-smoothing:antialiased}
+.page{max-width:1180px;margin:0 auto;padding:56px 72px 64px;border-bottom:1px solid var(--rule);background:var(--off-white)}
+.page:first-of-type{padding-top:120px}
+.eyebrow{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;margin-bottom:14px}
+.eyebrow .num{color:var(--deep-slate);font-weight:700;margin-right:10px}
+h1.action{font-size:30px;line-height:1.2;font-weight:700;color:var(--deep-slate);letter-spacing:-0.02em;margin-bottom:16px;max-width:980px}
+h2.action{font-size:22px;line-height:1.25;font-weight:700;color:var(--deep-slate);letter-spacing:-0.015em;margin-bottom:12px;max-width:920px}
+h3.sub{font-size:13px;font-weight:700;color:var(--deep-slate);text-transform:uppercase;letter-spacing:0.08em;margin:22px 0 10px}
+.lede{font-size:14px;line-height:1.55;color:var(--near-black);max-width:920px;margin-bottom:16px}
+.source{font-size:10.5px;letter-spacing:0.03em;color:#7B8590;border-top:1px solid var(--rule);padding-top:10px;margin-top:30px}
+
+/* COVER */
+.cover{min-height:78vh;display:flex;flex-direction:column;justify-content:space-between;padding-top:140px}
+.cover .top-mark{font-size:10px;letter-spacing:0.22em;color:var(--petrol-teal);font-weight:600;text-transform:uppercase}
+.cover h1{font-size:50px;line-height:1.1;font-weight:700;letter-spacing:-0.025em;color:var(--deep-slate);margin:54px 0 22px;max-width:980px}
+.cover .deck{font-size:18px;color:#3F4A57;max-width:880px;line-height:1.55;font-weight:400}
+.cover .meta{display:flex;gap:64px;margin-top:60px;font-size:12px;color:#5A6470}
+.cover .meta .label{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;display:block;margin-bottom:6px}
+.cover .meta .v{font-size:14px;color:var(--near-black);font-weight:600}
+.cover .palette{display:flex;gap:0;margin-top:40px;border-top:1px solid var(--rule);padding-top:18px}
+.cover .palette span{display:block;width:32px;height:6px}
+
+/* EXEC */
+.bluf{background:var(--silver-mist);border-left:4px solid var(--petrol-teal);padding:22px 26px;margin:18px 0 24px;max-width:980px}
+.bluf .bluf-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:10px}
+.bluf p{font-size:14.5px;line-height:1.55;color:var(--near-black)}
+.findings{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 6px}
+.find-card{background:#fff;border:1px solid var(--rule);padding:16px 18px;border-top:3px solid var(--deep-slate)}
+.find-card .ix{font-size:10px;letter-spacing:0.16em;color:var(--petrol-teal);font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.find-card .tt{font-size:13.5px;font-weight:700;color:var(--deep-slate);line-height:1.3;margin-bottom:8px}
+.find-card .body{font-size:12px;line-height:1.5;color:#3F4A57}
+
+/* TREE */
+.tree{margin:16px 0 6px;font-family:'JetBrains Mono','Menlo',monospace;font-size:12px;line-height:1.7;color:var(--near-black);background:#fff;border:1px solid var(--rule);padding:20px 24px;white-space:pre;overflow-x:auto}
+.tree .root{color:var(--deep-slate);font-weight:700}
+.tree .branch{color:var(--petrol-teal);font-weight:600}
+.tree .leaf{color:#3F4A57}
+
+/* TABLES */
+table.mck{width:100%;border-collapse:collapse;background:#fff;font-size:12px;margin:12px 0 8px}
+table.mck th{background:var(--deep-slate);color:#fff;text-align:left;padding:10px 12px;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;border-right:1px solid #3D506B}
+table.mck th:last-child{border-right:none}
+table.mck td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45}
+table.mck tr:nth-child(even) td{background:var(--shade-1)}
+table.mck td.idx{font-weight:700;color:var(--petrol-teal);width:38px;text-align:center;font-variant-numeric:tabular-nums}
+table.mck td.name{font-weight:700;color:var(--deep-slate);white-space:nowrap}
+table.mck td.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+table.mck caption{caption-side:bottom;text-align:left;font-size:10.5px;color:#7B8590;padding-top:8px;font-style:normal;line-height:1.5}
+
+/* HEAT MAP */
+.heat{font-size:11.5px}
+.heat td{text-align:center;font-variant-numeric:tabular-nums;font-weight:600}
+.heat td.name{text-align:left;font-weight:700;color:var(--deep-slate);white-space:nowrap}
+.heat td.idx{text-align:center}
+table.mck.heat tr:nth-child(even) td{background:transparent}
+table.mck.heat tr td.h5{background:#2E7780!important;color:#fff!important}
+table.mck.heat tr td.h4{background:#5A98A1!important;color:#fff!important}
+table.mck.heat tr td.h3{background:#A9C5D6!important;color:var(--near-black)!important}
+table.mck.heat tr td.h2{background:#DCE5EC!important;color:var(--near-black)!important}
+table.mck.heat tr td.h1{background:#F0F2F5!important;color:#5A6470!important}
+table.mck.heat tr td.hN{background:#FAF9F6!important;color:#5A6470!important}
+
+/* CARDS — compact */
+.archetype{background:#fff;border:1px solid var(--rule);margin:12px 0 0;padding:0;border-left:5px solid var(--deep-slate);display:grid;grid-template-columns:1.6fr 1fr;gap:0}
+.archetype.hot{border-left-color:var(--petrol-teal)}
+.archetype .left{padding:18px 24px 16px;border-right:1px solid var(--rule)}
+.archetype .ix{font-size:10px;letter-spacing:0.16em;color:var(--petrol-teal);font-weight:700;text-transform:uppercase;margin-bottom:6px}
+.archetype h3{font-size:18px;font-weight:700;color:var(--deep-slate);line-height:1.2;margin-bottom:10px;letter-spacing:-0.01em}
+.archetype .mech{font-size:12px;line-height:1.55;margin-bottom:10px;color:var(--near-black)}
+.archetype .winners{font-size:11.5px;line-height:1.5;color:#3F4A57;margin-bottom:8px}
+.archetype .winners b{color:var(--deep-slate);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-right:6px}
+.archetype .verdict{font-size:12px;line-height:1.5;color:var(--near-black);background:var(--shade-1);padding:10px 14px;margin-top:10px;border-left:3px solid var(--petrol-teal)}
+.archetype .verdict b{color:var(--deep-slate);font-weight:700;text-transform:uppercase;font-size:10px;letter-spacing:0.1em;display:inline-block;margin-right:8px}
+.archetype .right{padding:18px 24px;background:#FBFAF7}
+.score-grid{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:11px;line-height:1.45}
+.score-grid .lbl{color:#5A6470;font-weight:600;text-transform:uppercase;font-size:9.5px;letter-spacing:0.05em;white-space:nowrap}
+.score-grid .val{font-weight:700;color:var(--near-black);font-variant-numeric:tabular-nums}
+
+/* LENS */
+.lens{background:#fff;border:1px solid var(--rule);padding:20px 24px;margin:12px 0}
+.lens h3{font-size:15px;font-weight:700;color:var(--deep-slate);margin-bottom:6px;line-height:1.3}
+.lens .ix{font-size:10px;letter-spacing:0.16em;color:var(--petrol-teal);font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.lens .insight{font-size:12.5px;line-height:1.5;margin-bottom:12px;color:#3F4A57}
+.rank-list{margin:8px 0 0;border-top:1px solid var(--rule)}
+.rank-list .row{display:grid;grid-template-columns:30px 1fr 140px;gap:14px;padding:8px 0;border-bottom:1px solid var(--rule);align-items:baseline;font-size:12px}
+.rank-list .rk{font-weight:700;color:var(--petrol-teal);font-variant-numeric:tabular-nums}
+.rank-list .nm{font-weight:700;color:var(--deep-slate)}
+.rank-list .rs{color:#5A6470;font-size:11px;line-height:1.45;margin-top:2px}
+.rank-list .mt{text-align:right;font-variant-numeric:tabular-nums;color:var(--near-black);font-weight:600;font-size:11.5px}
+
+/* DECISION TABLE */
+.dt-row{display:grid;grid-template-columns:1fr 1.2fr;gap:14px;border:1px solid var(--rule);background:#fff;padding:14px 20px;margin-bottom:8px;align-items:center}
+.dt-row .if{font-size:12.5px;font-weight:600;color:var(--near-black)}
+.dt-row .if b{color:var(--petrol-teal);text-transform:uppercase;font-size:9.5px;letter-spacing:0.14em;display:block;margin-bottom:4px}
+.dt-row .then{font-size:12.5px;color:var(--deep-slate)}
+.dt-row .then b{color:var(--petrol-teal);text-transform:uppercase;font-size:9.5px;letter-spacing:0.14em;display:block;margin-bottom:4px}
+.dt-row .then strong{color:var(--deep-slate);font-weight:700}
+
+/* CALLOUTS */
+.callout{border:1px solid var(--cool-gray);background:#FDFCFA;padding:16px 20px;margin:14px 0;border-left:3px solid var(--petrol-teal)}
+.callout .h{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:8px}
+.callout p{font-size:12px;line-height:1.5;color:var(--near-black);max-width:920px}
+
+/* PRINT */
+@media print{
+  body{font-size:10px}
+  .page{padding:30px 36px;max-width:none;border-bottom:1px dashed var(--rule);page-break-after:always}
+  .cover{min-height:auto}
+  .archetype{page-break-inside:avoid}
+  .lens{page-break-inside:avoid}
+  table.mck th{background:var(--deep-slate)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .heat td{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================== COVER ============================== -->
+<section class="page cover">
+  <div>
+    <div class="top-mark">AI-Native Roll-Up Studio · Internal Strategy · Confidential</div>
+    <h1>Game Selection Framework</h1>
+    <div class="deck">
+      Working backwards from the founder cash-out at exit, this document maps the universe of business archetypes available on the US market when three enablers are present — domestic capital markets, SMB acquisition capability, and AI deployment capability — and scores each on the parameters that determine exit value.
+    </div>
+  </div>
+  <div>
+    <div class="meta">
+      <div><span class="label">Prepared</span><span class="v">June 12, 2026</span></div>
+      <div><span class="label">Author</span><span class="v">Strategy &amp; Research</span></div>
+      <div><span class="label">Question</span><span class="v">Which game maximizes founder exit value</span></div>
+    </div>
+    <div class="palette">
+      <span style="background:#31435B"></span>
+      <span style="background:#2E7780"></span>
+      <span style="background:#A9C5D6"></span>
+      <span style="background:#DCE5EC"></span>
+      <span style="background:#151A1F"></span>
+      <span style="background:#C9D2DC"></span>
+      <span style="background:#FAF9F6;border-right:1px solid #ddd;border-left:1px solid #ddd"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== EXECUTIVE SUMMARY ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">01</span>Executive Summary</div>
+  <h1 class="action">Three archetypes maximize absolute founder cash-out; a different three maximize probability of any exit at all. No single archetype dominates on both axes.</h1>
+
+  <div class="bluf">
+    <div class="bluf-label">Bottom Line Up Front</div>
+    <p>
+      Maximum theoretical founder cash-out is produced by software-economics games (horizontal AI platforms, vertical SaaS, AI agents-as-workforce). Maximum probability-weighted cash-out — adjusted for failure rates, capital intensity, and dilution — is produced by acquisition-plus-AI games (AI-native operating holdcos, data network compounders, vertical marketplaces). The two sets do not overlap. The choice is a preference declaration, not a ranking exercise.
+    </p>
+  </div>
+
+  <div class="findings">
+    <div class="find-card">
+      <div class="ix">Finding 01</div>
+      <div class="tt">Software multiples remain 3–5× higher than asset-heavy multiples.</div>
+      <div class="body">Public vertical SaaS trades at 4–8× ARR. Frontier AI platforms clear 20–40× ARR in private rounds. Operating holdcos trade at 8–14× post-AI EBITDA. The multiple gap is the single largest determinant of exit value at the same revenue scale.</div>
+    </div>
+    <div class="find-card">
+      <div class="ix">Finding 02</div>
+      <div class="tt">Founder ownership at exit varies by 8× across archetypes.</div>
+      <div class="body">Bootstrapped software founders retain 40–60% at exit. VC-backed vertical SaaS founders retain 15–25%. Frontier AI founders often retain 4–10%. Ranking by absolute cash-out diverges sharply from ranking by enterprise value when dilution is included.</div>
+    </div>
+    <div class="find-card">
+      <div class="ix">Finding 03</div>
+      <div class="tt">Only one archetype uses all three enablers at full structural strength.</div>
+      <div class="body">Pure software archetypes leave the SMB enabler unused. Classic PE leaves the AI enabler underused. The intersection of US, SMB acquisition, and AI deployment at scores of 4 or 5 across all three is unique to the AI-Native Operating Holdco.</div>
+    </div>
+  </div>
+
+  <div class="source">Sources synthesised from public exit data 2018–2026 (PitchBook, SEC filings, M&amp;A advisory benchmarks); methodology in Appendix.</div>
+</section>
+
+<!-- ============================== QUESTION + TREE ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">02</span>The Question and Its Decomposition</div>
+  <h1 class="action">Founder cash-out at exit decomposes into three multiplicative levers — multiple, scale, and retained ownership — each governed by the business archetype chosen.</h1>
+
+  <p class="lede">
+    Cash-out at exit is the cash a founder receives when the business is sold, taken public, or recapitalised, after dilution. It is the appropriate apex because it captures the practical objective of the entrepreneur and is the only number that exists with certainty after the fact. Three enablers are held constant: the US market, SMB acquisition capability, and AI deployment capability.
+  </p>
+
+<div class="tree">
+<span class="root">Maximize Founder Cash-Out at Exit</span>
+│
+├── <span class="branch">Lever 1 · Exit Multiple</span>  (what the buyer or market pays per unit of revenue or earnings)
+│        ├── <span class="leaf">Revenue predictability — recurring vs. project</span>
+│        ├── <span class="leaf">Gross margin — software vs. services vs. assets</span>
+│        ├── <span class="leaf">Growth sustainability — durable vs. cyclical</span>
+│        ├── <span class="leaf">Defensibility — network, data, brand, regulation, switching cost</span>
+│        └── <span class="leaf">Buyer universe — strategic, financial, public market, holdco</span>
+│
+├── <span class="branch">Lever 2 · Scale at Exit</span>  (the revenue or earnings on which the multiple is applied)
+│        ├── <span class="leaf">Market size — addressable demand</span>
+│        ├── <span class="leaf">Distribution — owned, channel, viral, acquisition</span>
+│        ├── <span class="leaf">Operating leverage — marginal cost of new revenue</span>
+│        └── <span class="leaf">Capital recycling — reinvestment optionality</span>
+│
+└── <span class="branch">Lever 3 · Retained Ownership</span>  (the share of enterprise value the founder receives)
+         ├── <span class="leaf">Capital intensity — equity required to reach scale</span>
+         ├── <span class="leaf">Source of capital — bootstrap, VC, PE, debt, perpetual</span>
+         ├── <span class="leaf">Dilution per round — pricing and dilution mechanics</span>
+         └── <span class="leaf">Liquidation waterfall — preferences, ratchets, recapitalisation</span>
+</div>
+
+  <div class="callout">
+    <div class="h">Reading the tree</div>
+    <p>
+      A high multiple with no scale produces a small business. Scale without retained ownership produces nothing for the founder. Ownership without multiple or scale produces a lifestyle business. All three levers must be optimised together; the archetype choice fixes the trade-off space. Software economics produce the highest multiples but typically require heavy dilution. Operating holdcos produce moderate multiples but retain higher founder ownership through sponsor equity plus carry. Services produce the lowest multiples regardless of dilution.
+    </p>
+  </div>
+
+  <div class="source">Decomposition adapted from standard enterprise value frameworks; ownership benchmarks from Carta and Cooley LP studies 2020–2025.</div>
+</section>
+
+<!-- ============================== UNIVERSE ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">03</span>The Universe of Games</div>
+  <h1 class="action">Fourteen distinct archetypes are available to an operator with these three enablers, grouped into six families by underlying economic logic.</h1>
+
+  <table class="mck">
+    <thead>
+      <tr>
+        <th style="width:36px">#</th>
+        <th style="width:150px">Family</th>
+        <th style="width:240px">Archetype</th>
+        <th>One-line description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="idx">01</td><td>Software economics</td><td class="name">Vertical SaaS</td><td>Build subscription software for one industry; expand wallet share, then geography.</td></tr>
+      <tr><td class="idx">02</td><td>Software economics</td><td class="name">Horizontal AI Agent Platform</td><td>Sell agentic AI products across many industries from a single technology base.</td></tr>
+      <tr><td class="idx">03</td><td>Software economics</td><td class="name">AI Agents-as-Workforce</td><td>Sell AI workers priced against headcount cost; replace labour in defined functions.</td></tr>
+      <tr><td class="idx">04</td><td>Software economics</td><td class="name">Data Network Compounder</td><td>Aggregate proprietary data through product or acquisition; monetise access and insight.</td></tr>
+      <tr><td class="idx">05</td><td>Software + acquisition</td><td class="name">Serial Software Acquirer</td><td>Holding company that buys mature vertical software businesses and holds permanently.</td></tr>
+      <tr><td class="idx">06</td><td>Operating holdco</td><td class="name">AI-Native Operating Holdco</td><td>Acquire operating SMBs, install AI inside, hold as decentralised opcos under a holdco.</td></tr>
+      <tr><td class="idx">07</td><td>Operating holdco</td><td class="name">Permanent Capital Compounder</td><td>Permanent capital vehicle that buys mixed businesses and compounds book value without exit.</td></tr>
+      <tr><td class="idx">08</td><td>Operating holdco</td><td class="name">Classic PE Buy-Improve-Sell</td><td>Acquire SMB platform, add bolt-ons, improve operations, sell in 3 to 5 years.</td></tr>
+      <tr><td class="idx">09</td><td>Services</td><td class="name">AI-Integration Services Co</td><td>Sell AI integration and implementation services on project or retainer basis.</td></tr>
+      <tr><td class="idx">10</td><td>Services</td><td class="name">Tech-Enabled Services Roll-Up</td><td>Aggressively acquire operating SMBs claiming multiple expansion through technology synergies.</td></tr>
+      <tr><td class="idx">11</td><td>Network / distribution</td><td class="name">Vertical Marketplace + AI</td><td>Two-sided market for one industry; AI augments matching, pricing, and fraud detection.</td></tr>
+      <tr><td class="idx">12</td><td>Network / distribution</td><td class="name">Franchise Operator Network</td><td>Build a single-location playbook, then license or franchise to operator-investors.</td></tr>
+      <tr><td class="idx">13</td><td>Multi-bet architecture</td><td class="name">Venture Studio</td><td>Studio creates multiple new companies with shared infrastructure; each pursues independent exit.</td></tr>
+      <tr><td class="idx">14</td><td>Multi-bet architecture</td><td class="name">Search Fund</td><td>Founder raises small fund, searches 18–24 months, acquires one SMB, operates, exits.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="source">Archetype classification synthesised from PitchBook, Bain Global PE Report 2025, Burgiss perpetual capital data, primary research on US M&amp;A advisory practice 2020–2026.</div>
+</section>
+
+<!-- ============================== SCOREBOARD ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">04</span>Comparative Scoreboard</div>
+  <h1 class="action">No archetype scores in the top quartile on all eight parameters; every game involves a structural trade-off.</h1>
+
+  <p class="lede">
+    The matrix scores all fourteen archetypes on eight parameters. P1–P4 are quantitative market ranges. P5–P8 use a 1 (low) to 5 (high) scale calibrated against the strongest known example. Colour intensity reflects score on qualitative columns. The final column reports the median founder cash-out at a $1B enterprise value comparison.
+  </p>
+
+  <table class="mck heat">
+    <thead>
+      <tr>
+        <th style="width:30px">#</th>
+        <th style="width:200px;text-align:left">Archetype</th>
+        <th>P1 Multiple</th>
+        <th>P2 Time</th>
+        <th>P3 Capital to $1B</th>
+        <th>P4 Founder %</th>
+        <th>P5 Scale</th>
+        <th>P6 Moat</th>
+        <th>P7 AI fit</th>
+        <th>P8 SMB fit</th>
+        <th>Take-home @ $1B</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="idx">01</td><td class="name">Vertical SaaS</td><td>8–15× ARR</td><td>7–10 yr</td><td>$50–150M</td><td>15–25%</td><td class="h5">5</td><td class="h4">4</td><td class="h5">5</td><td class="h1">1</td><td class="h4">$150–250M</td></tr>
+      <tr><td class="idx">02</td><td class="name">Horizontal AI Platform</td><td>15–40× ARR</td><td>3–7 yr</td><td>$100–500M</td><td>4–10%</td><td class="h5">5</td><td class="h3">3</td><td class="h5">5</td><td class="h1">1</td><td class="h3">$40–100M*</td></tr>
+      <tr><td class="idx">03</td><td class="name">AI Agents-as-Workforce</td><td>10–25× ARR</td><td>4–7 yr</td><td>$50–200M</td><td>10–20%</td><td class="h4">4</td><td class="h3">3</td><td class="h5">5</td><td class="h2">2</td><td class="h4">$100–200M</td></tr>
+      <tr><td class="idx">04</td><td class="name">Data Network Compounder</td><td>10–25× ARR</td><td>6–10 yr</td><td>$50–200M</td><td>20–35%</td><td class="h5">5</td><td class="h5">5</td><td class="h4">4</td><td class="h3">3</td><td class="h5">$200–350M</td></tr>
+      <tr><td class="idx">05</td><td class="name">Serial Software Acquirer</td><td>6–12× EBITDA</td><td>Perpetual</td><td>$500M+</td><td>3–10%</td><td class="h5">5</td><td class="h4">4</td><td class="h3">3</td><td class="h3">3</td><td class="h4">$50–300M paper</td></tr>
+      <tr><td class="idx">06</td><td class="name">AI-Native Operating Holdco</td><td>8–14× EBITDA</td><td>7–12 yr</td><td>$200–500M</td><td>20–35%</td><td class="h4">4</td><td class="h3">3</td><td class="h4">4</td><td class="h5">5</td><td class="h5">$200–400M</td></tr>
+      <tr><td class="idx">07</td><td class="name">Permanent Capital Compounder</td><td>n/a (no exit)</td><td>Never</td><td>$500M+</td><td>20–40%</td><td class="h5">5</td><td class="h5">5</td><td class="h3">3</td><td class="h5">5</td><td class="h5">$200M–1B+ paper</td></tr>
+      <tr><td class="idx">08</td><td class="name">Classic PE Buy-Improve-Sell</td><td>4–7× EBITDA</td><td>3–5 yr</td><td>$100M+ fund</td><td>GP carry 20%</td><td class="h3">3</td><td class="h2">2</td><td class="h3">3</td><td class="h5">5</td><td class="h4">$50–200M per fund</td></tr>
+      <tr><td class="idx">09</td><td class="name">AI-Integration Services Co</td><td>1–3× EBITDA</td><td>5–8 yr</td><td>$5–20M</td><td>50–80%</td><td class="h2">2</td><td class="h2">2</td><td class="h4">4</td><td class="h2">2</td><td class="h3">$50–120M</td></tr>
+      <tr><td class="idx">10</td><td class="name">Tech-Enabled Services Roll-Up</td><td>0.5–2× revenue</td><td>4–7 yr</td><td>$200M+</td><td>5–20%</td><td class="h3">3</td><td class="h1">1</td><td class="h3">3</td><td class="h5">5</td><td class="h1">$0–50M typical</td></tr>
+      <tr><td class="idx">11</td><td class="name">Vertical Marketplace + AI</td><td>4–10× revenue</td><td>7–12 yr</td><td>$200–500M</td><td>5–15%</td><td class="h5">5</td><td class="h4">4</td><td class="h4">4</td><td class="h4">4</td><td class="h3">$50–150M</td></tr>
+      <tr><td class="idx">12</td><td class="name">Franchise Operator Network</td><td>8–15× EBITDA</td><td>10–15 yr</td><td>$100–300M</td><td>25–50%</td><td class="h5">5</td><td class="h5">5</td><td class="h3">3</td><td class="h3">3</td><td class="h5">$250–500M</td></tr>
+      <tr><td class="idx">13</td><td class="name">Venture Studio</td><td>varies per co</td><td>5–10 yr each</td><td>$50–200M</td><td>30–50% per co</td><td class="h3">3</td><td class="h2">2</td><td class="h4">4</td><td class="h3">3</td><td class="h4">$200M–1B career</td></tr>
+      <tr><td class="idx">14</td><td class="name">Search Fund</td><td>5–8× EBITDA</td><td>5–10 yr</td><td>$5–30M</td><td>25–35%</td><td class="h2">2</td><td class="h2">2</td><td class="h3">3</td><td class="h5">5</td><td class="h2">$5–25M typical</td></tr>
+    </tbody>
+    <caption>
+      <b>Parameters.</b> P1 exit multiple range (ARR or EBITDA basis). P2 median years to liquidity. P3 equity capital required to reach $1B EV. P4 founder retained ownership at exit. P5 scalability ceiling (1 capped under $100M; 5 produced $10B+). P6 defensibility against entrants. P7 AI enabler strength (1 incidental; 5 structural). P8 SMB acquisition enabler strength (1 unused; 5 engine).
+      <br><b>*</b> Horizontal AI floor case at $1B comparison; absolute upside materially higher when EV reaches $5B+, but rarely captured by the founder at 4–10% ownership.
+    </caption>
+  </table>
+
+  <div class="callout">
+    <div class="h">Reading the matrix</div>
+    <p>
+      Vertical SaaS is highest on multiple and AI fit, lowest on SMB fit. The AI-Native Operating Holdco is highest on SMB fit but middling on multiple and moat. The Permanent Capital Compounder maximises scale and defensibility but produces no exit. The Tech-Enabled Services Roll-Up is the only archetype with a structurally negative outcome distribution.
+    </p>
+  </div>
+
+  <div class="source">Quantitative ranges from PitchBook private multiples Q4 2025, Damodaran public multiples January 2026, Carta dilution dataset; qualitative scoring calibrated against case examples in the cards below.</div>
+</section>
+
+<!-- ============================== ARCHETYPE CARDS ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">05</span>Archetype Cards</div>
+  <h1 class="action">One compact card per game; identical structure so the comparison is parameter-for-parameter, not narrative-for-narrative.</h1>
+
+  <!-- CARD 01 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 01 · Software economics</div>
+      <h3>Vertical SaaS</h3>
+      <div class="mech">Subscription software for one industry. Revenue is recurring (monthly or annual), gross margins 70 to 85%, expansion through additional modules and geography. The model requires 5 to 10 years of negative free cash flow funded by venture capital; founder ownership compounds dilution over each round.</div>
+      <div class="winners"><b>Winners</b>Toast ($14B), ServiceTitan ($8B), Veeva ($30B+), Procore ($10B).</div>
+      <div class="winners"><b>Cautionary</b>Niche-too-narrow exits under $100M; late-stage 2021 rounds producing 2023 down-rounds.</div>
+      <div class="verdict"><b>Verdict</b>High-quality multiple, large scale ceiling, long build, heavy dilution. Real but capped absolute cash-out.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">8–15× ARR</div>
+        <div class="lbl">P2 Time</div><div class="val">7–10 yr</div>
+        <div class="lbl">P3 Capital</div><div class="val">$50–150M</div>
+        <div class="lbl">P4 Founder %</div><div class="val">15–25%</div>
+        <div class="lbl">P5 Scale</div><div class="val">5 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">4 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">5 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">1 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 02 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 02 · Software economics</div>
+      <h3>Horizontal AI Agent Platform</h3>
+      <div class="mech">Single technology base sold as agentic AI products across many industries. Private rounds 2024–2026 cleared 30 to 60× ARR for application-layer leaders, over 100× for model labs. Capital requirements are large ($100M to $1B+ for application layer, multi-billion for model labs); founder ownership often 4 to 10% at exit.</div>
+      <div class="winners"><b>Winners</b>Anthropic and OpenAI (frontier labs); Sierra ($4B+); Decagon ($1B+); Harvey ($1.5B+).</div>
+      <div class="winners"><b>Cautionary</b>Adept (Amazon acqui-hire); Inflection (Microsoft absorption); GPT-wrapper commoditisation within 12–24 months.</div>
+      <div class="verdict"><b>Verdict</b>Largest theoretical cash-out, lowest founder ownership share. Realised outcomes bimodal — few transcendent winners, many depressed absorptions.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">15–40× ARR</div>
+        <div class="lbl">P2 Time</div><div class="val">3–7 yr</div>
+        <div class="lbl">P3 Capital</div><div class="val">$100–500M+</div>
+        <div class="lbl">P4 Founder %</div><div class="val">4–10%</div>
+        <div class="lbl">P5 Scale</div><div class="val">5 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">3 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">5 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">1 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 03 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 03 · Software economics</div>
+      <h3>AI Agents-as-Workforce</h3>
+      <div class="mech">AI agents perform a specific job function — sales development, legal demand letters, clinical intake, software engineering. Pricing calibrated against loaded cost of a human FTE. Buyer compares to headcount budget, not software seat. Multiple sits between software and services; faster exit pace than vertical SaaS due to concrete value proposition.</div>
+      <div class="winners"><b>Winners</b>EvenUp ($1B+, legal); Hippocratic ($1.6B, clinical); 11x.ai ($0.5B+, SDR); Cognition / Devin ($2B, engineering).</div>
+      <div class="winners"><b>Cautionary</b>Thin-wrapper agents commoditised on next foundation model release; BPO incumbents replicate with deeper distribution.</div>
+      <div class="verdict"><b>Verdict</b>Solid absolute cash-out, moderate dilution, faster cycle. Multiple ceiling limited by replicability.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">10–25× ARR</div>
+        <div class="lbl">P2 Time</div><div class="val">4–7 yr</div>
+        <div class="lbl">P3 Capital</div><div class="val">$50–200M</div>
+        <div class="lbl">P4 Founder %</div><div class="val">10–20%</div>
+        <div class="lbl">P5 Scale</div><div class="val">4 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">3 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">5 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">2 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 04 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 04 · Software economics</div>
+      <h3>Data Network Compounder</h3>
+      <div class="mech">Proprietary dataset assembled through product, acquisition, or aggregation. Access sold via API, dashboard, or licensed feed. Data compounds as more customers contribute. Strongest economics in the universe — high multiple, deep moat, moderate dilution. Requires a unique data position that the SMB acquisition enabler can help assemble.</div>
+      <div class="winners"><b>Winners</b>Plaid ($13B); Datavant ($7B); Snowflake ($60B+); Verisk ($40B+).</div>
+      <div class="winners"><b>Cautionary</b>Data leakage to competitors; customer disintermediation; regulatory exposure (HIPAA, GLBA).</div>
+      <div class="verdict"><b>Verdict</b>Among the strongest economics in the universe. Hard to engineer from a standing start; SMB acquisitions can be the assembly motion.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">10–25× ARR</div>
+        <div class="lbl">P2 Time</div><div class="val">6–10 yr</div>
+        <div class="lbl">P3 Capital</div><div class="val">$50–200M</div>
+        <div class="lbl">P4 Founder %</div><div class="val">20–35%</div>
+        <div class="lbl">P5 Scale</div><div class="val">5 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">5 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">4 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">3 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 05 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 05 · Software + acquisition</div>
+      <h3>Serial Software Acquirer</h3>
+      <div class="mech">Holding company that buys mature niche vertical software businesses (typically $1M–$20M revenue, profitable) and holds indefinitely. Acquisitions funded from existing cash flow. Public market values the holdco at premium multiples for compounding cash flow and capital allocation discipline. Wealth accumulates through equity in the holdco, not through liquidity events.</div>
+      <div class="winners"><b>Winners</b>Constellation Software ($80B+); Roper ($60B); Trilogy/ESW (private, est. $5B+); Topicus.</div>
+      <div class="winners"><b>Cautionary</b>Discipline failure (overpaying) erodes returns; reputation damage from aggressive cost cutting.</div>
+      <div class="verdict"><b>Verdict</b>Largest paper wealth outcomes on a perpetual horizon. Inter-generational compounding architecture, not cash-out architecture.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">6–12× EBITDA</div>
+        <div class="lbl">P2 Time</div><div class="val">Perpetual</div>
+        <div class="lbl">P3 Capital</div><div class="val">$500M+</div>
+        <div class="lbl">P4 Founder %</div><div class="val">3–10%</div>
+        <div class="lbl">P5 Scale</div><div class="val">5 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">4 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">3 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">3 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="source">Sources: SEC filings, S-1 documents, PitchBook private rounds, primary research 2024–2026.</div>
+</section>
+
+<!-- ============================== CARDS 06-10 ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">05</span>Archetype Cards (continued)</div>
+
+  <!-- CARD 06 -->
+  <div class="archetype hot">
+    <div class="left">
+      <div class="ix">Archetype 06 · Operating holdco</div>
+      <h3>AI-Native Operating Holdco</h3>
+      <div class="mech">Acquire operating SMBs — homecare, MSPs, accounting, P&amp;C insurance, property management — and install AI to raise margins. Opcos remain decentralised; holdco supplies capital, AI engineering, shared functions. Multiple arbitrage between the SMB market (3–6× EBITDA) and the AI-uplifted holdco (8–14× EBITDA). Only archetype using all three enablers at structural strength.</div>
+      <div class="winners"><b>Winners</b>Long Lake ($1.28B raised); GC Creation ($1.5B allocation); Shield Tech (15 MSPs, $200M); Crete/Current ($428M revenue).</div>
+      <div class="winners"><b>Cautionary</b>Smarter Technologies / NMC — CEO turnover after 7 months ("buy first, AI later" failure); GC Long Lake 85% concentration risk.</div>
+      <div class="verdict"><b>Verdict</b>Only archetype using all three enablers structurally. Realistic absolute cash-out $200M–$400M. Multiple ceiling lower than software; probability of meaningful exit higher.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">8–14× EBITDA</div>
+        <div class="lbl">P2 Time</div><div class="val">7–12 yr</div>
+        <div class="lbl">P3 Capital</div><div class="val">$200–500M</div>
+        <div class="lbl">P4 Founder %</div><div class="val">20–35%</div>
+        <div class="lbl">P5 Scale</div><div class="val">4 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">3 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">4 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">5 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 07 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 07 · Operating holdco</div>
+      <h3>Permanent Capital Compounder</h3>
+      <div class="mech">Permanent capital vehicle — typically insurance float, public holding company, or evergreen private fund — acquires mixed businesses and holds indefinitely. No exit by design; principal builds inter-generational wealth via compounding book value. Cash to principal comes from dividend, partial trimming, or estate transition. Berkshire Hathaway is the canonical example.</div>
+      <div class="winners"><b>Winners</b>Berkshire ($800B+, Buffett 38% peak); Brookfield ($100B+); Markel ($25B+); Loews (Tisch family 60+ yr).</div>
+      <div class="winners"><b>Cautionary</b>Capital allocation drift in late cycle; successor risk; slow first decade.</div>
+      <div class="verdict"><b>Verdict</b>Not an exit archetype. Largest paper wealth in the universe on a multi-decade timeline. For principals optimising family wealth across generations, not personal liquidity.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">n/a (no exit)</div>
+        <div class="lbl">P2 Time</div><div class="val">Never</div>
+        <div class="lbl">P3 Capital</div><div class="val">$500M+</div>
+        <div class="lbl">P4 Founder %</div><div class="val">20–40%</div>
+        <div class="lbl">P5 Scale</div><div class="val">5 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">5 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">3 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">5 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 08 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 08 · Operating holdco</div>
+      <h3>Classic PE Buy-Improve-Sell</h3>
+      <div class="mech">PE fund acquires platform SMB, adds 5 to 15 bolt-ons, improves operations, sells in 3 to 5 years to next-tier sponsor or strategic. GP earns management fee plus 20% carry above preferred return. No single liquidation event for founder; stream of fund vintages each producing carry. Successful mid-market PE founder earns $50M–$200M per $500M fund across 3 to 5 funds.</div>
+      <div class="winners"><b>Winners</b>Audax; Sun Capital; Apollo and KKR at mega-tier; Genstar Capital.</div>
+      <div class="winners"><b>Cautionary</b>Over-leveraged exits in down cycles (2008, 2022–2023); vintage concentration risk.</div>
+      <div class="verdict"><b>Verdict</b>Proven playbook. Founder wealth builds across decades through carry on multiple funds, not from a single exit. AI enabler available but not structurally required.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">4–7× EBITDA</div>
+        <div class="lbl">P2 Time</div><div class="val">3–5 yr per asset</div>
+        <div class="lbl">P3 Capital</div><div class="val">$100M+ fund</div>
+        <div class="lbl">P4 Founder %</div><div class="val">GP carry 20%</div>
+        <div class="lbl">P5 Scale</div><div class="val">3 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">2 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">3 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">5 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 09 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 09 · Services</div>
+      <h3>AI-Integration Services Co</h3>
+      <div class="mech">Boutique sells AI integration and implementation services on project, retainer, or outcome-linked basis. Resource constraint is human; cost structure is compensation. Lowest multiple in the universe (1–3× EBITDA strategic acquisition; rare 1× revenue for hot AI practices). Capital-light, bootstrap-friendly; founders retain 50 to 80% at exit. Multiple ceiling caps absolute outcome.</div>
+      <div class="winners"><b>Winners</b>Distyl AI ($202M raised, $1.8B at high end); Accenture and BCG-X tuck-ins 2022–2024; Slalom ($2B private).</div>
+      <div class="winners"><b>Cautionary</b>Multiple compression visible 2025–2026; services rollup attempts repeatedly fail to expand multiple.</div>
+      <div class="verdict"><b>Verdict</b>Low multiple caps absolute outcome despite high founder ownership. Useful as a cash-flowing engine or distribution channel; weak as primary cash-out vehicle.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">1–3× EBITDA</div>
+        <div class="lbl">P2 Time</div><div class="val">5–8 yr</div>
+        <div class="lbl">P3 Capital</div><div class="val">$5–20M</div>
+        <div class="lbl">P4 Founder %</div><div class="val">50–80%</div>
+        <div class="lbl">P5 Scale</div><div class="val">2 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">2 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">4 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">2 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 10 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 10 · Services</div>
+      <h3>Tech-Enabled Services Roll-Up</h3>
+      <div class="mech">Aggressive acquisition of operating SMBs in a fragmented vertical claiming multiple expansion through technology-enabled synergies. Documented failure pattern — claimed synergies typically not realised, acquired businesses less standardisable than thesis assumed, heavy debt against deteriorating SMB cash flows. Being attempted again with AI as the synergy thesis.</div>
+      <div class="winners"><b>Winners</b>Rare early Amazon FBA aggregators exiting at peak (2020–2021); Service Corp International at lower multiples over decades.</div>
+      <div class="winners"><b>Cautionary</b>Thrasio (bankruptcy 2024, $3.4B+ raised); OpenStore (writedowns); Perch / Heyday / Branded (distressed); Berlin Brands (restructuring).</div>
+      <div class="verdict"><b>Verdict</b>Failure-prone. Capital-intensive plus low-multiple = poor expected returns. Recommended only if the synergy thesis is genuinely verified before scaling.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">0.5–2× revenue</div>
+        <div class="lbl">P2 Time</div><div class="val">4–7 yr</div>
+        <div class="lbl">P3 Capital</div><div class="val">$200M+</div>
+        <div class="lbl">P4 Founder %</div><div class="val">5–20%</div>
+        <div class="lbl">P5 Scale</div><div class="val">3 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">1 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">3 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">5 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="source">Sources: company filings, sponsor press releases, BusinessWire and Reuters announcements, Bain Global PE Report 2025.</div>
+</section>
+
+<!-- ============================== CARDS 11-14 ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">05</span>Archetype Cards (continued)</div>
+
+  <!-- CARD 11 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 11 · Network and distribution</div>
+      <h3>Vertical Marketplace + AI</h3>
+      <div class="mech">Two-sided market for one industry. AI augments matching, pricing, fraud detection, quality scoring. Revenue is take-rate on transactions plus premium subscriptions. Public comparables trade at 4–10× revenue or 15–30× EBITDA depending on growth. SMB acquisition useful for seeding supply-side liquidity.</div>
+      <div class="winners"><b>Winners</b>Faire ($12.6B); GoodLeap ($12B); Procore ($10B SaaS-marketplace hybrid); Toast ($14B).</div>
+      <div class="winners"><b>Cautionary</b>Marketplaces without liquidity (Houzz, Thumbtack stalled); disintermediation; severe dilution in growth phase.</div>
+      <div class="verdict"><b>Verdict</b>High enterprise value possible; long road, severe dilution. SMB enabler helpful for seeding but not central.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">4–10× revenue</div>
+        <div class="lbl">P2 Time</div><div class="val">7–12 yr</div>
+        <div class="lbl">P3 Capital</div><div class="val">$200–500M</div>
+        <div class="lbl">P4 Founder %</div><div class="val">5–15%</div>
+        <div class="lbl">P5 Scale</div><div class="val">5 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">4 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">4 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">4 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 12 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 12 · Network and distribution</div>
+      <h3>Franchise Operator Network</h3>
+      <div class="mech">Single-location playbook proven through 3 to 10 corporate locations, then licensed or franchised to operator-investors who fund expansion. Franchisor earns upfront fee plus ongoing royalty (4 to 8%). Decouples growth from capital intensity. Public franchisors trade 15 to 25× EBITDA. Slow to test; brand damage propagates instantly.</div>
+      <div class="winners"><b>Winners</b>Inspire Brands ($30B); Restaurant Brands International ($30B+); Wingstop ($10B+); Anytime Fitness.</div>
+      <div class="winners"><b>Cautionary</b>F45 Training (2021 IPO to under $0.50); Subway value erosion; premature franchising without verified unit economics.</div>
+      <div class="verdict"><b>Verdict</b>High-quality model when brand and playbook thesis is genuinely verified. Slow to test; AI enabler supportive but not transformative.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">8–15× EBITDA</div>
+        <div class="lbl">P2 Time</div><div class="val">10–15 yr</div>
+        <div class="lbl">P3 Capital</div><div class="val">$100–300M</div>
+        <div class="lbl">P4 Founder %</div><div class="val">25–50%</div>
+        <div class="lbl">P5 Scale</div><div class="val">5 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">5 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">3 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">3 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 13 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 13 · Multi-bet architecture</div>
+      <h3>Venture Studio</h3>
+      <div class="mech">Holding entity that creates new companies using shared infrastructure — engineering, design, recruiting, finance, distribution. Each new co has an external operating CEO; studio retains 25 to 50% equity per company. Principal earns through cumulative equity across portfolio over career. Hit rate is the binding constraint.</div>
+      <div class="winners"><b>Winners</b>Atomic (Hims $5B IPO, mixed portfolio); GC Creation ($1.5B, in progress); Pioneer Square Labs; Betaworks (Giphy $400M, Bitly).</div>
+      <div class="winners"><b>Cautionary</b>Idealab (decades, modest cumulative); studios with weak picking discipline accumulate burn without hits.</div>
+      <div class="verdict"><b>Verdict</b>Portfolio architecture for principals comfortable with multiple parallel companies. Cumulative cash-out can be substantial; requires picking discipline and long horizon.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">varies per co</div>
+        <div class="lbl">P2 Time</div><div class="val">5–10 yr each</div>
+        <div class="lbl">P3 Capital</div><div class="val">$50–200M</div>
+        <div class="lbl">P4 Founder %</div><div class="val">30–50% per co</div>
+        <div class="lbl">P5 Scale</div><div class="val">3 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">2 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">4 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">3 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 14 -->
+  <div class="archetype">
+    <div class="left">
+      <div class="ix">Archetype 14 · Multi-bet architecture</div>
+      <h3>Search Fund</h3>
+      <div class="mech">Single operator raises $400K–$1M of search capital, spends 18 to 24 months searching, acquires one SMB ($5M–$30M EV) with equity from the same investors plus debt, runs it as CEO, exits in 5 to 10 years. Stanford GSB reports approximately 33% IRR median. Operator retains 25 to 30% after waterfall. Excellent return on time invested; modest absolute scale.</div>
+      <div class="winners"><b>Winners</b>Asurion (early search-style acquisition, scaled to $20B+); Sterling Backcheck; Stanford GSB 2024 study (33% IRR median).</div>
+      <div class="winners"><b>Cautionary</b>Single-asset concentration risk; search-period failure returns capital with no operator income.</div>
+      <div class="verdict"><b>Verdict</b>Solid IRR for a single operator; small absolute take-home. Not suitable for fund-level allocation; suitable for owner-operator wealth at modest scale.</div>
+    </div>
+    <div class="right">
+      <div class="score-grid">
+        <div class="lbl">P1 Multiple</div><div class="val">5–8× EBITDA</div>
+        <div class="lbl">P2 Time</div><div class="val">5–10 yr</div>
+        <div class="lbl">P3 Capital</div><div class="val">$5–30M</div>
+        <div class="lbl">P4 Founder %</div><div class="val">25–35%</div>
+        <div class="lbl">P5 Scale</div><div class="val">2 / 5</div>
+        <div class="lbl">P6 Moat</div><div class="val">2 / 5</div>
+        <div class="lbl">P7 AI fit</div><div class="val">3 / 5</div>
+        <div class="lbl">P8 SMB fit</div><div class="val">5 / 5</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="source">Sources: company filings, Stanford GSB Search Fund Study 2024, public franchisor SEC filings, primary research on studio operators and search-fund investors.</div>
+</section>
+
+<!-- ============================== ENABLER MAP ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">06</span>Where the Three Enablers Create Asymmetric Edge</div>
+  <h1 class="action">The combined utility of US, SMB acquisition, and AI deployment is concentrated in one archetype at full strength; the rest leave at least one enabler structurally idle.</h1>
+
+  <table class="mck heat">
+    <thead>
+      <tr>
+        <th style="width:30px">#</th>
+        <th style="width:240px;text-align:left">Archetype</th>
+        <th style="width:110px">US</th>
+        <th style="width:130px">SMB acquisition</th>
+        <th style="width:120px">AI deployment</th>
+        <th style="width:120px">Triple product</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="idx">01</td><td class="name">Vertical SaaS</td><td class="h4">4</td><td class="h1">1</td><td class="h5">5</td><td>20</td><td>Customers are SMB but not acquired</td></tr>
+      <tr><td class="idx">02</td><td class="name">Horizontal AI Platform</td><td class="h4">4</td><td class="h1">1</td><td class="h5">5</td><td>20</td><td>Global enterprise buyers; SMB unused</td></tr>
+      <tr><td class="idx">03</td><td class="name">AI Agents-as-Workforce</td><td class="h4">4</td><td class="h2">2</td><td class="h5">5</td><td>40</td><td>Mid-market preferred</td></tr>
+      <tr><td class="idx">04</td><td class="name">Data Network Compounder</td><td class="h4">4</td><td class="h3">3</td><td class="h4">4</td><td>48</td><td>SMB acquisition assembles data position</td></tr>
+      <tr><td class="idx">05</td><td class="name">Serial Software Acquirer</td><td class="h5">5</td><td class="h3">3</td><td class="h3">3</td><td>45</td><td>SMB software cos, not operators</td></tr>
+      <tr style="background:#FFF9E6"><td class="idx">06</td><td class="name">AI-Native Operating Holdco</td><td class="h5">5</td><td class="h5">5</td><td class="h4">4</td><td><b>100</b></td><td>All three engaged structurally</td></tr>
+      <tr><td class="idx">07</td><td class="name">Permanent Capital Compounder</td><td class="h5">5</td><td class="h5">5</td><td class="h3">3</td><td>75</td><td>No exit event</td></tr>
+      <tr><td class="idx">08</td><td class="name">Classic PE Buy-Improve-Sell</td><td class="h4">4</td><td class="h5">5</td><td class="h3">3</td><td>60</td><td>AI not structural thesis</td></tr>
+      <tr><td class="idx">09</td><td class="name">AI-Integration Services Co</td><td class="h4">4</td><td class="h2">2</td><td class="h4">4</td><td>32</td><td>Multiple capped by services category</td></tr>
+      <tr><td class="idx">10</td><td class="name">Tech-Enabled Services Roll-Up</td><td class="h4">4</td><td class="h5">5</td><td class="h3">3</td><td>60</td><td>High enabler use; documented failure pattern</td></tr>
+      <tr><td class="idx">11</td><td class="name">Vertical Marketplace + AI</td><td class="h4">4</td><td class="h4">4</td><td class="h4">4</td><td>64</td><td>Balanced use of all three</td></tr>
+      <tr><td class="idx">12</td><td class="name">Franchise Operator Network</td><td class="h5">5</td><td class="h3">3</td><td class="h3">3</td><td>45</td><td>Brand is the lever</td></tr>
+      <tr><td class="idx">13</td><td class="name">Venture Studio</td><td class="h4">4</td><td class="h3">3</td><td class="h4">4</td><td>48</td><td>Variable per new co</td></tr>
+      <tr><td class="idx">14</td><td class="name">Search Fund</td><td class="h4">4</td><td class="h5">5</td><td class="h3">3</td><td>60</td><td>Single asset limits AI scale</td></tr>
+    </tbody>
+    <caption>Score is 1 (enabler incidental) to 5 (enabler is structural engine). Triple product flags asymmetric edge: an archetype with a high triple product is one where an operator holding all three capabilities occupies a position that an operator missing one cannot.</caption>
+  </table>
+
+  <div class="callout">
+    <div class="h">Interpretation</div>
+    <p>
+      The AI-Native Operating Holdco is the only archetype scoring 4 or 5 on all three enablers. The Permanent Capital Compounder, Vertical Marketplace, Classic PE, Tech-Enabled Services Roll-Up, and Search Fund use the SMB enabler at full strength but leave AI partially idle. The three software-economics archetypes leave the SMB enabler structurally idle. This is a structural observation about enabler fit, not a recommendation — the synthesis lenses below weigh enabler fit against cash-out distribution.
+    </p>
+  </div>
+</section>
+
+<!-- ============================== SYNTHESIS LENSES ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">07</span>Synthesis Lenses</div>
+  <h1 class="action">Three lenses translate the comparative scoreboard into ranked answers for different founder objectives.</h1>
+
+  <p class="lede">
+    Different founders optimise for different objectives. A founder who prioritises top-of-distribution absolute cash-out will pick differently from a founder who prioritises median outcome reliability or asymmetric enabler edge. The three lenses below present the rankings for each.
+  </p>
+
+  <!-- LENS A -->
+  <div class="lens">
+    <div class="ix">Lens A</div>
+    <h3>By maximum theoretical absolute cash-out (top of distribution)</h3>
+    <div class="insight">Which archetypes have produced the largest single founder cash-out events on the US market, ignoring probability and time? This lens captures the top of the distribution.</div>
+    <div class="rank-list">
+      <div class="row"><div class="rk">01</div><div><div class="nm">Permanent Capital Compounder</div><div class="rs">Berkshire, Brookfield — multi-billion paper wealth, not liquid</div></div><div class="mt">$1B–$130B paper</div></div>
+      <div class="row"><div class="rk">02</div><div><div class="nm">Serial Software Acquirer</div><div class="rs">Constellation Software CEO position — multi-billion paper, not liquid</div></div><div class="mt">$1B–$5B paper</div></div>
+      <div class="row"><div class="rk">03</div><div><div class="nm">Horizontal AI Platform</div><div class="rs">Frontier founders — large EV with very low ownership percent</div></div><div class="mt">$200M–$2B liquid</div></div>
+      <div class="row"><div class="rk">04</div><div><div class="nm">Franchise Operator Network</div><div class="rs">Restaurant Brands, Inspire principals — strong liquid outcomes</div></div><div class="mt">$250M–$500M liquid</div></div>
+      <div class="row"><div class="rk">05</div><div><div class="nm">Venture Studio</div><div class="rs">Cumulative across portfolio over career (Atomic, GC Creation)</div></div><div class="mt">$200M–$1B career</div></div>
+    </div>
+  </div>
+
+  <!-- LENS B -->
+  <div class="lens">
+    <div class="ix">Lens B</div>
+    <h3>By probability-weighted cash-out reaching $100M+ for the operator</h3>
+    <div class="insight">Which archetypes most reliably produce a $100M+ founder outcome, after adjusting for failure rates, dilution risk, and exit feasibility? This lens captures the median realistic outcome at meaningful scale.</div>
+    <div class="rank-list">
+      <div class="row"><div class="rk">01</div><div><div class="nm">AI-Native Operating Holdco</div><div class="rs">Holdco equity plus carry; verified examples 2022–2026</div></div><div class="mt">$200M–$400M</div></div>
+      <div class="row"><div class="rk">02</div><div><div class="nm">Data Network Compounder</div><div class="rs">Defensible economics, moderate dilution; Plaid, Datavant, Verisk benchmarks</div></div><div class="mt">$200M–$350M</div></div>
+      <div class="row"><div class="rk">03</div><div><div class="nm">Vertical SaaS</div><div class="rs">Long build, established exit path; Toast, Procore, ServiceTitan</div></div><div class="mt">$150M–$250M</div></div>
+      <div class="row"><div class="rk">04</div><div><div class="nm">Classic PE Buy-Improve-Sell</div><div class="rs">Cumulative carry across multiple funds</div></div><div class="mt">$50M–$200M per fund</div></div>
+      <div class="row"><div class="rk">05</div><div><div class="nm">Franchise Operator Network</div><div class="rs">When playbook verified; slow path, high terminal multiple</div></div><div class="mt">$250M–$500M</div></div>
+    </div>
+  </div>
+
+  <!-- LENS C -->
+  <div class="lens">
+    <div class="ix">Lens C</div>
+    <h3>By full utilisation of the three enablers (asymmetric edge)</h3>
+    <div class="insight">Which archetypes structurally use all three of US, SMB acquisition, and AI deployment? This lens captures where the combined capability set is most defensible against operators lacking any one enabler.</div>
+    <div class="rank-list">
+      <div class="row"><div class="rk">01</div><div><div class="nm">AI-Native Operating Holdco</div><div class="rs">All three at 4 or 5; only archetype with full triple use</div></div><div class="mt">Score 100</div></div>
+      <div class="row"><div class="rk">02</div><div><div class="nm">Permanent Capital Compounder</div><div class="rs">SMB and US at 5; AI at 3 (operational uplift only)</div></div><div class="mt">Score 75</div></div>
+      <div class="row"><div class="rk">03</div><div><div class="nm">Vertical Marketplace + AI</div><div class="rs">Balanced 4/4/4 across all three</div></div><div class="mt">Score 64</div></div>
+      <div class="row"><div class="rk">04</div><div><div class="nm">Classic PE Buy-Improve-Sell</div><div class="rs">SMB at 5; AI at 3; US at 4</div></div><div class="mt">Score 60</div></div>
+      <div class="row"><div class="rk">05</div><div><div class="nm">Search Fund</div><div class="rs">SMB at 5; US at 4; AI at 3</div></div><div class="mt">Score 60</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== DECISION FRAMEWORK ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">08</span>Decision Framework</div>
+  <h1 class="action">The lenses translate into a conditional rule: state the founder objective, and the archetype recommendation follows.</h1>
+
+  <p class="lede">
+    Not a ranking. A conditional mapping from founder objective to archetype, given the three enablers held constant. The rule is descriptive of the underlying economics, not of any particular operator's preference.
+  </p>
+
+  <div class="dt-row">
+    <div class="if"><b>If the objective is</b>Maximum theoretical absolute cash-out (top of distribution)</div>
+    <div class="then"><b>Then the archetype is</b><strong>Horizontal AI Platform</strong> for liquid outcome; <strong>Permanent Capital Compounder</strong> for paper outcome over decades.</div>
+  </div>
+
+  <div class="dt-row">
+    <div class="if"><b>If the objective is</b>Most reliable $100M–$400M liquid cash-out (median outcome)</div>
+    <div class="then"><b>Then the archetype is</b><strong>AI-Native Operating Holdco</strong>, with <strong>Data Network Compounder</strong> as alternative when a unique data position can be assembled.</div>
+  </div>
+
+  <div class="dt-row">
+    <div class="if"><b>If the objective is</b>Asymmetric edge against operators missing any one enabler</div>
+    <div class="then"><b>Then the archetype is</b><strong>AI-Native Operating Holdco</strong>; no other archetype uses all three enablers at structural strength.</div>
+  </div>
+
+  <div class="dt-row">
+    <div class="if"><b>If the objective is</b>Inter-generational wealth without liquidity event</div>
+    <div class="then"><b>Then the archetype is</b><strong>Permanent Capital Compounder</strong>; the only archetype designed for the no-exit objective.</div>
+  </div>
+
+  <div class="dt-row">
+    <div class="if"><b>If the objective is</b>Avoiding the failure pattern in the universe</div>
+    <div class="then"><b>Then the archetype is</b><strong>Not Tech-Enabled Services Roll-Up</strong>; documented failure pattern across multiple attempts.</div>
+  </div>
+
+  <div class="callout">
+    <div class="h">Composite reading</div>
+    <p>
+      No archetype satisfies all objectives. The Horizontal AI Platform maximises the top of the cash-out distribution but offers 4–10% founder ownership at exit and leaves the SMB enabler idle. The AI-Native Operating Holdco offers the best median outcome and full enabler utilisation, but produces a ceiling of $400M–$1B rather than $1B–$5B. The Permanent Capital Compounder produces the largest paper wealth but no liquidity event. The choice rests on which trade-off the founder prefers.
+    </p>
+  </div>
+</section>
+
+<!-- ============================== APPENDIX ============================== -->
+<section class="page">
+  <div class="eyebrow"><span class="num">09</span>Appendix · Exit Multiple Benchmarks and Sources</div>
+
+  <h3 class="sub">Exit multiple benchmarks · US market · January 2026</h3>
+  <table class="mck">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th style="width:140px">Basis</th>
+        <th style="width:160px">Public range</th>
+        <th style="width:180px">Private range</th>
+        <th>Anchor source</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Frontier AI (model labs)</td><td>ARR</td><td>n/a</td><td>50–100×+</td><td>Anthropic, OpenAI private rounds</td></tr>
+      <tr><td>Application-layer AI agents</td><td>ARR</td><td>n/a</td><td>20–40×</td><td>Sierra, Decagon, Glean, Harvey</td></tr>
+      <tr><td>Vertical SaaS (growth tier)</td><td>ARR</td><td>4–8×</td><td>8–15×</td><td>Toast, Veeva, Procore</td></tr>
+      <tr><td>Vertical marketplaces</td><td>Revenue or EBITDA</td><td>2–6× revenue</td><td>4–10× revenue</td><td>Etsy, Airbnb, Faire</td></tr>
+      <tr><td>Data network businesses</td><td>ARR</td><td>8–15×</td><td>10–25×</td><td>Snowflake, Verisk, Plaid</td></tr>
+      <tr><td>Public franchisors</td><td>EBITDA</td><td>15–25×</td><td>10–18×</td><td>Restaurant Brands, Wingstop</td></tr>
+      <tr><td>Serial software acquirers</td><td>EBITDA equivalent</td><td>6–12×</td><td>n/a</td><td>Constellation, Roper</td></tr>
+      <tr><td>AI-integrated SMB roll-ups (post-uplift)</td><td>EBITDA</td><td>n/a</td><td>8–14×</td><td>Long Lake, Crete/Current, NMC</td></tr>
+      <tr><td>Mid-market PE exits</td><td>EBITDA</td><td>n/a</td><td>4–7×</td><td>Bain Global PE Report 2025</td></tr>
+      <tr><td>SMB operating businesses (pre-AI)</td><td>EBITDA</td><td>n/a</td><td>3–6×</td><td>BizBuySell, IBBA Q4 2025</td></tr>
+      <tr><td>Services and consulting (boutique)</td><td>EBITDA or revenue</td><td>5–10× EBITDA</td><td>1–3× EBITDA</td><td>Accenture, BCG-X tuck-ins</td></tr>
+      <tr><td>Tech-enabled aggregators (recent)</td><td>Revenue</td><td>n/a</td><td>0.5–2×</td><td>Thrasio, Perch distressed pricing</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Sources</h3>
+  <p class="lede" style="font-size:11.5px;line-height:1.6">
+    Aswath Damodaran sector multiples (NYU Stern, January 2026) · PitchBook private market multiples Q4 2025 and Q1 2026 · Bain Global PE Report 2025 · Carta dilution and ownership dataset 2020–2025 · Stanford GSB Search Fund Study 2024 · Bain PE Compensation Survey 2025 · SEC filings for Toast, Procore, ServiceTitan, Veeva, Snowflake, Datavant, Constellation Software, Roper Technologies, Restaurant Brands International, Wingstop, Berkshire Hathaway, Brookfield, Markel · BusinessWire and Reuters sponsor transactions 2022–2026 · IBBA Market Pulse Q4 2025 · BizBuySell Insight Report Q4 2025 · Primary research on US AI-integrator landscape, June 2026.
+  </p>
+
+  <div class="source">Prepared June 12, 2026 · For internal review by the AI-Native Roll-Up Studio principals.</div>
+</section>
+
+</body>
+</html>
