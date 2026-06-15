@@ -144,6 +144,21 @@ table.mck td.center{text-align:center;font-weight:600}
 
 table.mck caption{caption-side:top;text-align:left;font-size:11px;color:var(--deep-slate);font-weight:700;margin-bottom:4px}
 
+/* HEAT MAP — ported from docs/game-selection-framework.html */
+table.mck.heat tr:nth-child(even) td{background:transparent}
+table.mck.heat td.h5{background:#2E7780!important;color:#fff!important}
+table.mck.heat td.h4{background:#5A98A1!important;color:#fff!important}
+table.mck.heat td.h3{background:#A9C5D6!important;color:var(--near-black)!important}
+table.mck.heat td.h2{background:#DCE5EC!important;color:var(--near-black)!important}
+table.mck.heat td.h1{background:#F0F2F5!important;color:#5A6470!important}
+table.mck.heat td.th5{background:#2E7780!important;color:#fff!important}
+table.mck.heat td.th4{background:#7AAEB4!important;color:#fff!important}
+table.mck.heat td.th3{background:#C4D8DE!important;color:var(--near-black)!important}
+table.mck.heat td.th2{background:#E8DFD2!important;color:var(--near-black)!important}
+table.mck.heat td.th1{background:#EDD4D4!important;color:#6B2A2A!important}
+table.mck.heat tr.row-highlight td{box-shadow:inset 0 0 0 9999px rgba(225,240,238,0.55)}
+@media print{table.mck.heat td.h5,table.mck.heat td.h4,table.mck.heat td.h3,table.mck.heat td.h2,table.mck.heat td.h1,table.mck.heat td.th5,table.mck.heat td.th4,table.mck.heat td.th3,table.mck.heat td.th2,table.mck.heat td.th1{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
 .kpi-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 12px}
 
 .kpi{background:#fff;border:1px solid var(--rule);padding:10px 14px;border-left:3px solid var(--deep-slate);min-width:150px;flex:1}
@@ -434,7 +449,7 @@ table.mck caption{caption-side:top;text-align:left;font-size:11px;color:var(--de
 
 
 
-  <table class="mck" style="font-size:9.5px">
+  <table class="mck heat" style="font-size:9.5px">
 
     <caption>Comparative Scoreboard — 14 archetypes × 8 parameters; P1–P4 quantitative ranges, P5–P8 calibrated 1 (low) to 5 (high)</caption>
 
@@ -442,33 +457,33 @@ table.mck caption{caption-side:top;text-align:left;font-size:11px;color:var(--de
 
     <tbody>
 
-      <tr><td class="idx">01</td><td class="name">Vertical SaaS</td><td>8–15× ARR</td><td>7–10 yr</td><td>$50–150M</td><td>15–25%</td><td class="center">5</td><td class="center">4</td><td class="center">5</td><td class="center">1</td><td>$150–250M</td></tr>
+      <tr><td class="idx">01</td><td class="name">Vertical SaaS</td><td>8–15× ARR</td><td>7–10 yr</td><td>$50–150M</td><td>15–25%</td><td class="center h5">5</td><td class="center h4">4</td><td class="center h5">5</td><td class="center h1">1</td><td class="th4">$150–250M</td></tr>
 
-      <tr><td class="idx">02</td><td class="name">Horizontal AI Platform</td><td>15–40× ARR</td><td>3–7 yr</td><td>$100–500M</td><td>4–10%</td><td class="center">5</td><td class="center">3</td><td class="center">5</td><td class="center">1</td><td>$40–100M*</td></tr>
+      <tr><td class="idx">02</td><td class="name">Horizontal AI Platform</td><td>15–40× ARR</td><td>3–7 yr</td><td>$100–500M</td><td>4–10%</td><td class="center h5">5</td><td class="center h3">3</td><td class="center h5">5</td><td class="center h1">1</td><td class="th2">$40–100M*</td></tr>
 
-      <tr><td class="idx">03</td><td class="name">AI Agents-as-Workforce</td><td>10–25× ARR</td><td>4–7 yr</td><td>$50–200M</td><td>10–20%</td><td class="center">4</td><td class="center">3</td><td class="center">5</td><td class="center">2</td><td>$100–200M</td></tr>
+      <tr><td class="idx">03</td><td class="name">AI Agents-as-Workforce</td><td>10–25× ARR</td><td>4–7 yr</td><td>$50–200M</td><td>10–20%</td><td class="center h4">4</td><td class="center h3">3</td><td class="center h5">5</td><td class="center h2">2</td><td class="th3">$100–200M</td></tr>
 
-      <tr><td class="idx">04</td><td class="name">Data Network Compounder</td><td>10–25× ARR</td><td>6–10 yr</td><td>$50–200M</td><td>20–35%</td><td class="center">5</td><td class="center">5</td><td class="center">4</td><td class="center">3</td><td>$200–350M</td></tr>
+      <tr><td class="idx">04</td><td class="name">Data Network Compounder</td><td>10–25× ARR</td><td>6–10 yr</td><td>$50–200M</td><td>20–35%</td><td class="center h5">5</td><td class="center h5">5</td><td class="center h4">4</td><td class="center h3">3</td><td class="th5">$200–350M</td></tr>
 
-      <tr><td class="idx">05</td><td class="name">Serial Software Acquirer</td><td>6–12× EBITDA</td><td>Perpetual</td><td>$500M+</td><td>3–10%</td><td class="center">5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td>$50–300M paper</td></tr>
+      <tr><td class="idx">05</td><td class="name">Serial Software Acquirer</td><td>6–12× EBITDA</td><td>Perpetual</td><td>$500M+</td><td>3–10%</td><td class="center h5">5</td><td class="center h4">4</td><td class="center h3">3</td><td class="center h3">3</td><td class="th3">$50–300M paper</td></tr>
 
-      <tr style="background:#E1F0EE"><td class="idx"><b>06</b></td><td class="name"><b>AI-Native Operating Holdco</b></td><td><b>8–14× EBITDA</b></td><td><b>7–12 yr</b></td><td><b>$200–500M</b></td><td><b>20–35%</b></td><td class="center"><b>4</b></td><td class="center"><b>3</b></td><td class="center"><b>4</b></td><td class="center"><b>5</b></td><td><b>$200–400M</b></td></tr>
+      <tr class="row-highlight" style="background:#E1F0EE"><td class="idx"><b>06</b></td><td class="name"><b>AI-Native Operating Holdco</b></td><td><b>8–14× EBITDA</b></td><td><b>7–12 yr</b></td><td><b>$200–500M</b></td><td><b>20–35%</b></td><td class="center h4"><b>4</b></td><td class="center h3"><b>3</b></td><td class="center h4"><b>4</b></td><td class="center h5"><b>5</b></td><td class="th5"><b>$200–400M</b></td></tr>
 
-      <tr><td class="idx">07</td><td class="name">Permanent Capital Compounder</td><td>n/a (no exit)</td><td>Never</td><td>$500M+</td><td>20–40%</td><td class="center">5</td><td class="center">5</td><td class="center">3</td><td class="center">5</td><td>$200M–1B+ paper</td></tr>
+      <tr><td class="idx">07</td><td class="name">Permanent Capital Compounder</td><td>n/a (no exit)</td><td>Never</td><td>$500M+</td><td>20–40%</td><td class="center h5">5</td><td class="center h5">5</td><td class="center h3">3</td><td class="center h5">5</td><td class="th5">$200M–1B+ paper</td></tr>
 
-      <tr><td class="idx">08</td><td class="name">Classic PE Buy-Improve-Sell</td><td>4–7× EBITDA</td><td>3–5 yr</td><td>$100M+ fund</td><td>GP carry 20%</td><td class="center">3</td><td class="center">2</td><td class="center">3</td><td class="center">5</td><td>$50–200M per fund</td></tr>
+      <tr><td class="idx">08</td><td class="name">Classic PE Buy-Improve-Sell</td><td>4–7× EBITDA</td><td>3–5 yr</td><td>$100M+ fund</td><td>GP carry 20%</td><td class="center h3">3</td><td class="center h2">2</td><td class="center h3">3</td><td class="center h5">5</td><td class="th3">$50–200M per fund</td></tr>
 
-      <tr><td class="idx">09</td><td class="name">AI-Integration Services Co</td><td>1–3× EBITDA</td><td>5–8 yr</td><td>$5–20M</td><td>50–80%</td><td class="center">2</td><td class="center">2</td><td class="center">4</td><td class="center">2</td><td>$50–120M</td></tr>
+      <tr><td class="idx">09</td><td class="name">AI-Integration Services Co</td><td>1–3× EBITDA</td><td>5–8 yr</td><td>$5–20M</td><td>50–80%</td><td class="center h2">2</td><td class="center h2">2</td><td class="center h4">4</td><td class="center h2">2</td><td class="th3">$50–120M</td></tr>
 
-      <tr><td class="idx">10</td><td class="name">Tech-Enabled Services Roll-Up</td><td>0.5–2× revenue</td><td>4–7 yr</td><td>$200M+</td><td>5–20%</td><td class="center">3</td><td class="center">1</td><td class="center">3</td><td class="center">5</td><td>$0–50M typical</td></tr>
+      <tr><td class="idx">10</td><td class="name">Tech-Enabled Services Roll-Up</td><td>0.5–2× revenue</td><td>4–7 yr</td><td>$200M+</td><td>5–20%</td><td class="center h3">3</td><td class="center h1">1</td><td class="center h3">3</td><td class="center h5">5</td><td class="th1">$0–50M typical</td></tr>
 
-      <tr><td class="idx">11</td><td class="name">Vertical Marketplace + AI</td><td>4–10× revenue</td><td>7–12 yr</td><td>$200–500M</td><td>5–15%</td><td class="center">5</td><td class="center">4</td><td class="center">4</td><td class="center">4</td><td>$50–150M</td></tr>
+      <tr><td class="idx">11</td><td class="name">Vertical Marketplace + AI</td><td>4–10× revenue</td><td>7–12 yr</td><td>$200–500M</td><td>5–15%</td><td class="center h5">5</td><td class="center h4">4</td><td class="center h4">4</td><td class="center h4">4</td><td class="th3">$50–150M</td></tr>
 
-      <tr><td class="idx">12</td><td class="name">Franchise Operator Network</td><td>8–15× EBITDA</td><td>10–15 yr</td><td>$100–300M</td><td>25–50%</td><td class="center">5</td><td class="center">5</td><td class="center">3</td><td class="center">3</td><td>$250–500M</td></tr>
+      <tr><td class="idx">12</td><td class="name">Franchise Operator Network</td><td>8–15× EBITDA</td><td>10–15 yr</td><td>$100–300M</td><td>25–50%</td><td class="center h5">5</td><td class="center h5">5</td><td class="center h3">3</td><td class="center h3">3</td><td class="th5">$250–500M</td></tr>
 
-      <tr><td class="idx">13</td><td class="name">Venture Studio</td><td>varies per co</td><td>5–10 yr each</td><td>$50–200M</td><td>30–50% per co</td><td class="center">3</td><td class="center">2</td><td class="center">4</td><td class="center">3</td><td>$200M–1B career</td></tr>
+      <tr><td class="idx">13</td><td class="name">Venture Studio</td><td>varies per co</td><td>5–10 yr each</td><td>$50–200M</td><td>30–50% per co</td><td class="center h3">3</td><td class="center h2">2</td><td class="center h4">4</td><td class="center h3">3</td><td class="th4">$200M–1B career</td></tr>
 
-      <tr><td class="idx">14</td><td class="name">Search Fund</td><td>5–8× EBITDA</td><td>5–10 yr</td><td>$5–30M</td><td>25–35%</td><td class="center">2</td><td class="center">2</td><td class="center">3</td><td class="center">5</td><td>$5–25M typical</td></tr>
+      <tr><td class="idx">14</td><td class="name">Search Fund</td><td>5–8× EBITDA</td><td>5–10 yr</td><td>$5–30M</td><td>25–35%</td><td class="center h2">2</td><td class="center h2">2</td><td class="center h3">3</td><td class="center h5">5</td><td class="th2">$5–25M typical</td></tr>
 
     </tbody>
 
