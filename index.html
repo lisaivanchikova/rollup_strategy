@@ -3536,6 +3536,86 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
 
 
 
+  <table class="mck">
+    <caption>AI Engineering arm — internal headcount roadmap by Vintage phase (reframed from §3.3 of P&amp;L model for Pure HoldCo posture; no external Account Executive or Sales Lead — sourcing is internal portfolio sequencing)</caption>
+    <thead><tr><th>Phase / role</th><th>Phase 0 · Pre-Vintage 1</th><th>Phase 1 · Anchor + 1st bolt-on</th><th>Phase 2 · Add-on scaling</th><th>Phase 3 · Pre-exit / 2nd vertical</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Founder / AI Eng Lead</td><td class="center">1 · pilots only</td><td class="center">1 · pilots + 1st deploy</td><td class="center">1 · architecture</td><td class="center">1 · strategic</td></tr>
+      <tr><td class="name">Integration engineers</td><td class="center">0</td><td class="center"><b>1 ← 1st hire</b></td><td class="center">2–3</td><td class="center">4–6 (1–2 per vertical)</td></tr>
+      <tr><td class="name">Sourcing / SDR (internal portfolio)</td><td class="center">1 · part-time</td><td class="center">1</td><td class="center">1–2</td><td class="center">2</td></tr>
+      <tr><td class="name">Operator-in-residence (per §11)</td><td class="center">0</td><td class="center">0–1</td><td class="center">1 per vertical</td><td class="center">2 per vertical</td></tr>
+      <tr style="background:#DCE5EC"><td class="name"><b>AI Eng arm total (ex-Founder)</b></td><td class="center"><b>1</b></td><td class="center"><b>2–3</b></td><td class="center"><b>4–6</b></td><td class="center"><b>8–10</b></td></tr>
+      <tr><td class="name">OpCos serviced</td><td class="center">0 (paid pilots only)</td><td class="center">1–2</td><td class="center">3–5</td><td class="center">5–10</td></tr>
+      <tr><td class="name">Advance trigger →</td><td class="center" style="font-size:9.5px">Anchor close + ≥1 paid pilot validated at ≥1.5× productivity</td><td class="center" style="font-size:9.5px">Playbook productised + redeployed at 2nd OpCo without re-build</td><td class="center" style="font-size:9.5px">Per-OpCo AI cost ≤4% of OpCo revenue at steady state</td><td class="center" style="font-size:9.5px">2nd vertical anchor or data-network productisation (§03 Path C)</td></tr>
+    </tbody>
+  </table>
+  <div class="src">Source: <a href="https://lisaivanchikova.github.io/ai-integration-pnl-model/">ai-integration-pnl-model §3.3 Headcount &amp; De-foundering Roadmap</a>. AE / Sales Lead rows dropped — Pure HoldCo §04 has no external sales motion. Sourcing is internal portfolio sequencing, not customer outbound.</div>
+
+
+
+  <div style="background:#FAF9F6;border:1px solid #C9D2DC;padding:14px 16px;margin:14px 0">
+    <div style="font-size:11px;color:#31435B;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Chart · Cross-OpCo amortisation curve</div>
+    <div style="font-size:12px;color:#31435B;font-weight:600;margin-bottom:8px">Marginal AI-engineering cost per OpCo declines as portfolio grows</div>
+    <svg viewBox="0 0 380 180" width="100%" style="max-width:380px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
+      <rect x="0" y="0" width="380" height="180" fill="#FAF9F6"/>
+      <line x1="46" y1="20"  x2="360" y2="20"  stroke="#C9D2DC" stroke-width="0.6"/>
+      <line x1="46" y1="50"  x2="360" y2="50"  stroke="#C9D2DC" stroke-width="0.6"/>
+      <line x1="46" y1="80"  x2="360" y2="80"  stroke="#C9D2DC" stroke-width="0.6"/>
+      <line x1="46" y1="110" x2="360" y2="110" stroke="#C9D2DC" stroke-width="0.6"/>
+      <line x1="46" y1="140" x2="360" y2="140" stroke="#C9D2DC" stroke-width="0.6"/>
+      <text x="42" y="23"  text-anchor="end" font-size="9" fill="#31435B">$12K</text>
+      <text x="42" y="53"  text-anchor="end" font-size="9" fill="#31435B">$9K</text>
+      <text x="42" y="83"  text-anchor="end" font-size="9" fill="#31435B">$6K</text>
+      <text x="42" y="113" text-anchor="end" font-size="9" fill="#31435B">$3K</text>
+      <text x="42" y="143" text-anchor="end" font-size="9" fill="#31435B">$0</text>
+      <line x1="46" y1="20"  x2="46"  y2="140" stroke="#31435B" stroke-width="1.2"/>
+      <line x1="46" y1="140" x2="360" y2="140" stroke="#31435B" stroke-width="1.2"/>
+      <polyline fill="none" stroke="#2E7780" stroke-width="2.2" points="70,20 110,70 150,88 210,105 270,113 340,118"/>
+      <circle cx="70"  cy="20"  r="3.4" fill="#2E7780"/>
+      <circle cx="110" cy="70"  r="3.4" fill="#2E7780"/>
+      <circle cx="150" cy="88"  r="3.4" fill="#2E7780"/>
+      <circle cx="210" cy="105" r="3.4" fill="#2E7780"/>
+      <circle cx="270" cy="113" r="3.4" fill="#2E7780"/>
+      <circle cx="340" cy="118" r="3.4" fill="#2E7780"/>
+      <text x="70"  y="14" text-anchor="middle" font-size="9" fill="#31435B" font-weight="700">$12.0K</text>
+      <text x="110" y="64" text-anchor="middle" font-size="9" fill="#31435B" font-weight="700">$7.0K</text>
+      <text x="150" y="82" text-anchor="middle" font-size="9" fill="#31435B" font-weight="700">$5.2K</text>
+      <text x="210" y="99" text-anchor="middle" font-size="9" fill="#31435B" font-weight="700">$3.5K</text>
+      <text x="270" y="107" text-anchor="middle" font-size="9" fill="#31435B" font-weight="700">$2.7K</text>
+      <text x="340" y="112" text-anchor="middle" font-size="9" fill="#31435B" font-weight="700">$2.2K</text>
+      <text x="70"  y="155" text-anchor="middle" font-size="9" fill="#31435B">1</text>
+      <text x="110" y="155" text-anchor="middle" font-size="9" fill="#31435B">2</text>
+      <text x="150" y="155" text-anchor="middle" font-size="9" fill="#31435B">3</text>
+      <text x="210" y="155" text-anchor="middle" font-size="9" fill="#31435B">5</text>
+      <text x="270" y="155" text-anchor="middle" font-size="9" fill="#31435B">7</text>
+      <text x="340" y="155" text-anchor="middle" font-size="9" fill="#31435B">10</text>
+      <text x="203" y="172" text-anchor="middle" font-size="9.5" fill="#31435B" font-weight="600">Portfolio OpCo count</text>
+      <text x="14"  y="80"  text-anchor="middle" font-size="9.5" fill="#31435B" font-weight="600" transform="rotate(-90 14 80)">AI Eng cost / OpCo / mo</text>
+      <line x1="46" y1="70" x2="360" y2="70" stroke="#9A6B3E" stroke-width="0.8" stroke-dasharray="4,3"/>
+      <text x="356" y="67" text-anchor="end" font-size="8.5" fill="#9A6B3E" font-style="italic">~3–4% of OpCo revenue threshold</text>
+    </svg>
+    <div style="font-size:10.5px;color:#31435B;margin-top:6px;line-height:1.4">$12K/mo loaded engineer ÷ ~1.75 deployments/mo amortised across N OpCos sharing the same vertical playbook. Cross-OpCo amortisation is the H4 platform-vs-boutique insight: arm crosses below the 3–4% revenue threshold at <b>≥4 OpCos serviced</b>.</div>
+  </div>
+
+
+
+  <table class="mck">
+    <caption>Productivity &amp; throughput primitives — internal AI Eng arm operating envelope (validates H4 cross-OpCo amortisation and H5 signal-engine reuse)</caption>
+    <thead><tr><th>Metric</th><th>Value</th><th>Source / note</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Lusin signal-engine reply lift</td><td class="num"><b>3% → 30% (×10)</b></td><td>Cyborg HR pilot, April 2026 · prototype mechanism replicated per vertical</td></tr>
+      <tr><td class="name">Engineer billable utilization</td><td class="num">60–70%</td><td>Industry avg 68.9% · §3.8 P&amp;L model</td></tr>
+      <tr><td class="name">Playbook deployments / engineer / mo</td><td class="num">~1.75</td><td>50 engineer-hrs per deployment ÷ 160 hrs/mo at ~60% util · §3.8</td></tr>
+      <tr><td class="name">Loaded engineer cost</td><td class="num">$12K/mo cash · $400–600K all-in</td><td>§s11 team profile · Phase 0 P&amp;L decomposition</td></tr>
+      <tr><td class="name">AI Eng arm gross margin (internal book-keeping)</td><td class="num">~55%</td><td>§4.1 P&amp;L model · standard B2B services GM applied to internal cost allocation</td></tr>
+      <tr><td class="name">Per-OpCo AI cost at steady state</td><td class="num"><b>~3–4% of OpCo revenue</b></td><td>Reached at ≥4 OpCos serviced · §10 HoldCo cost allocation</td></tr>
+      <tr><td class="name">AI tools stack</td><td class="num">$15–250 / user / mo</td><td>Glean, Harvey, Copilot, Cursor class · OpCo opex line</td></tr>
+    </tbody>
+  </table>
+  <div class="src">Source: <a href="https://lisaivanchikova.github.io/ai-integration-pnl-model/">ai-integration-pnl-model §3.8 COGS + true EBITDA</a> and §2.5 Lusin signal-triggered. Pricing / CAC / LTV rows from external-sales scenarios omitted — Pure HoldCo §04 has no external customer ledger.</div>
+
+
+
   <h3 class="sub">Industry capture gap</h3>
 
 
