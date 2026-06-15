@@ -167,6 +167,23 @@ table.mck td.qB{background:#EDD4D4!important;color:#6B2A2A!important;font-weight
 table.mck td.qN{background:#F0F2F5!important;color:#5A6470!important;font-weight:500;font-size:9.5px;letter-spacing:0.02em;white-space:nowrap;font-style:italic}
 @media print{table.mck td.qS,table.mck td.qC,table.mck td.qM,table.mck td.qB,table.mck td.qN{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
+table.mck.raci th{vertical-align:middle}
+table.mck.raci tbody tr:nth-child(odd) td{background:var(--off-white)}
+table.mck.raci tbody tr:nth-child(even) td{background:var(--silver-mist)}
+table.mck.raci td.stage{font-weight:700;color:var(--deep-slate);width:24%}
+table.mck.raci td.stage .desc{display:block;font-weight:400;font-style:italic;color:#6B7480;font-size:10px;line-height:1.4;margin-top:3px;letter-spacing:0}
+table.mck.raci td.timeline{width:11%;font-variant-numeric:tabular-nums;color:var(--deep-slate);font-weight:600}
+table.mck.raci td.risk{width:25%;color:#3A4759;font-size:10.5px;line-height:1.45}
+table.mck.raci td.raci-R,table.mck.raci td.raci-A,table.mck.raci td.raci-C,table.mck.raci td.raci-I,table.mck.raci td.raci-none{text-align:center;font-weight:700;font-size:12.5px;letter-spacing:0.03em;width:11%;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+table.mck.raci td.raci-R{background:#2E7780!important;color:#fff!important}
+table.mck.raci td.raci-A{background:#31435B!important;color:#fff!important}
+table.mck.raci td.raci-C{background:#A9C5D6!important;color:var(--near-black)!important;font-weight:700}
+table.mck.raci td.raci-I{background:#DCE5EC!important;color:var(--near-black)!important;font-style:italic;font-weight:600}
+table.mck.raci td.raci-none{background:#F0F2F5!important;color:#9098A2!important;font-weight:500}
+@media print{table.mck.raci td.raci-R,table.mck.raci td.raci-A,table.mck.raci td.raci-C,table.mck.raci td.raci-I,table.mck.raci td.raci-none{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.raci-caption{font-size:10.5px;color:#5A6470;line-height:1.5;margin:6px 0 4px;max-width:1080px}
+.raci-caption b{color:var(--deep-slate)}
+
 .kpi-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 12px}
 
 .kpi{background:#fff;border:1px solid var(--rule);padding:10px 14px;border-left:3px solid var(--deep-slate);min-width:150px;flex:1}
@@ -1497,6 +1514,38 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
   <div class="eyebrow"><span class="part">PART III · OPERATING MODEL</span><span class="num">11</span>Roles</div>
 
   <h1 class="action">Studio team: GP + studio-lead, AI Engineering Lead, searcher-CEO per platform, shared AI Engineering team across portfolio, operator-in-residence per vertical, vertical M&amp;A advisor, independent board director with Holdco PE precedent.</h1>
+
+  <h2 style="font-size:14px;color:var(--deep-slate);font-weight:700;letter-spacing:0.02em;text-transform:uppercase;margin:18px 0 6px;border-bottom:1px solid var(--rule);padding-bottom:4px">Execution roadmap — 7 stages, RACI by entity</h2>
+
+  <table class="mck raci">
+
+    <thead><tr><th style="width:24%">Stage</th><th style="width:11%">Timeline</th><th style="width:25%">Risk if fails</th><th style="width:11%">Fund</th><th style="width:11%">HoldCo</th><th style="width:11%">Operator</th></tr></thead>
+
+    <tbody>
+
+      <tr><td class="stage">1. Select Vertical<span class="desc">Fragmentation, recurring revenue, EBITDA margins, SBA eligibility</span></td><td class="timeline">~3 weeks</td><td class="risk">Minimal — research cost</td><td class="raci-none">—</td><td class="raci-R">R</td><td class="raci-none">—</td></tr>
+
+      <tr><td class="stage">2. Find Operator<span class="desc">Vertical lead identification. 60–90 day evaluation</span></td><td class="timeline">~2 months</td><td class="risk">Low — time only, no capital</td><td class="raci-none">—</td><td class="raci-R">R</td><td class="raci-C">C</td></tr>
+
+      <tr><td class="stage">3. Build AI Product<span class="desc">AI playbook for target vertical. Validate ≥1.5× productivity</span></td><td class="timeline">~2 months</td><td class="risk">Moderate — dev cost ($100–300K), no platform acquired</td><td class="raci-none">—</td><td class="raci-R">R</td><td class="raci-C">C</td></tr>
+
+      <tr><td class="stage">4. Acquire Platform<span class="desc">First anchor company. EV $5–7M at 4–6×. SBA leverage. HoldCo formed here.</span></td><td class="timeline">~4 months</td><td class="risk">Significant — first capital at risk ($1.5–3M equity)</td><td class="raci-A">A</td><td class="raci-R">R</td><td class="raci-C">C</td></tr>
+
+      <tr><td class="stage">5. Add-ons + Integrate<span class="desc">3–7 bolt-ons at 3–4×. Integration simultaneous with each closing</span></td><td class="timeline">~12–18 months</td><td class="risk">High — $30–40M cumulative. Mitigated by proven operator + AI</td><td class="raci-A">A</td><td class="raci-R">R</td><td class="raci-R">R</td></tr>
+
+      <tr><td class="stage">6. Growth<span class="desc">Cross-sell, new markets. AI Eng deploys playbooks across consolidated platform</span></td><td class="timeline">~1 year</td><td class="risk">Moderate — platform built, execution risk</td><td class="raci-I">I</td><td class="raci-C">C</td><td class="raci-R">R</td></tr>
+
+      <tr><td class="stage">7. Exit<span class="desc">Sell to strategic or larger PE at 10–16× EBITDA on consolidated platform</span></td><td class="timeline">When ready</td><td class="risk">Low — asset is built</td><td class="raci-A">A</td><td class="raci-R">R</td><td class="raci-C">C</td></tr>
+
+    </tbody>
+
+  </table>
+
+  <p class="raci-caption"><b>RACI:</b> R = Responsible (executes), A = Accountable (signs off / owns outcome), C = Consulted (provides input), I = Informed (kept in the loop). Reference benchmarks: Encore Fire Protection — 5 yrs, 55 acquisitions, $1.8B exit (Permira, 2025); Service Logic — 5 yrs, $4–5B+ exit (Bain, 2025); Champions Group — $2.5B exit (Blackstone, 2026).</p>
+
+  <div class="src">Stage timelines and risk bands from internal Operating Model v4.0; entity assignments revised for Solo HoldCo (Path A) per §03.</div>
+
+  <h2 style="font-size:14px;color:var(--deep-slate);font-weight:700;letter-spacing:0.02em;text-transform:uppercase;margin:22px 0 6px;border-bottom:1px solid var(--rule);padding-bottom:4px">Team structure</h2>
 
 
 
