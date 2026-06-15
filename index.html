@@ -209,7 +209,33 @@ table.mck td.qN{background:#F0F2F5!important;color:#5A6470!important;font-weight
 
 .toc-grid li a:hover{color:var(--petrol-teal)}
 
-@media print{body{font-size:10px}.page{padding:26px 32px;max-width:none;page-break-after:always}.cover{min-height:auto}table.mck th{background:var(--deep-slate)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.summary-box,.callout{page-break-inside:avoid}}
+/* s05 corporate-blue restyle: KPI cards, capital table, scenario cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:14px 0 18px}
+.kpi-card{background:var(--silver-mist);border:1px solid var(--cool-gray);border-radius:3px;padding:16px 18px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.kpi-card .kpi-label{font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:6px;line-height:1.25}
+.kpi-card .kpi-value{font-size:26px;line-height:1.1;font-weight:700;color:var(--deep-slate);letter-spacing:-0.018em}
+.kpi-card .kpi-value.sm{font-size:16px}
+table.mck.capital-sources tbody tr:nth-child(odd){background:var(--off-white)}
+table.mck.capital-sources tbody tr:nth-child(even){background:var(--silver-mist)}
+table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--petrol-teal);padding-left:8px}
+.scenario-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0 8px}
+.scenario-card{padding:16px 18px;border-radius:3px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.scenario-card .sc-name{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.scenario-card .sc-sub{font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;opacity:0.85;margin-bottom:10px}
+.scenario-card .sc-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;padding:3px 0;border-bottom:1px solid rgba(49,67,91,0.12)}
+.scenario-card .sc-row:last-of-type{border-bottom:none}
+.scenario-card .sc-row .l{font-size:10px;letter-spacing:0.04em;text-transform:uppercase;font-weight:600;opacity:0.85}
+.scenario-card .sc-row .v{font-weight:700;font-size:14px}
+.scenario-card .sc-note{margin-top:10px;font-size:10.5px;line-height:1.4;opacity:0.9}
+.scenario-card.bear{background:var(--silver-mist);color:var(--deep-slate)}
+.scenario-card.base{background:var(--soft-steel);color:var(--deep-slate)}
+.scenario-card.upside{background:var(--petrol-teal);color:#fff}
+.scenario-card.upside .sc-row{border-bottom-color:rgba(255,255,255,0.2)}
+.fund-vehicle-note{background:var(--silver-mist);border-left:3px solid var(--petrol-teal);padding:12px 16px;margin:10px 0 14px;font-size:12px;color:var(--deep-slate);max-width:980px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.fn{font-size:11px;color:var(--deep-slate);margin:6px 0 12px;padding:8px 12px;background:var(--off-white);border-left:2px solid var(--soft-steel);max-width:980px}
+.fn sup{color:var(--petrol-teal);font-weight:700}
+
+@media print{body{font-size:10px}.page{padding:26px 32px;max-width:none;page-break-after:always}.cover{min-height:auto}table.mck th{background:var(--deep-slate)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.summary-box,.callout,.kpi-card,.scenario-card{page-break-inside:avoid}}
 
 </style>
 
@@ -711,29 +737,31 @@ table.mck td.qN{background:#F0F2F5!important;color:#5A6470!important;font-weight
 
   <h1 class="action">Fund-side inputs (s16vc Fund 3): $100M total, 30% AI roll-up bucket = $25.2M, fund coverage through Series A inclusive, then self-funding from operating cash flow. Capital efficiency is the fourth lever alongside Multiple × Scale × Retained Ownership.</h1>
 
+  <div class="fund-vehicle-note"><b>Fund vehicle:</b> closed-end LP, 7–12 year life, single vintage. Path B (Permanent Capital) is architecturally incompatible with this structure — see §03.</div>
 
+  <div class="kpi-grid">
 
-  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-label">Fund total (s16vc Fund 3)</div><div class="kpi-value">$100M</div></div>
 
-    <div class="kpi"><div class="l">Fund total (s16vc Fund 3)</div><div class="v">$100M</div></div>
+    <div class="kpi-card"><div class="kpi-label">AI roll-up bucket<sup>1</sup></div><div class="kpi-value">$25.2M</div></div>
 
-    <div class="kpi"><div class="l">AI roll-up bucket</div><div class="v">$25.2M</div></div>
+    <div class="kpi-card"><div class="kpi-label">Roll-up verticals modelled<sup>2</sup></div><div class="kpi-value">5</div></div>
 
-    <div class="kpi"><div class="l">Roll-up verticals modelled</div><div class="v">5</div></div>
+    <div class="kpi-card"><div class="kpi-label">Pre-Series B cash (fund + co-invest)</div><div class="kpi-value">$52M</div></div>
 
-    <div class="kpi"><div class="l">Pre-Series B cash invested (fund + co-invest)</div><div class="v">$52M</div></div>
+    <div class="kpi-card"><div class="kpi-label">Fund life</div><div class="kpi-value sm">7–12 yr (closed-end LP)</div></div>
 
-    <div class="kpi"><div class="l">Coverage to</div><div class="v sm">Series A inclusive</div></div>
+    <div class="kpi-card"><div class="kpi-label">Coverage to</div><div class="kpi-value sm">Series A inclusive</div></div>
 
-    <div class="kpi"><div class="l">After Series A</div><div class="v sm">Self-fund from cashflow</div></div>
+    <div class="kpi-card"><div class="kpi-label">After Series A</div><div class="kpi-value sm">Self-fund from cashflow</div></div>
 
   </div>
 
-
+  <div class="fn"><sup>1</sup> <b>$25.2M = 30% of $100M fund net of 2% × 8yr management fees</b> ($100M − $16M fees = $84M × 30%).<br><sup>2</sup> Strategy recommendation in §07 deploys <b>one vertical in Vintage 1 with the second staggered to Year 3+</b>; the 5-vertical envelope is the fund-side upper bound, not the planned deployment cadence.</div>
 
   <h3 class="sub">Capital sources and uses</h3>
 
-  <table class="mck">
+  <table class="mck capital-sources">
 
     <thead><tr><th style="width:24%">Source</th><th style="width:24%">Role</th><th>Notes</th></tr></thead>
 
@@ -741,39 +769,53 @@ table.mck td.qN{background:#F0F2F5!important;color:#5A6470!important;font-weight
 
       <tr><td class="name">Fund equity (s16vc + co-invest)</td><td>Pre-Series B</td><td>$52M total across portfolio (~$10M per vertical to Series A)</td></tr>
 
-      <tr><td class="name">Senior debt / SBA</td><td>Acquisition leverage at OpCo level</td><td>Mid-market PE norm 50–70% of EV; conservative 50–55% for Vintage 1 risk profile; <b>availability is a killer hypothesis</b></td></tr>
+      <tr class="killer"><td class="name">Senior debt / SBA</td><td>Acquisition leverage at OpCo level</td><td>Mid-market PE norm 50–70% of EV; conservative 50–55% for Vintage 1 risk profile; <b>availability is a killer hypothesis</b></td></tr>
 
       <tr><td class="name">Co-invest from LPs / investors</td><td>Top-up specific deals</td><td>Sized to specific opportunity; structurally lifts fund ceiling above committed capital</td></tr>
 
-      <tr><td class="name">Operating cash flow</td><td>Bolt-on self-funding post-Series A</td><td>Anchor OpCo throws cash; subsequent acquisitions recycled out of accumulated cashflow; <b>also a killer hypothesis</b></td></tr>
+      <tr class="killer"><td class="name">Operating cash flow</td><td>Bolt-on self-funding post-Series A</td><td>Anchor OpCo throws cash; subsequent acquisitions recycled out of accumulated cashflow; <b>also a killer hypothesis</b></td></tr>
+
+      <tr><td class="name">GP carry, hurdle &amp; waterfall</td><td>LP / GP economics</td><td>Defined in s16vc Fund 3 LPA (internal). Output returns shown net of carry.</td></tr>
 
     </tbody>
 
   </table>
 
-  <div class="src">Fund-side parameters from s16vc Fund 3 Portfolio Construction — internal document, available to team. Scenario analysis for the AI roll-up bucket in AI Roll-Up Case Analysis — internal document, available to team.</div>
+  <div class="src">Fund-side parameters from s16vc Fund 3 Portfolio Construction — internal document, available to team. Scenario analysis for the AI roll-up bucket in AI Roll-Up Case Analysis — internal document, available to team. Carry / hurdle / waterfall terms in s16vc Fund 3 LPA — internal.</div>
 
 
 
   <h3 class="sub">Returns scenario envelope (fund-side model)</h3>
 
-  <table class="mck">
+  <div class="scenario-cards">
 
-    <thead><tr><th style="width:18%">Scenario</th><th class="num" style="width:18%">Roll-up bucket return</th><th class="num" style="width:18%">Fund 3 gross</th><th class="num" style="width:18%">Fund 3 net of carry</th><th>Outcome assumption</th></tr></thead>
+    <div class="scenario-card bear">
+      <div class="sc-name">Bear</div>
+      <div class="sc-sub">4 of 5 roll-ups fail; 1 returns 3×</div>
+      <div class="sc-row"><span class="l">Bucket return</span><span class="v">0.7×</span></div>
+      <div class="sc-row"><span class="l">Fund 3 gross</span><span class="v">1.6×</span></div>
+      <div class="sc-row"><span class="l">Fund 3 net of carry</span><span class="v">1.48×</span></div>
+    </div>
 
-    <tbody>
+    <div class="scenario-card base">
+      <div class="sc-name">Base</div>
+      <div class="sc-sub">Recommended planning case · 2 of 5 fail; 3 succeed</div>
+      <div class="sc-row"><span class="l">Bucket return</span><span class="v">8.4×</span></div>
+      <div class="sc-row"><span class="l">Fund 3 gross</span><span class="v">4.9×</span></div>
+      <div class="sc-row"><span class="l">Fund 3 net of carry</span><span class="v">4.13×</span></div>
+    </div>
 
-      <tr><td class="name">Bear</td><td class="num">0.7×</td><td class="num">1.6×</td><td class="num">1.48×</td><td>4 of 5 roll-ups fail; 1 returns 3×</td></tr>
+    <div class="scenario-card upside">
+      <div class="sc-name">Upside</div>
+      <div class="sc-sub">All 5 succeed</div>
+      <div class="sc-row"><span class="l">Bucket return</span><span class="v">24.7×</span></div>
+      <div class="sc-row"><span class="l">Fund 3 gross</span><span class="v">13.2×</span></div>
+      <div class="sc-row"><span class="l">Fund 3 net of carry</span><span class="v">10.78×</span></div>
+    </div>
 
-      <tr style="background:#E1F0EE"><td class="name"><b>Base</b></td><td class="num"><b>8.4×</b></td><td class="num"><b>4.9×</b></td><td class="num"><b>4.13×</b></td><td>2 of 5 fail; 3 succeed</td></tr>
+  </div>
 
-      <tr><td class="name">Upside</td><td class="num">24.7×</td><td class="num">13.2×</td><td class="num">10.78×</td><td>All 5 succeed</td></tr>
-
-    </tbody>
-
-  </table>
-
-  <div class="src">Scenarios from AI Roll-Up Case Analysis (Bear / Base / Upside sheets) — fund-side hypothesis treated as input. Holding-layer and Agency-layer toggles set to zero in the headline returns; they remain optional upside contingent on our research conclusion that solo HoldCo is the primary thesis.</div>
+  <div class="src">Scenarios run with the fund-side 5-vertical envelope; strategy recommendation §07 runs to 1–2 verticals through Vintage 1, so realised returns are likely concentrated in the Bear-to-Base band on fewer verticals rather than spread thinly across five. Full case analysis in s16vc Fund 3 model — internal. Holding-layer and Agency-layer toggles set to zero in the headline returns; they remain optional upside contingent on our research conclusion that solo HoldCo is the primary thesis.</div>
 
 
 
