@@ -237,6 +237,23 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
 
 @media print{body{font-size:10px}.page{padding:26px 32px;max-width:none;page-break-after:always}.cover{min-height:auto}table.mck th{background:var(--deep-slate)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.summary-box,.callout,.kpi-card,.scenario-card{page-break-inside:avoid}}
 
+.entity-stack{display:flex;flex-direction:column;gap:0;margin:24px 0}
+.entity-card{background:var(--off-white);border:1.5px solid var(--cool-gray);border-left:5px solid var(--petrol-teal);border-radius:6px;padding:18px 22px;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+.entity-fund{border-left-color:var(--deep-slate)}
+.entity-holdco{border-left-color:var(--petrol-teal)}
+.entity-opcos{border-left-color:var(--soft-steel)}
+.entity-header{display:flex;flex-direction:column;gap:4px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--silver-mist)}
+.entity-tier{font-size:10px;color:var(--petrol-teal);letter-spacing:0.08em;text-transform:uppercase;font-weight:600}
+.entity-header h3{margin:0;font-size:18px;color:var(--deep-slate);font-weight:700;letter-spacing:0.01em}
+.entity-vehicle{font-size:12px;color:var(--near-black);font-style:italic}
+.entity-bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.entity-bullets li{font-size:12.5px;color:var(--near-black);line-height:1.5;padding-left:14px;border-left:2px solid var(--silver-mist)}
+.bullet-label{display:inline-block;font-weight:700;color:var(--deep-slate);margin-right:8px;min-width:120px}
+.entity-connector{display:flex;align-items:center;justify-content:center;padding:8px 0;position:relative}
+.entity-connector::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--cool-gray)}
+.connector-label{background:var(--silver-mist);color:var(--petrol-teal);font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;padding:3px 10px;border-radius:10px;position:relative;z-index:1}
+@media print{.entity-card,.connector-label{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+
 </style>
 
 </head>
@@ -1419,41 +1436,51 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
 
 
 
-<div class="tree">
+<div class="entity-stack">
 
-<span class="root">Three-entity skeleton</span>
+  <div class="entity-card entity-fund">
+    <div class="entity-header">
+      <span class="entity-tier">Tier 1 · Capital</span>
+      <h3>Fund</h3>
+      <span class="entity-vehicle">Delaware Limited Partnership (LP)</span>
+    </div>
+    <ul class="entity-bullets">
+      <li><span class="bullet-label">SEC status</span> ERA-exempt if AUM under $150M</li>
+      <li><span class="bullet-label">Waterfall</span> European (whole-fund); 8% pref; 20% carry; 100% catch-up</li>
+      <li><span class="bullet-label">LPA provisions</span> Vintage 2 conversion option, anchor LP ROFR, co-invest rights, key-person</li>
+    </ul>
+  </div>
 
-│
+  <div class="entity-connector"><span class="connector-label">owns 100%</span></div>
 
-├── <span class="branch">Fund</span> — Delaware Limited Partnership (LP)
+  <div class="entity-card entity-holdco">
+    <div class="entity-header">
+      <span class="entity-tier">Tier 2 · Operations &amp; IP</span>
+      <h3>Holding Company</h3>
+      <span class="entity-vehicle">Delaware C-corp · QSBS Section 1202 eligible at formation</span>
+    </div>
+    <ul class="entity-bullets">
+      <li><span class="bullet-label">AI Engineering</span> <b>internal department</b>, not separate legal entity</li>
+      <li><span class="bullet-label">QSBS economics</span> up to 100% federal exclusion on first $10M / shareholder; ~$2.38M federal tax saved per shareholder at top LTCG + NIIT rate</li>
+      <li><span class="bullet-label">Equity participation</span> Founders + AI engineers participate via HoldCo equity (QSBS-eligible)</li>
+      <li><span class="bullet-label">Compliance</span> No related-party services contracts with portfolio cos; Section 206(3) trip wire does not arise</li>
+    </ul>
+  </div>
 
-│        ├── <span class="leaf">ERA-exempt SEC status if AUM under $150M</span>
+  <div class="entity-connector"><span class="connector-label">wholly owns</span></div>
 
-│        ├── <span class="leaf">European (whole-fund) waterfall; 8% pref; 20% carry; 100% catch-up</span>
-
-│        └── <span class="leaf">LPA provisions: Vintage 2 conversion option, anchor LP ROFR, co-invest rights, key-person</span>
-
-│
-
-├── <span class="branch">Holding Company</span> — Delaware C-corp, QSBS Section 1202 eligible at formation
-
-│        ├── <span class="leaf">AI Engineering as <b>internal department</b>, not separate legal entity</span>
-
-│        ├── <span class="leaf">QSBS: up to 100% federal exclusion on first $10M / shareholder; ~$2.38M federal tax saved per shareholder at top LTCG + NIIT rate</span>
-
-│        ├── <span class="leaf">Founders + AI engineers participate via HoldCo equity (QSBS-eligible)</span>
-
-│        └── <span class="leaf">No related-party services contracts with portfolio cos; Section 206(3) trip wire does not arise</span>
-
-│
-
-└── <span class="branch">Operating Companies (OpCos)</span> — wholly-owned LLCs
-
-         ├── <span class="leaf">Acquired SMBs in chosen vertical; retain local brand, customer relationships, regulatory licensing</span>
-
-         ├── <span class="leaf">Operator-CEO retained 24+ months under earn-out; sub-brand retention</span>
-
-         └── <span class="leaf">Alliance model substitution where state regulation requires (CPA vertical — Crete precedent)</span>
+  <div class="entity-card entity-opcos">
+    <div class="entity-header">
+      <span class="entity-tier">Tier 3 · Operating</span>
+      <h3>Operating Companies (OpCos)</h3>
+      <span class="entity-vehicle">Wholly-owned LLCs</span>
+    </div>
+    <ul class="entity-bullets">
+      <li><span class="bullet-label">Acquisition profile</span> Acquired SMBs in chosen vertical; retain local brand, customer relationships, regulatory licensing</li>
+      <li><span class="bullet-label">Operator retention</span> Operator-CEO retained 24+ months under earn-out; sub-brand retention</li>
+      <li><span class="bullet-label">Alliance substitution</span> where state regulation requires (CPA vertical — Crete precedent)</li>
+    </ul>
+  </div>
 
 </div>
 
