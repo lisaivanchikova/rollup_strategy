@@ -338,18 +338,23 @@ table.mck td.center{text-align:center;font-weight:600}
   <div class="eyebrow"><span class="num">06</span>Path B · Holdco + Permanent Capital Migration</div>
   <h1 class="action">Vintage 1 runs as closed-end fund. After demonstrating multiple-arbitrage returns, Vintage 2+ migrates to evergreen capital structure — publicly listed Holdco, insurance float, or perpetual private vehicle. The Berkshire / Markel architecture, but staged.</h1>
 
-  <div class="path-block cond">
-    <div class="id">PATH B · DEFERRED</div>
-    <div class="title">Holdco + Permanent Capital migration starting Vintage 2 or later</div>
+  <div class="path-block fail">
+    <div class="id">PATH B · ARCHITECTURALLY INCOMPATIBLE</div>
+    <div class="title">Holdco + Permanent Capital migration — not a Vintage 1 lever; vehicle-class mismatch with closed-end LP fund</div>
     <div class="scoreline">
-      <div class="s"><span class="lbl">Q1 · Capital</span><span class="val"><span class="dot marg"></span>MARGINAL</span></div>
-      <div class="s"><span class="lbl">Q2 · Team fit</span><span class="val"><span class="dot cond"></span>CONDITIONAL</span></div>
-      <div class="s"><span class="lbl">Q3 · Sequencing</span><span class="val"><span class="dot cond"></span>CONDITIONAL</span></div>
-      <div class="s"><span class="lbl">Q4 · P&amp;L</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
-      <div class="s"><span class="lbl">Q5 · Reference</span><span class="val"><span class="dot pass"></span>STRONG</span></div>
+      <div class="s"><span class="lbl">Q1 · Capital</span><span class="val"><span class="dot fail"></span>BLOCKED — vehicle class mismatch</span></div>
+      <div class="s"><span class="lbl">Q2 · Team fit</span><span class="val">not assessed</span></div>
+      <div class="s"><span class="lbl">Q3 · Sequencing</span><span class="val">not assessed</span></div>
+      <div class="s"><span class="lbl">Q4 · P&amp;L</span><span class="val">not assessed</span></div>
+      <div class="s"><span class="lbl">Q5 · Reference</span><span class="val">not assessed</span></div>
     </div>
-    <p class="body" style="margin-bottom:6px"><b>Verdict:</b> <span class="verdict cond">Defer to Vintage 2+, trigger on Vintage 1 success</span></p>
+    <p class="body" style="margin-bottom:6px"><b>Verdict:</b> <span class="verdict fail">Architecturally incompatible with Vintage 1 vehicle — revisit at Vintage 2 raise as new vehicle decision</span></p>
   </div>
+
+  <h3 class="sub">Path B · Architecturally Incompatible with Current Vehicle</h3>
+  <p class="body">Vintage 1 is structured as a closed-end LP fund: capital is committed for a defined fund life (7–12 years) with explicit exit liquidity at vintage end. Permanent Capital requires evergreen mechanics — perpetual or publicly-listed capital base, insurance float, or open-end vehicle — that cannot be retrofitted into a closed-end LP agreement mid-life. This is not a sequencing problem solved by deferral; it is a vehicle-class mismatch.</p>
+  <p class="body">Permanent Capital becomes available only by raising a structurally different Vintage 2+ (public listing, insurance acquisition, or evergreen LP raise), not by migrating the existing closed-end fund.</p>
+  <p class="body"><strong>Verdict: not a Vintage 1 lever; revisit at Vintage 2 raise as a new vehicle decision, not a Path B activation.</strong></p>
 
   <h3 class="sub">Why this is structurally attractive</h3>
   <p class="body">Permanent capital removes the fund-vintage exit clock. Berkshire compounded book value per share at ~18.3% CAGR over 60 years (1965–2024) because it never had to sell. The same Holdco operating engine becomes worth dramatically more when held indefinitely: the math of compounding 12% per year for 25 years versus exiting at year 7–12 differs by an order of magnitude in cumulative wealth, even at modest CAGRs. Markel Group is the documented mid-scale precedent — IPO 1986 at ~$130M market cap, today a multi-billion-dollar permanent-capital compounder with Markel Ventures running &gt;20 wholly-owned operating businesses alongside specialty insurance.</p>
@@ -529,7 +534,7 @@ table.mck td.center{text-align:center;font-weight:600}
 
 <section class="page">
   <div class="eyebrow"><span class="num">11</span>Comparative Scorecard — All Six Paths Across Five Dimensions</div>
-  <h1 class="action">Path A is the unambiguous Vintage 1 winner. Path C (Holdco + Data Network at Stage 2) and Paths B + D (Permanent Capital migration) emerge naturally if Vintage 1 succeeds. Two of five Horizontal AI flavors are recommended as non-revenue assets; Path F is a different game.</h1>
+  <h1 class="action">Path A is the unambiguous Vintage 1 winner. Path C (Holdco + Data Network at Stage 2) emerges naturally if Vintage 1 succeeds and the data trigger fires. Paths B and D are architecturally incompatible with the closed-end Vintage 1 vehicle and revisit only as new-vehicle decisions at Vintage 2+. Two of five Horizontal AI flavors are recommended as non-revenue assets; Path F is a different game.</h1>
 
   <table class="mck scorecard">
     <thead><tr>
@@ -554,12 +559,12 @@ table.mck td.center{text-align:center;font-weight:600}
       </tr>
       <tr>
         <td class="path">B</td><td class="name">Holdco + Permanent Capital migration</td>
-        <td class="center"><span class="dot marg"></span>MARGINAL</td>
-        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
-        <td class="center"><span class="dot cond"></span>CONDITIONAL</td>
-        <td class="center"><span class="dot pass"></span>STRONG</td>
-        <td class="center"><span class="dot pass"></span>STRONG</td>
-        <td><span class="verdict cond">Defer to Vintage 2+</span></td>
+        <td class="center"><span class="dot fail"></span>BLOCKED</td>
+        <td class="center">n/a</td>
+        <td class="center">n/a</td>
+        <td class="center">n/a</td>
+        <td class="center">n/a</td>
+        <td><span class="verdict fail">Architecturally incompatible — revisit at Vintage 2 raise</span></td>
       </tr>
       <tr>
         <td class="path">C</td><td class="name">Holdco + Data Network Stage 2</td>
@@ -640,7 +645,7 @@ table.mck td.center{text-align:center;font-weight:600}
   <ul class="body">
     <li>Paths with multiple STRONG and one CONDITIONAL or MARGINAL → recommend with explicit triggers (A, E-3 brand asset, E-5 OSS).</li>
     <li>Paths with one or two FAILs that dominate → reject regardless of other dimensions (E-1, E-4, F).</li>
-    <li>Paths gated by sequencing and capital — defer with explicit Stage 2 / Vintage 2 triggers (B, C, D).</li>
+    <li>Paths gated by sequencing and capital — defer with explicit Stage 2 / Vintage 2 triggers (C, D). Path B is gated by vehicle architecture, not sequencing — it requires a new vehicle class to activate, not a deferral within Vintage 1.</li>
     <li>"N/A" reflects path-blocking failures earlier that make subsequent dimensions irrelevant.</li>
   </ul>
 
@@ -649,13 +654,13 @@ table.mck td.center{text-align:center;font-weight:600}
 
 <section class="page">
   <div class="eyebrow"><span class="num">12</span>Final Positioning — Recommended Sequence Across Vintages</div>
-  <h1 class="action">Path A operates Vintage 1. Paths E-3 and E-5 run in parallel as brand / talent assets at zero strategic cost. Path C activates at Stage 2 (Year 4–6) if the data trigger fires. Paths B and D defer to Vintage 2+, emerging from operating success rather than from forward commitment.</h1>
+  <h1 class="action">Path A operates Vintage 1. Paths E-3 and E-5 run in parallel as brand / talent assets at zero strategic cost. Path C activates at Stage 2 (Year 4–6) if the data trigger fires. Paths B and D are architecturally incompatible with the Vintage 1 closed-end vehicle; they revisit only as structurally distinct new-vehicle decisions at Vintage 2+.</h1>
 
   <h3 class="sub">Stage 1 — Vintage 1, Years 0–4</h3>
   <ul class="body">
     <li><b>Operating spine:</b> Path A as specified in Operating Model v4.0. First vertical (Hell-Yes per V×C×A×B×M scoring map) launches Q3 2026; 4–7 OpCos targeted; AI Engineering arm fully internal; paid pre-acquisition pilots covered.</li>
     <li><b>Non-revenue assets in parallel:</b> Path E-3 (industry benchmark, framework content, research output — extending what is already at <code>rollup-economy.com</code> and the Game Selection Framework). Path E-5 narrowly scoped (release internally-built evals or playbook tools as OSS when they have no IP-sensitive content). Neither requires significant incremental capital or team.</li>
-    <li><b>Explicitly not pursued at this stage:</b> Paths B, C, D defer. Path E-1, E-4, F rejected. Path E-2 reserved for opportunistic activation only.</li>
+    <li><b>Explicitly not pursued at this stage:</b> Paths C, D defer to Stage 2+. Path B is architecturally incompatible with Vintage 1 and revisits only at a Vintage 2+ new-vehicle raise. Paths E-1, E-4, F rejected. Path E-2 reserved for opportunistic activation only.</li>
   </ul>
 
   <h3 class="sub">Stage 2 — Vintage 1 mid-cycle, Years 4–6</h3>
@@ -666,7 +671,7 @@ table.mck td.center{text-align:center;font-weight:600}
 
   <h3 class="sub">Stage 3 — Vintage 2+, Years 6–12+</h3>
   <ul class="body">
-    <li><b>Path B activates conditionally</b> as Vintage 2 structure: if LP base wants long-duration exposure and operating record supports it, negotiate evergreen vehicle / public listing / insurance float access. Markel-Berkshire architecture begins to emerge.</li>
+    <li><b>Path B becomes available only as a new Vintage 2+ vehicle decision</b> — not as a migration of Vintage 1. If LP base wants long-duration exposure and operating record supports it, raise a structurally different vehicle (evergreen LP, public listing, or insurance float acquisition). Markel-Berkshire architecture begins to emerge, but only by raising a new vehicle class, not by retrofitting the closed-end fund.</li>
     <li><b>Path D emerges naturally</b> if both B and C succeeded — the publicly-listed Holdco with operating subsidiaries plus productised data layer plus permanent capital base. This is not engineered; it is the inheritance of having played A → C → B in sequence successfully.</li>
   </ul>
 
@@ -695,11 +700,11 @@ table.mck td.center{text-align:center;font-weight:600}
 │        ├── <span class="leaf">Capital signal: Vintage 2 raise process opens at $200M+ target</span>
 │        └── <span class="leaf">If all four → activate Path C; else continue Stage 1 into Vintage 2</span>
 │
-├── <span class="branch">Vintage 2 Stage 3 trigger (Year 6–10)</span>
+├── <span class="branch">Vintage 2+ new-vehicle decision (Year 6–10)</span>
 │        ├── <span class="leaf">Track record: Vintage 1 exits delivered ≥2.5× MOIC blended</span>
 │        ├── <span class="leaf">LP signal: ≥1 anchor LP commits $50M+ to evergreen vehicle</span>
-│        ├── <span class="leaf">Structure: legal counsel confirms permanent-capital migration viable without breaking Vintage 1 LP agreements</span>
-│        └── <span class="leaf">If all three → activate Path B; else continue closed-end vintage structure</span>
+│        ├── <span class="leaf">Structure: legal counsel confirms a structurally distinct Vintage 2 vehicle (public listing, insurance float, evergreen LP) — Vintage 1 LP agreements are not migrated</span>
+│        └── <span class="leaf">If all three → raise Vintage 2 as Permanent Capital vehicle; else continue closed-end vintage structure</span>
 │
 └── <span class="branch">Vintage 3+ Path D synthesis (Year 10+)</span>
          ├── <span class="leaf">Both B and C are operational and producing</span>
@@ -711,7 +716,7 @@ table.mck td.center{text-align:center;font-weight:600}
   <h3 class="sub">What blocks each trigger</h3>
   <ul class="body">
     <li><b>Path C blocked if:</b> data does not accumulate (OpCos use different systems), buyer set turns out to be portfolio competitors only (Section 206 concern returns), or engineering bandwidth cannot be added without compromising vertical roll-up.</li>
-    <li><b>Path B blocked if:</b> Vintage 1 returns are below 2× MOIC (LPs decline permanent-capital extension), legal structure conflict with existing LP agreements, or team does not have public-market-CEO bench depth.</li>
+    <li><b>Path B (as a new Vintage 2+ vehicle) blocked if:</b> Vintage 1 returns are below 2× MOIC (anchor LPs decline new evergreen commitments), the team does not have public-market-CEO bench depth, or no insurance / evergreen LP path is available at sufficient scale. Note: Vintage 1 itself is never converted to permanent capital — Path B is always a new vehicle decision.</li>
     <li><b>Path D blocked if:</b> either B or C remains incomplete, or if scaling adds operational complexity faster than data and capital advantages accrue. Path D is not a target — it is a possible inheritance.</li>
   </ul>
 
@@ -721,7 +726,7 @@ table.mck td.center{text-align:center;font-weight:600}
     <li><b>Path E-3 — committed at zero incremental cost.</b> Continue framework / research / benchmark content. Position as Holdco research arm.</li>
     <li><b>Path E-5 — committed selectively.</b> Release OSS evals and tools as they reach reusable state, with IP review.</li>
     <li><b>Path C — committed to monitoring.</b> Establish data capture standards across OpCos from Vintage 1 day one, so that if the trigger fires at Year 4–6 the dataset is ready, not greenfield.</li>
-    <li><b>Paths B, D — committed to optionality.</b> Vintage 1 LP agreements structured to allow Vintage 2 conversion to evergreen if conditions met.</li>
+    <li><b>Paths B, D — held open as new-vehicle decisions for Vintage 2+.</b> Vintage 1 closed-end fund cannot be retrofitted to permanent capital; if conditions warrant, raise Vintage 2 as a structurally distinct evergreen / public / insurance-backed vehicle.</li>
     <li><b>Paths E-1, E-2, E-4, F — not committed.</b> Reject or hold for opportunistic activation only.</li>
   </ul>
 
