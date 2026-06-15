@@ -902,11 +902,7 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
 
 
 
-          <li><a href="#s16">16 · Financial model</a></li>
-
-
-
-          <li><a href="#s17">17 · 90-day plan</a></li>
+          <li><a href="#s16">16 · 90-day plan</a></li>
 
 
 
@@ -1674,6 +1670,8 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
 
       <div class="sc-row"><span class="l">Fund 3 net of carry</span><span class="v">1.48×</span></div>
 
+      <div class="sc-row"><span class="l"><b>Roll-up bucket EqV at exit</b></span><span class="v"><b>$190.5M</b></span></div>
+
     </div>
 
 
@@ -1689,6 +1687,8 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
       <div class="sc-row"><span class="l">Fund 3 gross</span><span class="v">4.9×</span></div>
 
       <div class="sc-row"><span class="l">Fund 3 net of carry</span><span class="v">4.13×</span></div>
+
+      <div class="sc-row"><span class="l"><b>Roll-up bucket EqV at exit</b></span><span class="v"><b>$2.03B</b></span></div>
 
     </div>
 
@@ -1706,6 +1706,8 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
 
       <div class="sc-row"><span class="l">Fund 3 net of carry</span><span class="v">10.78×</span></div>
 
+      <div class="sc-row"><span class="l"><b>Roll-up bucket EqV at exit</b></span><span class="v"><b>$5.94B</b></span></div>
+
     </div>
 
 
@@ -1715,6 +1717,20 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
 
 
   <div class="src">Scenarios run with the fund-side 5-vertical envelope; strategy recommendation §07 runs to 1–2 verticals through Vintage 1, so realised returns are likely concentrated in the Bear-to-Base band on fewer verticals rather than spread thinly across five. Full case analysis in s16vc Fund 3 model — internal. Holding-layer and Agency-layer toggles set to zero in the headline returns; they remain optional upside contingent on our research conclusion that solo HoldCo is the primary thesis.</div>
+
+
+
+  <table class="mck capital-sources" style="margin-top:14px">
+
+    <thead><tr><th style="width:30%">Killer hypothesis</th><th>Mechanism &amp; test</th></tr></thead>
+
+    <tbody>
+
+      <tr class="killer"><td class="name"><b>Entry multiple inflation</b></td><td>Bear case stress-tests <b>7.2× mean entry</b> (top of the 4–8× range). At 4× the bucket supports 5+ anchor platforms; at 8× it supports 2. <b>Entry-multiple inflation is the single largest swing factor</b> — tested by H1 in §08, validation in §09 Wave 2.</td></tr>
+
+    </tbody>
+
+  </table>
 
 
 
@@ -2886,13 +2902,13 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
 
     </ul>
 
-    <p style="margin-top:8px">Each is documented as a known model dependency; full sensitivity analysis lives in §16 (Fund Construction).</p>
+    <p style="margin-top:8px">Each is documented as a known model dependency; full sensitivity analysis lives in §05 (Capital Architecture).</p>
 
   </div>
 
 
 
-  <p class="body" style="margin-top:14px">If Wave 1 returns green or strong yellow, §10–§17 (Operating Model) defines what we activate. If any Wave 1 insight returns red, we return to §03 (Combinations Memo) to determine whether the residual capital deploys against a modified thesis, a different fund vehicle, or is returned to LPs.</p>
+  <p class="body" style="margin-top:14px">If Wave 1 returns green or strong yellow, §10–§16 (Operating Model) defines what we activate. If any Wave 1 insight returns red, we return to §03 (Combinations Memo) to determine whether the residual capital deploys against a modified thesis, a different fund vehicle, or is returned to LPs.</p>
 
 
 
@@ -3854,163 +3870,7 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
 
 
 
-  <div class="eyebrow"><span class="part">PART III · OPERATING MODEL</span><span class="num">16</span>Financial Model — Fund-Side Inputs and Roll-up Bucket Scenarios</div>
-
-
-
-  <h1 class="action">Inputs from s16vc Fund 3 portfolio construction and AI Roll-Up Case Analysis. Roll-up bucket sized at $25.2M; modelled across Bear / Base / Upside scenarios with 5 verticals; coverage to Series A inclusive; then self-funding from operating cash flow.</h1>
-
-
-
-
-
-
-
-  <h3 class="sub">Fund-side capital plan</h3>
-
-
-
-  <table class="mck">
-
-
-
-    <thead><tr><th style="width:30%">Item</th><th class="num" style="width:18%">Amount</th><th>Source / use</th></tr></thead>
-
-
-
-    <tbody>
-
-
-
-      <tr><td class="name">Fund 3 total</td><td class="num">$100M</td><td>s16vc Fund 3 committed</td></tr>
-
-
-
-      <tr><td class="name">Venture portfolio (Pre-Seed + Core Bets)</td><td class="num">$58.8M</td><td>First checks $38.22M + pro-rata reserve $20.58M</td></tr>
-
-
-
-      <tr><td class="name">AI roll-up bucket</td><td class="num">$25.2M</td><td>30% of Fund 3; allocated across 5 verticals over 5-year investment period</td></tr>
-
-
-
-      <tr><td class="name">Pre-Series B cash invested (fund + co-invest)</td><td class="num">$52M</td><td>$25.2M fund + ~$26.8M co-invest stretched across portfolio to Series A inclusive</td></tr>
-
-
-
-      <tr><td class="name">Management fee</td><td class="num">2% × 8 years</td><td>Standard fund economics</td></tr>
-
-
-
-      <tr><td class="name">Target ownership at investment</td><td class="num">7%</td><td>Initial equity stake per portfolio company</td></tr>
-
-
-
-    </tbody>
-
-
-
-  </table>
-
-
-
-  <div class="src">Inputs from s16vc Fund 3 Portfolio Construction — internal document, available to team.</div>
-
-
-
-
-
-
-
-  <h3 class="sub">Roll-up bucket — return scenarios</h3>
-
-
-
-  <table class="mck">
-
-
-
-    <thead><tr><th style="width:14%">Scenario</th><th class="num" style="width:18%">Roll-up bucket EqV</th><th class="num" style="width:18%">Roll-up bucket CoC</th><th class="num" style="width:18%">Fund 3 gross</th><th class="num" style="width:18%">Fund 3 net of carry</th><th>Outcome assumption</th></tr></thead>
-
-
-
-    <tbody>
-
-
-
-      <tr><td class="name">Bear</td><td class="num">$190.5M</td><td class="num">0.7×</td><td class="num">1.60×</td><td class="num">1.48×</td><td>4 of 5 verticals fail; 1 returns 3×</td></tr>
-
-
-
-      <tr style="background:#E1F0EE"><td class="name"><b>Base</b></td><td class="num"><b>$2,032M</b></td><td class="num"><b>8.4×</b></td><td class="num"><b>4.92×</b></td><td class="num"><b>4.13×</b></td><td>2 of 5 fail; 3 succeed</td></tr>
-
-
-
-      <tr><td class="name">Upside</td><td class="num">$5,942M</td><td class="num">24.7×</td><td class="num">13.22×</td><td class="num">10.78×</td><td>All 5 succeed</td></tr>
-
-
-
-    </tbody>
-
-
-
-  </table>
-
-
-
-  <p class="body">Numbers are equity value of the roll-up bucket at exit, the bucket CoC return, and the consequent fund-level gross and net returns. The IRR on the Bear case is below fund target; Base case clears top-decile (4.13× net per fund-side benchmark); Upside is best-case-only.</p>
-
-
-
-
-
-
-
-  <h3 class="sub">Acquisition multiples and exit assumptions in the fund-side model</h3>
-
-
-
-  <ul class="body">
-
-
-
-    <li><b>Entry multiples 4–8× EBITDA</b>; Base case mean 5.6× across V1–V5; Upside mean 5.4×; Bear mean 7.2× (stress-tests buying at the top of the range).</li>
-
-
-
-    <li><b>Reference comps</b> from fund-side Sources: Accounting 3–5× (FirmLever); Legal 3–5×; Property Management 3.76–4.17× (Peak Valuation). Model multiples sit above comps assuming tech-ready owner-operated SMEs command a quality premium.</li>
-
-
-
-    <li><b>Exit multiple 15× EBITDA</b> at consolidated platform — conservative relative to AppFolio ~30× and Constellation Software ~25× public market comps.</li>
-
-
-
-    <li><b>Holding and Agency layers</b> are toggled to zero in headline scenarios. They represent optional upside but are not part of our research conclusion (Solo HoldCo).</li>
-
-
-
-  </ul>
-
-
-
-  <div class="src">Scenario sheets, vertical-by-vertical assumptions, sources and underlying assumptions in AI Roll-Up Case Analysis — internal document, available to team.</div>
-
-
-
-</section>
-
-
-
-
-
-
-
-<section class="page" id="s17">
-
-
-
-  <div class="eyebrow"><span class="part">PART III · OPERATING MODEL</span><span class="num">17</span>90-Day Plan</div>
+  <div class="eyebrow"><span class="part">PART III · OPERATING MODEL</span><span class="num">16</span>90-Day Plan</div>
 
 
 
