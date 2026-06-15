@@ -144,6 +144,13 @@ table.mck td.center{text-align:center;font-weight:600}
 
 table.mck caption{caption-side:top;text-align:left;font-size:11px;color:var(--deep-slate);font-weight:700;margin-bottom:4px}
 
+/* SEAT COLUMN — entity assignment per role in §11 team table */
+table.mck td.seat-fund{color:#31435B;font-weight:700;white-space:nowrap}
+table.mck td.seat-holdco{color:#2E7780;font-weight:700;white-space:nowrap}
+table.mck td.seat-opco{color:#9A6B3E;font-weight:700;white-space:nowrap}
+table.mck td.seat-opco .seat-flag{display:inline-block;background:#9A6B3E;color:#fff;font-size:8.5px;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;padding:1px 5px;border-radius:2px;margin-left:4px;vertical-align:1px}
+table.mck td.seat-external{color:#7B8590;font-style:italic;white-space:nowrap}
+
 /* HEAT MAP — ported from docs/game-selection-framework.html */
 table.mck.heat tr:nth-child(even) td{background:transparent}
 table.mck.heat td.h5{background:#2E7780!important;color:#fff!important}
@@ -1551,27 +1558,27 @@ table.mck.capital-sources tbody tr.killer td.name{border-left:4px solid var(--pe
 
   <table class="mck">
 
-    <thead><tr><th style="width:5%">#</th><th style="width:22%">Role</th><th style="width:12%">FTE</th><th>Function</th></tr></thead>
+    <thead><tr><th style="width:5%">#</th><th style="width:22%">Role</th><th style="width:11%">FTE</th><th style="width:13%">Seat</th><th>Function</th></tr></thead>
 
     <tbody>
 
-      <tr><td class="idx">1</td><td class="name">GP + studio-lead</td><td>1</td><td>Capital allocation, LP relationships, M&amp;A negotiation, governance across studio portfolio</td></tr>
+      <tr><td class="idx">1</td><td class="name">GP + studio-lead</td><td>1</td><td class="seat-fund">Fund</td><td>Capital allocation, LP relationships, M&amp;A negotiation, governance across studio portfolio</td></tr>
 
-      <tr><td class="idx">2</td><td class="name">GP partner</td><td>1</td><td>Operating-side counterbalance; integration discipline; vertical strategy</td></tr>
+      <tr><td class="idx">2</td><td class="name">GP partner</td><td>1</td><td class="seat-fund">Fund</td><td>Operating-side counterbalance; integration discipline; vertical strategy</td></tr>
 
-      <tr><td class="idx">3</td><td class="name">AI Engineering Lead</td><td>1</td><td>Enterprise-productisation background (Sierra / Glean / Harvey / Anthropic enterprise track); production-grade evals, observability, integration patterns. Heads shared AI Engineering team across portfolio</td></tr>
+      <tr><td class="idx">3</td><td class="name">AI Engineering Lead</td><td>1</td><td class="seat-holdco">HoldCo</td><td>Enterprise-productisation background (Sierra / Glean / Harvey / Anthropic enterprise track); production-grade evals, observability, integration patterns. Heads shared AI Engineering team across portfolio</td></tr>
 
-      <tr><td class="idx">4</td><td class="name">Searcher-CEO per platform</td><td>1 per vertical</td><td>Anchor operator inside the platform; equity + carry compensation; runs OpCo day-to-day; orchestrates bolt-ons</td></tr>
+      <tr><td class="idx">4</td><td class="name">Searcher-CEO per platform</td><td>1 per vertical</td><td class="seat-opco">OpCo<span class="seat-flag">not fund payroll</span></td><td>Anchor operator inside the platform; equity + carry compensation; runs OpCo day-to-day; orchestrates bolt-ons</td></tr>
 
-      <tr><td class="idx">5</td><td class="name">Vertical Lead (operator-in-residence)</td><td>1 per active vertical</td><td>Ex-CEO from $20–80M revenue OpCo in vertical; AI uplift KPI definition; seller credibility; pilot delivery</td></tr>
+      <tr><td class="idx">5</td><td class="name">Vertical Lead (operator-in-residence)</td><td>1 per active vertical</td><td class="seat-holdco">HoldCo</td><td>Ex-CEO from $20–80M revenue OpCo in vertical; AI uplift KPI definition; seller credibility; pilot delivery</td></tr>
 
-      <tr><td class="idx">6</td><td class="name">M&amp;A diligence + integration ops</td><td>2–3</td><td>Sourcing, QofE, 90-day post-close integration playbook execution</td></tr>
+      <tr><td class="idx">6</td><td class="name">M&amp;A diligence + integration ops</td><td>2–3</td><td class="seat-holdco">HoldCo</td><td>Sourcing, QofE, 90-day post-close integration playbook execution</td></tr>
 
-      <tr><td class="idx">7</td><td class="name">Data Analyst</td><td>1</td><td>Cross-OpCo measurement, AI uplift verification, dashboards</td></tr>
+      <tr><td class="idx">7</td><td class="name">Data Analyst</td><td>1</td><td class="seat-holdco">HoldCo</td><td>Cross-OpCo measurement, AI uplift verification, dashboards</td></tr>
 
-      <tr><td class="idx">8</td><td class="name">Vertical M&amp;A advisor</td><td>External retainer</td><td>Proprietary deal flow; market intelligence; co-exclusive arrangement</td></tr>
+      <tr><td class="idx">8</td><td class="name">Vertical M&amp;A advisor</td><td>External retainer</td><td class="seat-external">External</td><td>Proprietary deal flow; market intelligence; co-exclusive arrangement</td></tr>
 
-      <tr><td class="idx">9</td><td class="name">Independent board director</td><td>External</td><td>Ex-partner from documented operating-Holdco PE firm; PE-to-PE recap intelligence</td></tr>
+      <tr><td class="idx">9</td><td class="name">Independent board director</td><td>External</td><td class="seat-external">External</td><td>Ex-partner from documented operating-Holdco PE firm; PE-to-PE recap intelligence</td></tr>
 
     </tbody>
 
