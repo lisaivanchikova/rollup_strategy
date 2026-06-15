@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Support-Process Competitive Landscape · AI-Integrator Roll-Up</title>
+<style>
+:root{
+  --deep-slate:#31435B;
+  --petrol-teal:#2E7780;
+  --soft-steel:#A9C5D6;
+  --silver-mist:#DCE5EC;
+  --near-black:#151A1F;
+  --cool-gray:#C9D2DC;
+  --off-white:#FAF9F6;
+  --rule:#D8DEE5;
+  --shade-1:#F4F2EE;
+  --accent:#2E7780;
+  --warn:#C5874A;
+  --reject:#7A3030;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--off-white);color:var(--near-black);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.55;letter-spacing:-0.005em;-webkit-font-smoothing:antialiased}
+a{color:var(--petrol-teal);text-decoration:none;border-bottom:1px solid rgba(46,119,128,0.3)}
+a:hover{border-bottom-color:var(--petrol-teal)}
+.page{max-width:1180px;margin:0 auto;padding:48px 72px 56px;border-bottom:1px solid var(--rule);background:var(--off-white)}
+.page:first-of-type{padding-top:90px}
+.eyebrow{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;margin-bottom:12px}
+.eyebrow .num{color:var(--deep-slate);font-weight:700;margin-right:10px}
+.eyebrow .part{display:inline-block;background:var(--silver-mist);color:var(--deep-slate);padding:2px 8px;border-radius:2px;margin-right:10px;font-size:9.5px;letter-spacing:0.14em}
+h1.action{font-size:26px;line-height:1.22;font-weight:700;color:var(--deep-slate);letter-spacing:-0.018em;margin-bottom:14px;max-width:980px}
+h2.subhead{font-size:18px;font-weight:700;color:var(--deep-slate);margin:18px 0 8px;line-height:1.3}
+h3.sub{font-size:12px;font-weight:700;color:var(--deep-slate);text-transform:uppercase;letter-spacing:0.08em;margin:22px 0 8px}
+p.body{font-size:13.5px;line-height:1.6;color:var(--near-black);margin-bottom:8px;max-width:960px}
+p.body b{color:var(--deep-slate)}
+ul.body{font-size:13.5px;line-height:1.6;color:var(--near-black);margin:6px 0 12px 20px;max-width:960px}
+ul.body li{margin-bottom:4px}
+ul.body li b{color:var(--deep-slate)}
+.lead{font-size:14.5px;line-height:1.55;color:var(--near-black);margin-bottom:14px;max-width:980px}
+.lead b{color:var(--deep-slate)}
+.src{font-size:10.5px;letter-spacing:0.02em;color:#7B8590;margin-top:8px;line-height:1.45;max-width:960px}
+.src a{color:#5A6A78;border-bottom-color:rgba(90,106,120,0.4)}
+.callout{border:1px solid var(--cool-gray);background:#FDFCFA;padding:14px 20px;margin:12px 0;border-left:3px solid var(--petrol-teal);max-width:980px}
+.callout .h{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700;margin-bottom:6px}
+.callout p{font-size:12.5px;line-height:1.55;color:var(--near-black)}
+table.mck{width:100%;border-collapse:collapse;background:#fff;font-size:11.5px;margin:10px 0 8px}
+table.mck th{background:var(--deep-slate);color:#fff;text-align:left;padding:8px 10px;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;border-right:1px solid #3D506B;vertical-align:top}
+table.mck th:last-child{border-right:none}
+table.mck td{padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45}
+table.mck tr:nth-child(even) td{background:var(--shade-1)}
+table.mck td.name{font-weight:700;color:var(--deep-slate)}
+table.mck td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.mck td.center{text-align:center;font-weight:600}
+table.mck caption{caption-side:top;text-align:left;font-size:11px;color:var(--deep-slate);font-weight:700;margin-bottom:4px}
+table.mck.heat tr:nth-child(even) td{background:transparent}
+table.mck.heat td.h5{background:#2E7780!important;color:#fff!important;text-align:center;font-weight:700}
+table.mck.heat td.h3{background:#A9C5D6!important;color:var(--near-black)!important;text-align:center;font-weight:600}
+table.mck.heat td.h1{background:#F0F2F5!important;color:#5A6470!important;text-align:center}
+table.mck.heat td.oos{background:#EBE6DC!important;color:#6B6256!important;text-align:center;font-style:italic;border-left:2px solid var(--cool-gray)}
+.tag-pass{display:inline-block;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 8px;border-radius:2px;font-weight:700;background:#E1F0EE;color:var(--accent)}
+.tag-rej{display:inline-block;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 8px;border-radius:2px;font-weight:700;background:#EDD4D4;color:var(--reject)}
+.tag-warn{display:inline-block;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 8px;border-radius:2px;font-weight:700;background:#F5E8D5;color:var(--warn)}
+.cover{min-height:46vh;padding-top:60px}
+.cover h1{font-size:38px;line-height:1.1;font-weight:700;letter-spacing:-0.022em;color:var(--deep-slate);margin:24px 0 14px;max-width:980px}
+.cover .deck{font-size:15.5px;color:#3F4A57;max-width:880px;line-height:1.55}
+.cover .meta{display:flex;gap:48px;margin-top:38px;font-size:12px;color:#5A6470;border-top:1px solid var(--rule);padding-top:18px}
+.cover .meta .label{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--petrol-teal);font-weight:600;display:block;margin-bottom:4px}
+.cover .meta .v{font-size:13px;color:var(--near-black);font-weight:600}
+@media print{body{font-size:10px}.page{padding:26px 32px;max-width:none;page-break-after:always}.cover{min-height:auto}table.mck th{background:var(--deep-slate)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.callout{page-break-inside:avoid}table.mck.heat td.h5,table.mck.heat td.h3,table.mck.heat td.h1,table.mck.heat td.oos{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<section class="page cover">
+  <div class="eyebrow"><span class="part">Competitive Intelligence</span>Support-Process Roll-Up</div>
+  <h1>Competitive Landscape — AI-Integrator Roll-Ups in Support-Process Verticals</h1>
+  <div class="deck">Companion to the Roll-up Studio Strategy. Maps the operators who buy SMB businesses and embed proprietary AI inside them. From an initial scan of 43 adjacent players, seven pass the purebred-competitor filter; five operate at adjacent scale; three sit inside the support-process opportunity space.</div>
+  <div class="meta">
+    <div><span class="label">Universe scanned</span><div class="v">43 companies</div></div>
+    <div><span class="label">Purebred competitors</span><div class="v">7</div></div>
+    <div><span class="label">Tier 1 deep dives</span><div class="v">5</div></div>
+    <div><span class="label">Capital deployed (core 7)</span><div class="v">~$3.4B (24 mo)</div></div>
+    <div><span class="label">Edge half-life</span><div class="v">12–24 months</div></div>
+  </div>
+</section>
+
+<section class="page" id="s01">
+  <div class="eyebrow"><span class="part">Methodology</span><span class="num">01</span>Inclusion criteria</div>
+  <h1 class="action">Three hard tests separate true AI-integrator roll-ups from adjacent noise: buys operators, integrates AI inside them, and runs a HoldCo (or three-entity) structure.</h1>
+
+  <p class="lead">A prior draft of this landscape listed 43 companies. The audit re-applied three filters from the AI-Native Operating HoldCo definition. Only <b>seven survived</b> all three. The other 36 are retained as context in four appendix buckets — Disruption Watchlist, Capital Ecosystem, Structural References, Adjacent Ecosystem — each labelled with the explicit reason it is not a competitor.</p>
+
+  <h3 class="sub">The three filters</h3>
+  <table class="mck">
+    <thead><tr><th style="width:18%">Filter</th><th>Requirement</th><th>What it excludes</th></tr></thead>
+    <tbody>
+      <tr><td class="name">F1 · Buys operators</td><td>Acquires going-concern SMB operating businesses in a vertical and owns them on balance sheet.</td><td>Vertical AI SaaS vendors that sell software <em>to</em> regulated industries (Harvey, Sierra, Decagon, Hippocratic, Glean, Hebbia, Cresta, Eudia-as-product).</td></tr>
+      <tr><td class="name">F2 · AI inside</td><td>Embeds proprietary AI tooling inside each portfolio company to drive productivity uplift in the existing workflow.</td><td>AI consulting / FDE shops that deliver AI <em>to</em> third-party customers (Distyl, BCG X, McKinsey QB, Accenture Song, OpenAI DeployCo).</td></tr>
+      <tr><td class="name">F3 · HoldCo structure</td><td>Either explicit three-entity Fund + AI-Integration Co + HoldCo, or a single operating HoldCo with an AI thesis.</td><td>Classical software holdcos without an integrated AI thesis (Constellation, Banyan, Roper, Permanent Equity, CODI).</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Why the demotions matter</h3>
+  <ul class="body">
+    <li><b>Distyl AI</b> — earlier rankings placed Distyl as a Tier-1 competitor. It is AI consulting / services for Fortune 500 and does not acquire operators. Risk that its sponsors spin up an adjacent acquisition vehicle within 12–18 months is tracked on the Watchlist; today it is not a direct competitor.</li>
+    <li><b>Trilogy / ESW (Joe Liemandt)</b> — classical software PE with wage-arbitrage delivery and AI overlay. Buys B2B software, not SMB operators. Structural reference for the perpetual-capital model, not a roll-up of operators.</li>
+    <li><b>Eudia, Accrual, Beacon Software</b> — vertical AI SaaS sold <em>to</em> regulated industries, not roll-ups of them. Disruption signal, not direct competitor.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="h">v4 reclassification summary</div>
+    <p><b>43 companies scanned · 7 pass all three filters · 5 deep-dived (Tier 1) · 2 partial-fit (Tier 2) · 36 reclassified into appendix categories.</b> The competitive landscape is materially smaller and more concentrated than the prior 43-company headline implied.</p>
+  </div>
+</section>
+
+<section class="page" id="s02">
+  <div class="eyebrow"><span class="part">Tier 1 — purebred</span><span class="num">02</span>Five operators at adjacent scale</div>
+  <h1 class="action">Five operators run the AI-Native Operating HoldCo mechanic at adjacent scale. Vertical concentration is high: each is anchored in one vertical, with two sponsors funding four of the five.</h1>
+
+  <h3 class="sub">Tier 1 — purebred competitors (5/5 architectural fit)</h3>
+  <table class="mck">
+    <thead><tr><th style="width:18%">Operator</th><th style="width:13%">Capital raised</th><th style="width:20%">Primary vertical</th><th style="width:13%">Sponsor</th><th>AI mechanic and business model</th></tr></thead>
+    <tbody>
+      <tr><td class="name">General Catalyst Creation</td><td class="num">$1.5B of $8B Fund XII</td><td>Multi-vertical NewCo studio</td><td>General Catalyst</td><td>Codified $1.5B NewCo studio that established the category. Build AI software first, then acquire operators underneath. 10+ active NewCos across legal, IT, accounting, property management, healthcare.</td></tr>
+      <tr><td class="name">Thrive Holdings</td><td class="num">Embedded inside Thrive Capital</td><td>Multi-vertical HoldCo with OpenAI partnership</td><td>Thrive Capital</td><td>December 2025 OpenAI equity partnership embeds engineers inside each Holdings portco. Crete (accounting) and Shield (MSP) are the two operating arms; further verticals telegraphed.</td></tr>
+      <tr><td class="name">Long Lake Management</td><td class="num">$1.28B (NewCo total)</td><td>HOA + adjacent residential property management</td><td>General Catalyst</td><td>Stayed primarily in HOA and adjacent residential for its first ~18 acquisitions. AI uplift documented at 25–30% per FTE; integration cadence compressed from years to days. May 2026 take-private of Amex Global Business Travel at $6.3B EV (12× EBITDA, 60.2% premium) proves the HoldCo mechanic scales to public-company acquisitions.</td></tr>
+      <tr><td class="name">Shield Technology Partners</td><td class="num">~$200M across two rounds</td><td>MSP / IT services</td><td>Thrive Holdings + ZBS + OpenAI</td><td>"Palantir-of-MSPs" framing. Sentinel (ticket triage) and Spectre (auto-resolution) built in-house — proprietary, not licensed to non-Shield MSPs. Median ticket resolution time cut >50%. ~15 MSPs acquired; $100M+ annual revenue reported.</td></tr>
+      <tr><td class="name">Titan</td><td class="num">$74M Series A</td><td>FS-focused MSP / IT services</td><td>General Catalyst</td><td>"Augmented AI" platform automates up to 30% of client IT workloads. Anchor acquisition of RFA ($74M revenue, 400+ financial-services clients, ~250–300 FTEs).</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Tier 2 — vertical playbooks (4/5 architectural fit)</h3>
+  <table class="mck">
+    <thead><tr><th style="width:18%">Operator</th><th style="width:13%">Capital raised</th><th style="width:20%">Primary vertical</th><th style="width:13%">Sponsor</th><th>AI mechanic and business model</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Current (formerly Crete Professionals Alliance)</td><td class="num">$500M deployment budget</td><td>CPA / Accounting</td><td>Thrive Holdings + ZBS</td><td>30+ accounting firms, $300M+ revenue, 900+ team, 17 offices. Alliance structure navigates state-board ownership rules in accounting. OpenAI custom accounting models for data mapping and memo writing via the Thrive-OpenAI partnership; 31% time savings on Tax AI workflows publicly reported.</td></tr>
+      <tr><td class="name">Smarter Technologies / NMC <span class="tag-rej">Failure-mode case</span></td><td class="num">$1B+ combined</td><td>Healthcare RCM</td><td>Multiple sponsors</td><td>May 2025 three-way combination of SmarterDx + Access Healthcare + Thoughtful.ai. CEO departed at month 7 (Becker's, Modern Healthcare, December 2025). Instructive failure-mode case for the inverse mechanic: acquire portfolio first, integrate AI later, without a productivity gate at acquisition.</td></tr>
+    </tbody>
+  </table>
+  <div class="src">Sources: BusinessWire, PR Newswire, Skift (Amex GBT take-private), Channelholic, SiliconAngle, Becker's Hospital Review, Modern Healthcare, TechCrunch, Bloomberg, Sacra, OpenAI blog, Bessemer "Vertical AI" January 2026, PitchBook private multiples Q4 2025.</div>
+</section>
+
+<section class="page" id="s03">
+  <div class="eyebrow"><span class="part">Vertical map</span><span class="num">03</span>Support-process coverage heatmap</div>
+  <h1 class="action">Inside the eight support-process families that anchor the Roll-up Studio thesis, only two verticals (Accounting and IT/MSP) have direct AI-integrator competitors at scale. Five families remain structurally uncontested.</h1>
+
+  <p class="lead">The heatmap maps each operator against the eight support-process verticals plus two out-of-scope reference verticals (HOA, Healthcare RCM) where the archetype validators sit. Active = scaled operating presence; Adjacent = telegraphed entry or minor exposure; Not active = no presence identified.</p>
+
+  <table class="mck heat" style="font-size:10.5px">
+    <caption>Operator × support-process coverage (5 operators × 8 support-process verticals + 2 out-of-scope reference verticals)</caption>
+    <thead><tr>
+      <th style="width:14%">Operator</th>
+      <th class="center" style="width:8%">Accounting</th>
+      <th class="center" style="width:8%">IT / MSP</th>
+      <th class="center" style="width:8%">HR / Recruiting</th>
+      <th class="center" style="width:8%">Legal back-office</th>
+      <th class="center" style="width:8%">Marketing</th>
+      <th class="center" style="width:8%">Translation</th>
+      <th class="center" style="width:8%">Collections</th>
+      <th class="center" style="width:8%">Telemarketing</th>
+      <th class="center" style="width:8%;border-left:2px solid var(--cool-gray)">HOA (oos)</th>
+      <th class="center" style="width:8%">Healthcare RCM (oos)</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="name">Shield Technology Partners</td><td class="h1">—</td><td class="h5">Active</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="oos">—</td><td class="oos">—</td></tr>
+      <tr><td class="name">Titan</td><td class="h1">—</td><td class="h5">Active</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="oos">—</td><td class="oos">—</td></tr>
+      <tr><td class="name">Current (Crete)</td><td class="h5">Active</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="oos">—</td><td class="oos">—</td></tr>
+      <tr><td class="name">Long Lake Management <span class="tag-pass">Validator</span></td><td class="h1">—</td><td class="h1">—</td><td class="h3">Telegraphed</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="oos" style="background:#2E7780!important;color:#fff!important;font-style:normal">Active</td><td class="oos">—</td></tr>
+      <tr><td class="name">Smarter Technologies / NMC <span class="tag-rej">Inverse</span></td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="h1">—</td><td class="oos">—</td><td class="oos" style="background:#2E7780!important;color:#fff!important;font-style:normal">Active</td></tr>
+    </tbody>
+  </table>
+  <p class="body" style="font-size:11px;color:#5A6470;margin-top:8px">Five operators cluster in four distinct verticals. Five of the eight support-process families (HR / Recruiting, Legal back-office, Marketing, Translation, Collections, Telemarketing) currently have no direct AI-integrator competitor at scale. Long Lake has publicly telegraphed entry into HR services (WSJ, January 2025); column rendered as adjacent.</p>
+
+  <h3 class="sub">What the heatmap implies</h3>
+  <ul class="body">
+    <li><b>MSP / IT — competitive.</b> Two well-funded operators (Shield $200M, Titan $74M) backed by the dominant sponsors, racing on an identical mechanic.</li>
+    <li><b>Accounting — occupied.</b> Current (Crete) deploys $500M with an OpenAI tech partnership at the sub-$100M-revenue tier. Further entry requires structural differentiation, not scale.</li>
+    <li><b>HR · Legal back-office · Marketing · Translation · Collections · Telemarketing — white space.</b> No direct AI-integrator competitor at scale operating an AI-Native HoldCo in these verticals. The support-process thesis here is structurally less crowded.</li>
+    <li><b>HOA, Healthcare RCM — out of scope but instructive.</b> Long Lake validates the mechanic at scale; Smarter Tech validates the failure mode of the inverse cadence.</li>
+  </ul>
+</section>
+
+<section class="page" id="s04">
+  <div class="eyebrow"><span class="part">Sponsor concentration</span><span class="num">04</span>Two sponsors fund four of five operators</div>
+  <h1 class="action">General Catalyst and Thrive Holdings fund four of the five Tier-1 / Tier-2 operators. MSP has a GC-vs-Thrive race; accounting is the dominant Thrive-OpenAI vehicle.</h1>
+
+  <table class="mck">
+    <thead><tr><th style="width:20%">Sponsor</th><th>Operators backed</th><th>Vertical exposure</th></tr></thead>
+    <tbody>
+      <tr><td class="name">General Catalyst (Creation sleeve, $1.5B of $8B Fund XII)</td><td>Long Lake, Titan, GC Creation NewCo studio</td><td>HOA / residential PM (Long Lake), FS-focused MSP / IT (Titan), plus eight additional GC Creation NewCos including healthcare (HATCo), legal (Eudia), accounting (Accrual), property management (Dwelly), customer experience (Crescendo).</td></tr>
+      <tr><td class="name">Thrive Holdings (within Thrive Capital, OpenAI equity partner)</td><td>Shield Technology Partners, Current (Crete)</td><td>MSP / IT (Shield) and CPA / Accounting (Current). Single Thrive-OpenAI engineering capacity allocated across both verticals.</td></tr>
+      <tr><td class="name">Multiple / independent</td><td>Smarter Technologies / NMC</td><td>Healthcare RCM combination of three pre-existing AI-tooling companies.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="h">Concentration signal</div>
+    <p>One vertical (MSP / IT) hosts competing GC-backed and Thrive-backed operators racing on an identical mechanic — a strong but possibly saturating market signal. Accounting is structurally claimed by Current/Crete through the Thrive-OpenAI partnership. The other support-process verticals have no analogous sponsor competition yet.</p>
+  </div>
+
+  <h3 class="sub">OpenAI as embedded engineering capacity</h3>
+  <p class="body">The December 2025 OpenAI equity stake in Thrive Capital embeds OpenAI researchers, PMs, and engineers inside Thrive Holdings portcos at zero incremental capital cost to the operator. This compresses the AI build cost for Crete and Shield specifically. Equivalent partnerships with Anthropic, Google Cloud, Meta, or xAI are not in place for the other operators in this set — those lanes remain open.</p>
+  <div class="src">OpenAI blog (December 2025), Sourcery VC podcast, The Information, Bloomberg.</div>
+</section>
+
+<section class="page" id="s05">
+  <div class="eyebrow"><span class="part">Archetype validators</span><span class="num">05</span>Long Lake and Smarter Technologies</div>
+  <h1 class="action">Long Lake validates the AI-Native HoldCo mechanic at $6.3B exit scale. Smarter Technologies / NMC validates the failure mode of the inverse cadence. Both operate in verticals out of scope for the support-process thesis but inform mechanism design.</h1>
+
+  <h3 class="sub">Long Lake Management Holdings — positive validator</h3>
+  <p class="body">$1.28B raised across the NewCo. Stayed primarily in HOA and adjacent residential property management for the first ~18 acquisitions. Internal AI platform (Nexus) is approximately 80% horizontal and 20% vertical, model-agnostic. Documented uplift: 25–30% per-FTE productivity, integration cadence compressed from years to days.</p>
+  <p class="body"><b>Killer data point:</b> May 2026 agreement to take Amex Global Business Travel private at $6.3B EV — 12× EBITDA, 60.2% premium to public price. Proves the AI-rollup HoldCo mechanic can scale to public-company acquisition size. Reported in Skift, Reuters, BusinessWire.</p>
+
+  <h3 class="sub">Smarter Technologies / NMC — failure-mode case</h3>
+  <p class="body">May 2025 three-way combination of SmarterDx (clinical AI), Access Healthcare (RCM operations), and Thoughtful.ai (RPA / agents). Effectively a multi-asset combination of pre-existing AI tools without integration discipline. CEO out at month 7 — reported in Becker's Hospital Review and Modern Healthcare (December 2025).</p>
+  <p class="body"><b>What the case demonstrates:</b> the inverse cadence — acquire the portfolio first and deploy AI afterward — without an explicit productivity gate at acquisition produces measurable execution risk inside the first year. A negative reference for any HoldCo design that relies on post-acquisition AI deployment to justify multiple arbitrage.</p>
+  <div class="src">Becker's Hospital Review (December 2025), Modern Healthcare (December 2025), Skift (May 2026), Reuters (May 2026), BusinessWire (May 2026), PitchBook.</div>
+</section>
+
+<section class="page" id="s06">
+  <div class="eyebrow"><span class="part">Patterns</span><span class="num">06</span>Five structural patterns</div>
+  <h1 class="action">Five structural patterns appear across the Tier-1 operators. Each pattern is a design choice in the AI-Native HoldCo archetype; each has visible variants across the operator set.</h1>
+
+  <h3 class="sub">Pattern 1 — Permanent capital as structural moat</h3>
+  <p class="body">Thrive Holdings and Trilogy/ESW (structural reference) and Long Lake all use perpetual-capital structures. GC Creation has publicly discussed adding a permanent vehicle in Fund XIII. The reasoning: 10-year LP fund mechanics force-sell HoldCos at year 8, compressing compound value before the AI uplift fully realises.</p>
+
+  <h3 class="sub">Pattern 2 — Talent concentration in a single network</h3>
+  <p class="body">The "Palantir mafia" recurs as the talent pool for AI Engineering Lead and Forward-Deployed Engineer (FDE) roles across multiple operators. Pedigree pattern at AI lead roles: 8–13 years of Palantir Forward-Deployed Engineering tenure, often a former Palantir CIO or product lead, sometimes a Palantir BD lead who built Foundry commercial.</p>
+
+  <h3 class="sub">Pattern 3 — Frontier-model partnerships, not generic API consumption</h3>
+  <p class="body">OpenAI took equity in Thrive Capital in December 2025, embedding researchers and engineers inside Crete and Shield. Distyl runs the OpenAI Services Alliance since 2023. GC Creation uses Mistral as a default model across portcos. Each operator has a primary frontier-model relationship; Anthropic enterprise and xAI lanes remain open across the set.</p>
+
+  <h3 class="sub">Pattern 4 — 60–90% acquisition with seller rollover is standard</h3>
+  <p class="body">Shield acquires 60–90% with 10–40% rollover. Long Lake universally retains founders / CEOs. Current/Crete retains partner-firm brand and local autonomy. Marc Bhargava (GC) has publicly framed 30% seller rollover as "the key differentiator versus traditional PE." Standard earn-out window across the set: 12–24 months.</p>
+
+  <h3 class="sub">Pattern 5 — Captive AI tooling, not licensed SaaS</h3>
+  <p class="body">Sentinel and Spectre (Shield) are platform-owned, not available to non-Shield MSPs. Distillery and Context Mesh (Distyl) are Palantir Foundry Ontology analogues, owned. Nexus AI (Long Lake) is ~80% horizontal / 20% vertical, model-agnostic. The pattern across the set: own the tooling layer, lease the models.</p>
+
+  <h3 class="sub">Pattern 6 — Vertical specialisation beats horizontal scale in early platform years</h3>
+  <p class="body">Shield's strongest sub-segments are vertical-specialised: dental practices, energy-sector IT, biotech / financial-services IT. Long Lake is HOA-only. Current/Crete is accounting-only. Joe Liemandt's Trilogy / ESW (75–100 acquisitions across software) is the exception, not the rule. Vertical-niche beats horizontal scale in years 1–3.</p>
+</section>
+
+<section class="page" id="s07">
+  <div class="eyebrow"><span class="part">Failure modes</span><span class="num">07</span>Thrasio and OpenStore — five lessons for HoldCo design</div>
+  <h1 class="action">Thrasio raised $3B+ and filed Chapter 11 in February 2024 at a $10B peak valuation. OpenStore went from $970M to ~$50M. Both Amazon FBA aggregators. Five lessons translate directly to any AI-integrator HoldCo design.</h1>
+
+  <ol class="body" style="margin-left:20px">
+    <li style="margin-bottom:10px"><b>Deferred-payment acquisitions create earnings-recursion risk.</b> Thrasio paid sellers in 2–3 year tranches contingent on portco performance. When pandemic-era e-commerce demand normalised, the tranches could not be funded. Upfront cash plus earn-out on organic-growth metrics is the safer structure.</li>
+    <li style="margin-bottom:10px"><b>No operational moat means no roll-up.</b> Amazon FBA brands had no defensible technology layer. Each brand was independently buyable. Vertical AI built inside the operator is the moat that makes the HoldCo defensible.</li>
+    <li style="margin-bottom:10px"><b>Capital availability is not thesis validation.</b> 2020–21 easy money funded the aggregator boom; subsequent rate hikes killed it. Any HoldCo design needs to clear a 5%+ Fed-funds environment from formation.</li>
+    <li style="margin-bottom:10px"><b>Multiple compression works only with operational uplift.</b> Thrasio paid 4–5× EBITDA and got nothing structural in return. Sub-$1M EBITDA insurance-brokerage arbitrage 5× → 11–16× requires AI margin uplift backing the multiple expansion, not financial engineering alone.</li>
+    <li><b>Single-platform concentration is a single point of failure.</b> Diversification across multiple support-process verticals — even a small number — is structurally safer than concentration in one operator type.</li>
+  </ol>
+</section>
+
+<section class="page" id="s08">
+  <div class="eyebrow"><span class="part">Sources</span><span class="num">08</span>External press and analyst coverage</div>
+  <h1 class="action">All figures and claims in this document are sourced from publicly available press, analyst reports, and regulatory filings. No internal Bobroff Cap analysis or proprietary intelligence is reproduced here.</h1>
+
+  <p class="body"><b>Press:</b> BusinessWire · PR Newswire · Reuters · Skift (Amex GBT take-private, May 2026) · TechCrunch · Bloomberg · CNBC · WSJ (Long Lake HR signal, January 2025) · Fortune · Becker's Hospital Review (Smarter Tech CEO departure, December 2025) · Modern Healthcare (December 2025) · Channelholic · SiliconAngle · DigitalApplied · SaaStr · Skift.</p>
+
+  <p class="body"><b>Analyst and research:</b> PitchBook private multiples Q4 2025 · Damodaran public multiples January 2026 · Carta dilution dataset · Bessemer "Vertical AI" January 2026 · Sacra · CB Insights · Marketplace Pulse · Euclid Ventures · Sourcery VC podcast · The Information · Cognitive Revolution podcast · Capital and Clarity Substack · Newcomer.</p>
+
+  <p class="body"><b>Filings and official:</b> SEC filings · Form 10-K / 10-Q / 8-K filings of public parents · OpenAI corporate blog (December 2025 Thrive equity partnership) · Mark Leonard annual letters (Constellation reference) · a16z services-led-growth analyses · AI Rollup Investor Sentiment Report 2026.</p>
+
+  <div class="src">Companion document to the Roll-up Studio Strategy. Sanitised for external distribution: internal positioning, role-map hiring intelligence, sponsor escalation triggers, and tactical counter-moves are kept in the internal v4 working file and not reproduced here.</div>
+</section>
+
+</body>
+</html>
