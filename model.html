@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MSP Roll-up Financial Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --slate: #31435B; --teal: #2E7780; --steel: #A9C5D6; --mist: #DCE5EC;
+  --near-black: #151A1F; --cool-gray: #C9D2DC; --off-white: #FAF9F6;
+  --bg-cream: #FAF9F6; --border: #C9D2DC; --light-border: #E4E9EE;
+  --muted: #7A8896; --pos: #2E7780;
+  --flag: #31435B; --flag-bg: rgba(49,67,91,0.06); --flag-text: #1F2A3B;
+}
+body { background: var(--bg-cream); color: var(--near-black); font-family: 'Inter', sans-serif; font-size: 13px; min-height: 100vh; }
+
+/* HEADER — sticky top */
+.header { background: #fff; border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; position: sticky; top: 0; z-index: 100; height: 61px; }
+.logo-block { display: flex; align-items: baseline; gap: 14px; }
+.logo { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.04em; color: var(--slate); }
+.tagline { font-family: 'DM Sans', sans-serif; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+.be-badge { padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 500; border: 1px solid var(--border); color: var(--muted); background: var(--off-white); white-space: nowrap; font-family: 'DM Sans', sans-serif; }
+
+/* SHELL — grid */
+.shell { display: grid; grid-template-columns: 340px 1fr; align-items: start; }
+
+/* SIDEBAR — sticky, own scroll */
+.sidebar { background: #fff; border-right: 1px solid var(--border); padding: 18px 16px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 61px; height: calc(100vh - 61px); overflow-y: auto; }
+.sidebar > * { flex-shrink: 0; }
+
+/* CONTENT — right panel */
+.content { padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; min-height: calc(100vh - 61px); }
+
+/* SECTION LABEL + pills in sidebar */
+.sec-label { font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+.sec-label .pin { font-size: 9px; padding: 2px 6px; border-radius: 10px; background: var(--mist); color: var(--slate); letter-spacing: 0.05em; }
+.pills { display: flex; flex-direction: column; gap: 5px; }
+.pill { padding: 9px 12px; border-radius: 7px; cursor: pointer; font-size: 12px; border: 1px solid var(--border); color: var(--muted); background: transparent; text-align: left; display: flex; justify-content: space-between; align-items: center; line-height: 1.4; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+.pill:hover { border-color: var(--slate); color: var(--near-black); background: rgba(49,67,91,0.04); }
+.pill.active { border-color: var(--slate); color: var(--slate); background: rgba(49,67,91,0.07); font-weight: 500; }
+.pill > span { display: flex; flex-direction: column; gap: 1px; }
+.pill-name { font-weight: 500; display: block; }
+.pill-sub { font-size: 10px; color: var(--muted); margin-top: 1px; font-weight: 400; display: block; }
+
+/* SLIDER controls */
+.slider-label-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+.slider-name { font-size: 11px; color: var(--muted); }
+.slider-val { font-size: 12px; font-weight: 500; color: var(--near-black); font-family: 'DM Sans', sans-serif; font-variant-numeric: tabular-nums; }
+input[type=range] { -webkit-appearance: none; width: 100%; height: 3px; background: var(--border); border-radius: 2px; outline: none; cursor: pointer; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--teal); cursor: pointer; box-shadow: 0 0 0 3px rgba(46,119,128,0.15); }
+input[type=range]::-moz-range-thumb { width: 13px; height: 13px; border-radius: 50%; background: var(--teal); cursor: pointer; border: none; box-shadow: 0 0 0 3px rgba(46,119,128,0.15); }
+input[type=range].flag-slider::-webkit-slider-thumb { background: var(--flag); box-shadow: 0 0 0 3px rgba(49,67,91,0.18); }
+input[type=range].flag-slider::-moz-range-thumb { background: var(--flag); box-shadow: 0 0 0 3px rgba(49,67,91,0.18); }
+
+/* RESET */
+.reset-btn { margin-top: 4px; padding: 8px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 7px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.04em; text-align: center; font-weight: 500; }
+.reset-btn:hover { border-color: var(--slate); color: var(--slate); }
+
+/* SUBBLOCK (collapsible sidebar groups) */
+.subblock { background: var(--off-white); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.subblock > summary { padding: 10px 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--near-black); font-weight: 700; letter-spacing: 0.04em; display: flex; align-items: center; gap: 8px; user-select: none; list-style: none; }
+.subblock > summary::-webkit-details-marker { display: none; }
+.subblock > summary::before { content: '▸'; font-size: 10px; color: var(--teal); transition: transform 0.15s; }
+.subblock[open] > summary::before { transform: rotate(90deg); }
+.subblock[open] > summary { border-bottom: 1px solid var(--light-border); background: #fff; }
+.subblock .sb-body { padding: 12px; display: flex; flex-direction: column; gap: 10px; background: #fff; }
+.subblock .sb-tag { font-family: 'DM Sans', sans-serif; font-size: 9px; padding: 2px 6px; border-radius: 8px; background: var(--mist); color: var(--slate); letter-spacing: 0.03em; margin-left: auto; }
+.subblock .sb-tag.flag { background: rgba(49,67,91,0.12); color: var(--flag); }
+.slider-name .flag-badge { display: inline-block; font-family: 'DM Sans', sans-serif; font-size: 8px; font-weight: 700; letter-spacing: 0.06em; padding: 1px 5px; border-radius: 6px; background: var(--flag); color: #fff; text-transform: uppercase; margin-left: 4px; }
+
+/* SECTION (main content) */
+.section { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.section > summary { padding: 14px 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--near-black); font-weight: 700; display: flex; align-items: center; gap: 10px; user-select: none; list-style: none; }
+.section-headline { font-family: 'Inter', sans-serif; font-weight: 700; color: var(--slate); font-size: 15px; text-transform: none; letter-spacing: 0; line-height: 1.4; }
+.section-num { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--teal); font-weight: 700; letter-spacing: 0.04em; margin-right: 2px; }
+.mini-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 800px) { .mini-grid-2 { grid-template-columns: 1fr; } }
+.section > summary::-webkit-details-marker { display: none; }
+.section > summary::before { content: '▸'; transition: transform 0.15s; font-size: 11px; color: var(--teal); }
+.section[open] > summary::before { transform: rotate(90deg); }
+.section[open] > summary { border-bottom: 1px solid var(--light-border); background: var(--off-white); }
+.section-body { padding: 18px 20px; }
+.section-meta { margin-left: auto; font-family: 'Inter', sans-serif; font-size: 11px; color: var(--muted); text-transform: none; font-weight: 400; }
+.section-meta strong { color: var(--near-black); font-weight: 500; }
+.section h4 { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate); font-weight: 700; margin: 20px 0 10px; }
+.section h4:first-child { margin-top: 0; }
+.section p { margin: 8px 0; color: var(--near-black); line-height: 1.55; }
+.section p + p { margin-top: 12px; }
+
+/* TABLES */
+.cmp-table, .pe-table, .pnl-table, .scen-table, .cap-table, .cost-table, .data { width: 100%; border-collapse: collapse; font-size: 11px; font-variant-numeric: tabular-nums; }
+.cmp-table thead th, .pe-table thead th, .pnl-table thead th, .scen-table thead th, .cap-table thead th, .cost-table thead th, .data thead th { text-align: right; font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 9px 10px; border-bottom: 1px solid var(--border); background: var(--off-white); }
+.cmp-table thead th:first-child, .pe-table thead th:first-child, .pnl-table thead th:first-child, .scen-table thead th:first-child, .cap-table thead th:first-child, .cost-table thead th:first-child, .data thead th:first-child { text-align: left; }
+.cmp-table tbody td, .pe-table tbody td, .pnl-table tbody td, .scen-table tbody td, .cap-table tbody td, .cost-table tbody td, .data tbody td { padding: 8px 10px; border-bottom: 1px solid var(--light-border); text-align: right; font-family: 'DM Sans', sans-serif; font-weight: 500; color: var(--near-black); }
+.cmp-table tbody td:first-child, .pe-table tbody td:first-child, .pnl-table tbody td:first-child, .scen-table tbody td:first-child, .cap-table tbody td:first-child, .cost-table tbody td:first-child, .data tbody td:first-child { text-align: left; font-family: 'Inter', sans-serif; color: var(--near-black); font-weight: 500; }
+.cmp-table tbody tr.s16vc td, .pe-table tbody tr.target-tier td { background: rgba(46,119,128,0.08); font-weight: 700; }
+.cmp-table tbody td .row-sub, .pe-table tbody td .row-sub, .data tbody td .row-sub { display: block; font-size: 9px; color: var(--muted); font-weight: 400; margin-top: 1px; }
+.data tbody tr.section-row td, .pnl-table tbody tr.section-row td { background: var(--mist); font-weight: 700; color: var(--slate); font-family: 'DM Sans', sans-serif; }
+.data tbody tr.total-row td, .pnl-table tbody tr.total-row td { border-top: 2px solid var(--slate); background: #fff; font-weight: 700; color: var(--slate); }
+.data tbody tr.subtotal-row td, .pnl-table tbody tr.subtotal-row td { font-weight: 700; color: var(--near-black); background: var(--off-white); }
+
+/* CALLOUTS */
+.callout { background: var(--mist); border-left: 3px solid var(--teal); padding: 12px 16px; border-radius: 4px; font-size: 12px; color: var(--near-black); line-height: 1.55; margin-bottom: 14px; }
+.callout strong { color: var(--slate); }
+.callout.warn { background: var(--off-white); border-left-color: var(--slate); }
+.callout.warn strong { color: var(--slate); }
+.callout:last-child { margin-bottom: 0; }
+
+/* ADVISOR-FLAG (red) */
+.advisor-flag { border-left: 3px solid var(--flag); background: var(--flag-bg); padding: 10px 14px; border-radius: 4px; margin: 8px 0; }
+.advisor-flag-badge { display: inline-block; font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 10px; background: var(--flag); color: #fff; text-transform: uppercase; margin-right: 8px; }
+.advisor-flag-note { font-family: 'Inter', sans-serif; font-size: 11.5px; color: var(--flag-text); margin-top: 4px; line-height: 1.5; }
+.advisor-stamp { display: inline-block; font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 10px; background: rgba(46,119,128,0.12); color: var(--teal); text-transform: uppercase; margin-left: 6px; }
+.advisor-stamp.flag { background: rgba(49,67,91,0.12); color: var(--flag); }
+
+/* FORMULA NOTE — source citations under tables */
+.formula-note { font-size: 10px; color: var(--muted); font-style: italic; margin-top: 8px; line-height: 1.5; padding: 8px 12px; background: var(--off-white); border-radius: 4px; }
+.formula-note strong { color: var(--near-black); font-style: normal; font-weight: 600; }
+.formula-note a { color: var(--teal); text-decoration: none; border-bottom: 1px dotted var(--teal); }
+
+/* SRC citations under paragraphs */
+.src { border-left: 2px solid var(--steel); padding: 4px 0 4px 10px; margin: 6px 0 10px; font-size: 10.5px; color: var(--muted); word-break: break-word; line-height: 1.5; }
+.src-ol { font-size: 11px; line-height: 1.55; padding-left: 22px; color: var(--muted); }
+.src-ol li { margin-bottom: 3px; }
+.src-ol a { color: var(--accent); text-decoration: none; word-break: break-all; }
+.src-ol a:hover { text-decoration: underline; }
+.src a { color: var(--teal); text-decoration: none; }
+.src a:hover { text-decoration: underline; }
+
+/* WATERFALL */
+.waterfall { display: flex; flex-direction: column; gap: 6px; padding: 10px 0; }
+.waterfall-row { display: flex; align-items: center; gap: 12px; }
+.waterfall-row .wlabel { flex: 0 0 200px; font-size: 12px; color: var(--near-black); }
+.waterfall-row .wbar { flex: 1 1 auto; height: 20px; background: var(--mist); border-radius: 4px; position: relative; }
+.waterfall-row .wbar .wfill { display: block; height: 100%; background: var(--teal); border-radius: 4px; transition: width 0.2s ease; }
+.waterfall-row .wbar .wfill.slate { background: var(--slate); }
+.waterfall-row .wbar .wfill.mist { background: var(--steel); }
+.waterfall-row .wval { flex: 0 0 100px; text-align: right; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 12px; color: var(--near-black); font-variant-numeric: tabular-nums; }
+
+/* SENSITIVITY */
+.sens-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.sens-card { background: var(--off-white); border: 1px solid var(--light-border); border-radius: 8px; padding: 14px; }
+.sens-card h5 { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate); font-weight: 700; margin-bottom: 10px; }
+
+/* SCENARIO SWITCHER (Bear/Base/Bull) */
+.scenario-bar { display: flex; gap: 6px; margin-bottom: 12px; }
+.sb-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0 16px; }
+.sb-kpi { background: linear-gradient(135deg, var(--slate) 0%, var(--teal) 100%); color: #fff; padding: 14px 10px; border-radius: 8px; text-align: center; box-shadow: 0 1px 3px rgba(21,26,31,0.08); }
+.sb-kpi-label { font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: 0.10em; text-transform: uppercase; opacity: 0.85; font-weight: 700; }
+.sb-kpi-value { font-family: 'DM Sans', sans-serif; font-size: 24px; font-weight: 700; margin-top: 4px; line-height: 1; font-variant-numeric: tabular-nums; }
+.sb-kpi-sub { font-size: 9px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.03em; }
+.scen-btn { flex: 1; padding: 10px 8px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; text-align: center; border: 1.5px solid transparent; background: var(--off-white); color: var(--muted); transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.scen-btn:hover { border-color: var(--border); color: var(--near-black); }
+.scen-btn .scen-sub { font-size: 9px; font-weight: 500; letter-spacing: 0.03em; text-transform: none; color: var(--muted); margin-top: 2px; }
+/* Bear = Deep Slate #31435B — dark, weighted */
+.scen-btn.scen-bear.active { background: rgba(49,67,91,0.14); border-color: #31435B; color: #31435B; }
+/* Base = Petrol Teal #2E7780 — primary brand accent */
+.scen-btn.scen-base.active { background: rgba(46,119,128,0.14); border-color: #2E7780; color: #2E7780; }
+/* Bull = Soft Steel Blue #A9C5D6 — light, optimistic */
+.scen-btn.scen-bull.active { background: rgba(169,197,214,0.30); border-color: #A9C5D6; color: #5B7E93; }
+.scen-btn.active .scen-sub { color: inherit; opacity: 0.85; }
+
+/* FUND KPI DASHBOARD */
+.fund-kpi-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 14px 0 18px; }
+.fund-kpi { background: linear-gradient(180deg, #fff 0%, var(--off-white) 100%); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.fund-kpi .kpi-label { font-family: 'DM Sans', sans-serif; font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.fund-kpi .kpi-value { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--slate); margin-top: 3px; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.fund-kpi .kpi-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+@media (max-width: 900px) { .fund-kpi-bar { grid-template-columns: repeat(2, 1fr); } }
+
+/* 3x3 MATRIX — Entry/Uplift/Exit × Bear/Base/Bull */
+.matrix-3x3 { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 18px 0; box-shadow: 0 1px 2px rgba(21,26,31,.04); }
+.matrix-3x3 h4 { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--slate); font-weight: 700; margin: 0 0 10px; }
+.matrix-3x3 table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.matrix-3x3 th { padding: 8px 10px; font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 700; text-align: right; border-bottom: 1px solid var(--border); background: var(--off-white); }
+.matrix-3x3 th:first-child { text-align: left; }
+.matrix-3x3 th.col-bear { color: #31435B; }
+.matrix-3x3 th.col-base { color: #2E7780; }
+.matrix-3x3 th.col-bull { color: #5B7E93; }
+.matrix-3x3 td { padding: 7px 10px; border-bottom: 1px solid var(--light-border); text-align: right; font-family: 'DM Sans', sans-serif; font-weight: 500; color: var(--near-black); font-variant-numeric: tabular-nums; }
+.matrix-3x3 td:first-child { text-align: left; font-family: 'Inter', sans-serif; color: var(--near-black); font-weight: 500; }
+.matrix-3x3 tr.block-row td { background: var(--mist); font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate); font-weight: 700; }
+.matrix-3x3 tr.result-row td { border-top: 2px solid var(--slate); font-weight: 700; color: var(--slate); font-size: 12px; background: #fff; }
+
+/* SCENARIO HYPOTHESIS BREAKDOWN */
+.scen-hypos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 14px 0 20px; }
+.scen-hypo-card { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: #fff; }
+.scen-hypo-card.hypo-bear { border-top: 3px solid #31435B; }
+.scen-hypo-card.hypo-base { border-top: 3px solid #2E7780; }
+.scen-hypo-card.hypo-bull { border-top: 3px solid #A9C5D6; }
+.scen-hypo-card h5 { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 0 0 8px; }
+.hypo-bear h5 { color: #31435B; }
+.hypo-base h5 { color: #2E7780; }
+.hypo-bull h5 { color: #5B7E93; }
+.scen-hypo-card ul { margin: 0; padding-left: 16px; font-size: 11px; line-height: 1.55; color: var(--near-black); }
+.scen-hypo-card ul li { margin-bottom: 3px; }
+.scen-hypo-card .hypo-flag { display: inline-block; font-size: 9px; padding: 2px 6px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 700; letter-spacing: 0.04em; margin-right: 4px; }
+.hypo-flag.uncontrolled { background: rgba(49,67,91,0.10); color: var(--slate); }
+.hypo-flag.risky { background: rgba(169,197,214,0.30); color: var(--slate); }
+.hypo-flag.controlled { background: rgba(46,119,128,0.12); color: var(--teal); }
+
+/* CONSOLIDATOR COMPARISON TABLE (numeric, wide) */
+.consol-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 11px; background: #fff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.consol-table thead th { background: var(--slate); color: #fff; padding: 10px 8px; font-family: 'DM Sans', sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; text-align: left; }
+.consol-table thead th.us { background: var(--teal); }
+.consol-table tbody th { text-align: left; padding: 8px; background: var(--off-white); font-family: 'DM Sans', sans-serif; font-size: 10.5px; color: var(--slate); font-weight: 700; letter-spacing: 0.03em; border-bottom: 1px solid var(--light-border); }
+.consol-table tbody td { padding: 8px; border-bottom: 1px solid var(--light-border); color: var(--near-black); }
+.consol-table tbody td.us { background: rgba(46,119,128,0.06); font-weight: 600; color: var(--slate); }
+.consol-table tbody tr:last-child td, .consol-table tbody tr:last-child th { border-bottom: none; }
+.consol-verdict { background: var(--mist); padding: 12px 14px; border-left: 3px solid var(--teal); border-radius: 4px; margin: 14px 0 0; font-size: 11.5px; line-height: 1.55; }
+.consol-verdict strong { color: var(--slate); }
+
+/* LEVEL-2 DIVIDER */
+.level2-divider { margin: 32px 0 18px; border-top: 2px dashed var(--border); padding-top: 14px; font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); font-weight: 700; text-align: center; }
+.level2-divider span { background: var(--bg); padding: 0 14px; }
+
+/* BUYER ARCHETYPE CARDS */
+.buyer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 14px 0; }
+@media (max-width: 800px) { .buyer-grid { grid-template-columns: 1fr; } .scen-hypos { grid-template-columns: 1fr; } }
+.buyer-card { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: var(--off-white); }
+.buyer-card h5 { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.05em; color: var(--slate); font-weight: 700; margin: 0 0 4px; }
+.buyer-card .buyer-mult { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--teal); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.buyer-card p { font-size: 11px; color: var(--near-black); margin: 0 0 4px; line-height: 1.5; }
+.buyer-card .examples { font-size: 10px; color: var(--muted); font-style: italic; }
+
+/* METHOD NOTES */
+.method-notes { font-family: 'Inter', sans-serif; color: var(--near-black); line-height: 1.55; }
+.method-notes h3 { color: var(--slate); font-size: 13px; font-weight: 700; margin: 22px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--mist); font-family: 'DM Sans', sans-serif; letter-spacing: 0.02em; text-transform: uppercase; }
+.method-notes h3:first-child { margin-top: 0; }
+.method-notes p, .method-notes li { font-size: 12px; margin: 4px 0; }
+.method-notes ul { padding-left: 18px; margin: 6px 0 10px; }
+.method-notes .val { font-weight: 600; color: var(--near-black); }
+
+/* ─── MARKET INTELLIGENCE (v4) ─── */
+/* Academic footnote refs */
+.fn-ref { display: inline; font-size: 9.5px; font-weight: 600; color: var(--teal); vertical-align: super; line-height: 0; margin: 0 1px; padding: 0 2px; border-radius: 3px; cursor: pointer; text-decoration: none; letter-spacing: 0; font-family: 'DM Sans', sans-serif; }
+.fn-ref:hover { background: rgba(46,119,128,0.12); text-decoration: none; }
+.fn-ref::before { content: '['; }
+.fn-ref::after { content: ']'; }
+
+/* Structural Forces cards */
+.mi-forces { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 14px 0 20px; }
+.mi-force { background: #fff; border: 1px solid var(--border); border-left: 3px solid var(--teal); border-radius: 8px; padding: 14px 16px; }
+.mi-force h5 { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.04em; text-transform: none; color: var(--slate); font-weight: 700; margin: 0 0 6px; }
+.mi-force .mi-force-num { display: inline-block; font-family: 'DM Sans', sans-serif; font-size: 10px; color: var(--teal); font-weight: 700; letter-spacing: 0.06em; margin-right: 8px; }
+.mi-force p { font-size: 11.5px; color: var(--near-black); line-height: 1.55; margin: 6px 0; }
+.mi-force .mi-insight { background: var(--off-white); border-left: 2px solid var(--steel); padding: 8px 12px; margin-top: 8px; font-size: 11px; color: var(--near-black); font-style: italic; line-height: 1.5; border-radius: 3px; }
+.mi-force .mi-insight strong { font-style: normal; color: var(--slate); font-weight: 600; }
+.mi-force.risk { border-left-color: var(--flag); }
+.mi-force.risk .mi-insight { border-left-color: var(--flag); }
+
+/* Benchmark stat tiles */
+.mi-benchmark-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0 6px; }
+@media (max-width: 900px) { .mi-benchmark-grid { grid-template-columns: repeat(2, 1fr); } }
+.mi-tile { background: linear-gradient(180deg, #fff 0%, var(--off-white) 100%); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.mi-tile .mi-tile-label { font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.mi-tile .mi-tile-value { font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 700; color: var(--slate); margin: 3px 0 1px; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.mi-tile .mi-tile-sub { font-size: 10px; color: var(--muted); line-height: 1.4; }
+
+/* Compact source line (Source: [1], [2]) */
+.mi-source-line { font-size: 10px; color: var(--muted); font-style: italic; margin-top: 6px; }
+.mi-source-line strong { font-style: normal; color: var(--near-black); font-weight: 600; }
+
+/* MI sub-tables */
+.mi-subtable { width: 100%; border-collapse: collapse; font-size: 11px; font-variant-numeric: tabular-nums; margin: 10px 0 4px; }
+.mi-subtable thead th { text-align: right; font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 8px 10px; border-bottom: 1px solid var(--border); background: var(--off-white); }
+.mi-subtable thead th:first-child { text-align: left; }
+.mi-subtable tbody td { padding: 7px 10px; border-bottom: 1px solid var(--light-border); text-align: right; font-family: 'DM Sans', sans-serif; font-weight: 500; }
+.mi-subtable tbody td:first-child { text-align: left; font-family: 'Inter', sans-serif; }
+.mi-subtable tr.hilite td { background: rgba(46,119,128,0.06); font-weight: 700; }
+
+/* Bibliography (footnotes) */
+.mi-bibliography { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border); }
+.mi-bibliography h4 { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--slate); font-weight: 700; margin: 0 0 10px; }
+.mi-bibliography ol { list-style: none; padding: 0; margin: 0; counter-reset: fn; }
+.mi-bibliography ol li { counter-increment: fn; padding: 5px 0 5px 32px; font-size: 10.5px; line-height: 1.55; color: var(--near-black); position: relative; border-bottom: 1px dotted var(--light-border); }
+.mi-bibliography ol li:last-child { border-bottom: none; }
+.mi-bibliography ol li::before { content: '['counter(fn)']'; position: absolute; left: 0; top: 5px; font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; color: var(--teal); }
+.mi-bibliography ol li strong { color: var(--slate); font-weight: 600; }
+.mi-bibliography ol li a { color: var(--teal); text-decoration: none; border-bottom: 1px dotted var(--teal); word-break: break-all; }
+.mi-bibliography ol li a:hover { text-decoration: underline; border-bottom-style: solid; }
+
+/* QUOTES */
+.quote { border-left: 3px solid var(--teal); padding: 6px 0 6px 14px; margin: 14px 0; font-style: italic; color: var(--near-black); font-size: 12.5px; line-height: 1.55; }
+.quote .ts { display: inline-block; font-style: normal; font-weight: 700; color: var(--teal); font-size: 11px; margin-right: 8px; letter-spacing: 0.03em; font-family: 'DM Sans', sans-serif; }
+.caption { font-size: 11.5px; color: var(--muted); margin: 4px 0 12px; line-height: 1.55; }
+
+/* MOBILE */
+@media (max-width: 1400px) { .sens-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 1100px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); max-height: none; }
+  .header { position: relative; height: auto; }
+  .sens-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-block">
+    <span class="logo">S16VC</span>
+    <span class="tagline">Rollup Studio · MSP</span>
+  </div>
+</header>
+
+<div class="shell">
+
+<aside class="sidebar">
+
+  <div>
+    <div class="sec-label">Scenario <span class="pin">BEAR · BASE · BULL</span></div>
+    <div class="scenario-bar">
+      <button class="scen-btn scen-bear" data-scenario="bear" onclick="setScenario('bear')">Bear<span class="scen-sub">below-median</span></button>
+      <button class="scen-btn scen-base active" data-scenario="base" onclick="setScenario('base')">Base<span class="scen-sub">market median</span></button>
+      <button class="scen-btn scen-bull" data-scenario="bull" onclick="setScenario('bull')">Bull<span class="scen-sub">top-decile</span></button>
+    </div>
+    <div class="sb-kpis">
+      <div class="sb-kpi">
+        <div class="sb-kpi-label">Vertical MOIC</div>
+        <div class="sb-kpi-value" id="sb-moic">—</div>
+      </div>
+      <div class="sb-kpi">
+        <div class="sb-kpi-label">Vertical IRR (5y)</div>
+        <div class="sb-kpi-value" id="sb-irr">—</div>
+      </div>
+      <div class="sb-kpi">
+        <div class="sb-kpi-label">Max deals</div>
+        <div class="sb-kpi-value" id="sb-maxdeals">—</div>
+      </div>
+      <div class="sb-kpi">
+        <div class="sb-kpi-label">Burnout</div>
+        <div class="sb-kpi-value" id="sb-burnout">—</div>
+      </div>
+    </div>
+  </div>
+
+  <details class="subblock" open>
+    <summary>MOIC drivers</summary>
+    <div class="sb-body">
+      <div>
+        <div class="slider-label-row"><span class="slider-name">Entry price <span class="sb-tag">× REVENUE</span></span><span class="slider-val" id="v-mult">0.435×</span></div>
+        <input type="range" min="0.20" max="0.70" step="0.01" value="0.435" id="sl-mult" oninput="onSlider()">
+      </div>
+      <div>
+      </div>
+      <div>
+        <div class="slider-label-row"><span class="slider-name">Gross margin ceiling <span class="sb-tag">NET = GM − 25PP</span></span><span class="slider-val" id="v-gmt">40.5%</span></div>
+        <input type="range" min="30" max="55" step="0.1" value="40.5" id="sl-gmt" oninput="onSlider()">
+      </div>
+      <div>
+        <div class="slider-label-row"><span class="slider-name">Central OPEX Y5 <span class="sb-tag">MSP SHARE</span></span><span class="slider-val" id="v-copex">$1.5M</span></div>
+        <input type="range" min="0.5" max="3" step="0.1" value="1.5" id="sl-copex" oninput="onSlider()">
+      </div>
+      <div>
+        <div class="slider-label-row"><span class="slider-name">Senior debt × EBITDA <span class="sb-tag">2.5–3× EBITDA</span></span><span class="slider-val" id="v-leverage">2.75×</span></div>
+        <input type="range" min="2" max="3.5" step="0.05" value="2.75" id="sl-leverage" oninput="onSlider()">
+      </div>
+    </div>
+  </details>
+
+  <details class="subblock" open>
+    <summary>MOIC uplift</summary>
+    <div class="sb-body">
+      <div>
+        <div class="slider-label-row"><span class="slider-name">Price uplift (existing customers)</span><span class="slider-val" id="v-price">25%</span></div>
+        <input type="range" min="0" max="60" step="1" value="25" id="sl-price" oninput="onSlider()">
+      </div>
+      <div>
+        <div class="slider-label-row"><span class="slider-name">Revenue lift (new logos + cross-sell)</span><span class="slider-val" id="v-revlift">12%</span></div>
+        <input type="range" min="0" max="30" step="1" value="12" id="sl-revlift" oninput="onSlider()">
+      </div>
+      <div>
+        <div class="slider-label-row"><span class="slider-name">Annual customer churn</span><span class="slider-val" id="v-churn">6.2%</span></div>
+        <input type="range" min="0" max="20" step="0.5" value="6.2" id="sl-churn" oninput="onSlider()">
+      </div>
+    </div>
+  </details>
+
+  <button class="reset-btn" onclick="resetAll()">↺ Reset to defaults</button>
+</aside>
+
+<main class="content">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       8 sections, headlines-as-thesis.
+       Read only headlines → understand thesis. Open to dig deeper.
+       ═══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- 1 · MARKET — Arbitrage window -->
+  <details class="section" open>
+    <summary><span class="section-num">1 ·</span> <span class="section-headline" id="h-1-hdr">Market · The multiple is a staircase — entry at 5× EBITDA, exit set by the band the portfolio reaches</span></summary>
+    <div class="section-body">
+
+      <h4>Median US MSP earns ~8% adjusted EBITDA — the top quartile earns about 2.5× that share is fixable arbitrage</h4>
+      <div class="mi-benchmark-grid">
+        <div class="mi-tile"><div class="mi-tile-label">Median MSP EBITDA</div><div class="mi-tile-value">8.7%</div><div class="mi-tile-sub">North America 2024<sup><a class="fn-ref" href="#fn-9">9</a></sup></div></div>
+        <div class="mi-tile"><div class="mi-tile-label">Top-quartile EBITDA</div><div class="mi-tile-value">20.6%</div><div class="mi-tile-sub">North America 2024<sup><a class="fn-ref" href="#fn-9">9</a></sup></div></div>
+        <div class="mi-tile"><div class="mi-tile-label">Managed GM avg</div><div class="mi-tile-value">40.5%</div><div class="mi-tile-sub">Industry avg Q2 2024<sup><a class="fn-ref" href="#fn-8">8</a></sup></div></div>
+        <div class="mi-tile"><div class="mi-tile-label">MSPs at a loss</div><div class="mi-tile-value">18%</div><div class="mi-tile-sub">Q4 2024, up from 14%<sup><a class="fn-ref" href="#fn-9">9</a></sup></div></div>
+      </div>
+      <p style="font-size:11px; color:var(--muted); margin: 10px 0 0; line-height:1.5;">Median vs. best-in-class gap: ~8pp EBITDA + ~4pp GM. Not a market failure — a management-attention failure. That gap is what a roll-up captures.</p>
+
+      <h4>Buy at 5× EBITDA, exit at the band the consolidated portfolio reaches — the staircase is the return engine</h4>
+      <div class="mini-grid-2">
+        <table class="mi-subtable">
+          <thead><tr><th>Entry EV/EBITDA (by target size)</th><th>Range</th></tr></thead>
+          <tbody>
+            <tr><td>&lt;$3M micro add-on</td><td><strong>3–5×</strong><sup><a class="fn-ref" href="#fn-1">1</a></sup></td></tr>
+            <tr><td>$3–5M small add-on</td><td>4–6×<sup><a class="fn-ref" href="#fn-1">1</a></sup><sup><a class="fn-ref" href="#fn-2">2</a></sup></td></tr>
+            <tr><td>$5–10M scaled</td><td>6–8×<sup><a class="fn-ref" href="#fn-1">1</a></sup></td></tr>
+            <tr><td>All private (n=117)</td><td>Median <strong>8.9×</strong><sup><a class="fn-ref" href="#fn-3">3</a></sup></td></tr>
+          </tbody>
+        </table>
+        <table class="mi-subtable">
+          <thead><tr><th>Exit EV/EBITDA (by positioning)</th><th>Range</th></tr></thead>
+          <tbody>
+            <tr><td>Private M&amp;A median</td><td>8.9×<sup><a class="fn-ref" href="#fn-3">3</a></sup></td></tr>
+            <tr><td>Maturity ladder, $2.5–4M adj EBITDA<sup><a class="fn-ref" href="#fn-29">29</a></sup></td><td><strong>6–9×</strong></td></tr>
+            <tr><td>Maturity ladder, $4–5M+ adj EBITDA<sup><a class="fn-ref" href="#fn-29">29</a></sup></td><td><strong>8–10×+</strong></td></tr>
+            <tr><td>Public 3-yr avg (MSP) — reference only, not used</td><td><strong>12.07×</strong><sup><a class="fn-ref" href="#fn-4">4</a></sup></td></tr>
+            <tr><td>Premium platform (Softchoice, Crayon)</td><td>12.7–14.5×<sup><a class="fn-ref" href="#fn-5">5</a></sup></td></tr>
+            <tr><td>"Managed cloud + cyber" public</td><td><strong>17.6–17.8×</strong><sup><a class="fn-ref" href="#fn-6">6</a></sup></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:11px; color:var(--muted); margin: 8px 0 0; line-height:1.5;">Positioning delta: +70% multiple for same operations (cloud/cyber vs IT consulting)<sup><a class="fn-ref" href="#fn-6">6</a></sup>.</p>
+
+    </div>
+  </details>
+
+  <!-- 2 · ENTRY — $5M funds N deals -->
+  <details class="section" open>
+    <summary><span class="section-num">2 ·</span> <span class="section-headline" id="h-2-hdr">Entry · $5M funds the programme at 0.44× revenue — 8.7% median margin, 5× EBITDA, senior debt 2.75×</span></summary>
+    <div class="section-body">
+
+      <h4>Target profiles<span class="section-meta"> · current purchase <span id="tgt-price-meta">$1.52M</span></span></h4>
+      <div class="scen-hypos">
+        <div class="scen-hypo-card hypo-bear">
+          <h5>Bear · $5–10M scaled tier</h5>
+          <ul>
+            <li>Target ARR ~<strong>$7M</strong> · ~35 FTE · ~2,350 endpoints</li>
+            <li>Multiple <strong>0.52× rev</strong> (6× EBITDA at 8.7% margin)<sup><a class="fn-ref" href="#fn-1">1</a></sup></li>
+            <li>Purchase price ~<strong>$3.65M</strong> · acquired GM ~26%</li>
+          </ul>
+        </div>
+        <div class="scen-hypo-card hypo-base">
+          <h5>Base · $3–5M small tier</h5>
+          <ul>
+            <li>Target ARR ~<strong>$3.5M</strong> · ~17 FTE · ~1,150 endpoints</li>
+            <li>Multiple <strong>0.44× rev</strong> (5× EBITDA at 8.7% margin)<sup><a class="fn-ref" href="#fn-1">1</a></sup></li>
+            <li>Purchase price ~<strong>$1.52M</strong> · acquired GM ~30%</li>
+          </ul>
+        </div>
+        <div class="scen-hypo-card hypo-bull">
+          <h5>Bull · &lt;$3M micro tier</h5>
+          <ul>
+            <li>Target ARR ~<strong>$2M</strong> · ~10 FTE · ~670 endpoints</li>
+            <li>Multiple <strong>0.35× rev</strong> (4× EBITDA at 8.7% margin)<sup><a class="fn-ref" href="#fn-1">1</a></sup></li>
+            <li>Purchase price ~<strong>$0.70M</strong> · acquired GM ~33%</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4>Target snapshot at acquisition</h4>
+      <table class="data">
+        <thead>
+          <tr><th>Line item</th><th>Monthly ($)</th><th>Annual ($)</th><th>% of revenue</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Recurring revenue (MRR)</td><td id="t-mrr">$100,000</td><td id="t-arr">$1,200,000</td><td>100.0%</td></tr>
+          <tr class="subtotal-row"><td>Labor subtotal</td><td id="t-lab">$45,833</td><td id="t-lab-y">$550,000</td><td id="t-lab-pct">45.8%</td></tr>
+          <tr><td>Vendor stack (PSA+RMM+sec+backup+MDR+docs+phones+PEO)</td><td id="t-ven">$9,980</td><td id="t-ven-y">$119,760</td><td id="t-ven-pct">10.0%</td></tr>
+          <tr><td>Business expenses (rent, phones, accounting, misc)</td><td>$8,000</td><td>$96,000</td><td id="t-biz-pct">8.0%</td></tr>
+          <tr class="subtotal-row"><td>Total COGS</td><td id="t-cogs">$64,533</td><td id="t-cogs-y">$774,400</td><td>64.5%</td></tr>
+          <tr class="section-row"><td>Gross profit</td><td id="t-gp">$35,467</td><td id="t-gp-y">$425,600</td><td id="t-gm">35.5%</td></tr>
+        </tbody>
+      </table>
+      <div class="formula-note"><strong>Purchase price:</strong> <span id="pp-formula">$292K MRR × 12 × 0.75× = <strong id="t-price">$2,628,000</strong></span>. Working capital reserve at close: $100–150K. Sub-$5M East Coast bidder density fell 4–5 (2023) → 2–3 (2025–26)<sup><a class="fn-ref" href="#fn-2">2</a></sup>.</div>
+
+      <h4>CAC ceiling — max acquisition cost per deal</h4>
+      <table class="data">
+        <thead>
+          <tr><th>Component</th><th>Value</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Entry price</td><td id="cac-entry">$1.52M</td><td><span id="cac-mult-note">0.75×</span> revenue on <span id="cac-arr-note">$3.5M</span> ARR<sup><a class="fn-ref" href="#fn-1">1</a></sup></td></tr>
+          <tr><td>Exit value at platform</td><td id="cac-exit">$9.53M</td><td><span id="cac-exit-mult">—</span> × uplifted EBITDA<sup><a class="fn-ref" href="#fn-4">4</a></sup></td></tr>
+          <tr><td>Value budget at required 2.5× MOIC</td><td id="cac-budget">$3.81M</td><td>Exit ÷ MOIC hurdle</td></tr>
+          <tr class="total-row"><td><strong>Max CAC ceiling / deal</strong></td><td><strong id="cac-ceiling">$1.18M</strong></td><td>Value budget − Entry price</td></tr>
+          <tr><td>CAC actual (broker + legal + QoE + integration + WC)</td><td id="cac-actual">$777K</td><td>Double Lehman broker fee<sup><a class="fn-ref" href="#fn-12">12</a></sup> · scales with entry price</td></tr>
+          <tr class="subtotal-row"><td>Headroom under ceiling</td><td><strong id="cac-headroom">$400K</strong></td><td><span id="cac-headroom-pct">34%</span> headroom — capacity to invest in origination</td></tr>
+        </tbody>
+      </table>
+      <div class="formula-note">Negative ceiling → arbitrage alone can't clear hurdle; must fix entry or uplift first. Full calc: <a href="https://github.com/bobroff-cap/roll-ups/blob/main/raw/2026-07-09-rollup-bac-max-acquisition-cost-calculator.html">CAC calculator</a>.</div>
+
+    </div>
+  </details>
+
+  <!-- 3 · PLAYBOOK — 90 days delivers X% GM -->
+  <details class="section" open>
+    <summary><span class="section-num">3 ·</span> <span class="section-headline" id="h-3-hdr">Playbook · Two years lifts net margin from 8.7% to the 15.5% leading-cohort benchmark</span></summary>
+    <div class="section-body">
+
+      <h4>−12% cost / +12% revenue / +25% price → portco EBITDA doubles to 46% GM in 90 days</h4>
+      <div class="scen-hypos">
+        <div class="scen-hypo-card">
+          <h5>Cost reduction · Base −12% (Bear −5% / Bull −20%)</h5>
+          <ul>
+            <li>Vendor renegotiation at 250+ endpts/portco (Alpine/Evergreen model<sup><a class="fn-ref" href="#fn-16">16</a></sup>): Base −7% / Bull −12%</li>
+            <li>SaaS de-duplication (Zylo 2024: 15–30% overlap capture<sup><a class="fn-ref" href="#fn-19">19</a></sup>): Base −4% / Bull −6%</li>
+            <li>Back-office normalization (accounting, phones, insurance): Base −1% / Bull −2%</li>
+            <li><em>McKinsey: 70–85% synergies in 18 mo, not 90 days<sup><a class="fn-ref" href="#fn-18">18</a></sup></em></li>
+          </ul>
+        </div>
+        <div class="scen-hypo-card">
+          <h5>Revenue lift · Base +12% (Bear +5% / Bull +20%)</h5>
+          <ul>
+            <li>Inside sales activation — SDR closes 5–8 logos/yr @ $2K MRR<sup><a class="fn-ref" href="#fn-5">5</a></sup><sup><a class="fn-ref" href="#fn-22">22</a></sup>: Base +7% / Bull +10%</li>
+            <li>Cyber cross-sell to 30% of base at +$300/mo<sup><a class="fn-ref" href="#fn-17">17</a></sup>: Base +4% / Bull +7%</li>
+            <li>Cyber attach at MSA renewal (Datto: 68% MSPs bundle cyber<sup><a class="fn-ref" href="#fn-6">6</a></sup>): Base +1% / Bull +3%</li>
+          </ul>
+        </div>
+        <div class="scen-hypo-card">
+          <h5>Price uplift · Base +25% (Bear +10% / Bull +40%)</h5>
+          <ul>
+            <li>Owner-operators underprice 25–50% vs. professional platforms<sup><a class="fn-ref" href="#fn-7">7</a></sup></li>
+            <li>Owner-op 30% GM vs. leading-cohort GM 51.2% = 10.7pp discipline gap<sup><a class="fn-ref" href="#fn-23">23</a></sup></li>
+            <li>Applied at contract renewal (12–24 mo earn-out)</li>
+            <li><em id="playbook-worked">Base worked — see live example (updates per scenario)</em></li>
+          </ul>
+        </div>
+      </div>
+
+      <h4>Per-target cohort trajectory — M0 → M+3 → M+12 → Steady state</h4>
+      <table class="data">
+        <thead>
+          <tr><th>Line item</th><th>M0 (pre-acq)</th><th>M+3 (post-90d)</th><th>M+12 (post-owner)</th><th>SS (M+18)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>MRR</td><td id="u-mrr-m0">$100,000</td><td id="u-mrr-m3">$105,000</td><td id="u-mrr-m12">$130,000</td><td id="u-mrr-ss">$132,500</td></tr>
+          <tr><td>ARR (annualized)</td><td id="u-arr-m0">$1,200,000</td><td id="u-arr-m3">$1,260,000</td><td id="u-arr-m12">$1,560,000</td><td id="u-arr-ss">$1,590,000</td></tr>
+          <tr class="subtotal-row"><td>Labor / mo</td><td id="u-lab-m0">$45,000</td><td id="u-lab-m3">$42,000</td><td id="u-lab-m12">$29,000</td><td id="u-lab-ss">$29,000</td></tr>
+          <tr><td>Vendor / mo</td><td id="u-ven-m0">$9,980</td><td id="u-ven-m3">$8,930</td><td id="u-ven-m12">$8,930</td><td id="u-ven-ss">$8,116</td></tr>
+          <tr class="subtotal-row"><td>Total COGS / mo</td><td id="u-cogs-m0">$63,813</td><td id="u-cogs-m3">$57,263</td><td id="u-cogs-m12">$45,263</td><td id="u-cogs-ss">$44,449</td></tr>
+          <tr><td>Gross profit / mo</td><td id="u-gp-m0">$36,187</td><td id="u-gp-m3">$47,737</td><td id="u-gp-m12">$85,737</td><td id="u-gp-ss">$88,051</td></tr>
+          <tr class="subtotal-row"><td>Gross margin</td><td id="u-gm-m0">36.2%</td><td id="u-gm-m3">42.6%</td><td id="u-gm-m12">45.0%</td><td id="u-gm-ss">45.0%</td></tr>
+          <tr><td>SG&amp;A / mo — sales, admin, dispatch, rent, owner comp</td><td id="u-sga-m0">—</td><td id="u-sga-m3">—</td><td id="u-sga-m12">—</td><td id="u-sga-ss">—</td></tr>
+          <tr><td>SG&amp;A % of revenue</td><td id="u-sgap-m0">—</td><td id="u-sgap-m3">—</td><td id="u-sgap-m12">—</td><td id="u-sgap-ss">—</td></tr>
+          <tr class="subtotal-row"><td>Target EBITDA / mo</td><td id="u-eb-m0">$36,187</td><td id="u-eb-m3">$39,737</td><td id="u-eb-m12">$73,737</td><td id="u-eb-ss">$73,051</td></tr>
+          <tr><td>EBITDA margin</td><td id="u-ebm-m0">36.2%</td><td id="u-ebm-m3">28.0%</td><td id="u-ebm-m12">33.0%</td><td id="u-ebm-ss">33.0%</td></tr>
+        </tbody>
+      </table>
+      <div class="formula-note"><strong>Vendor consolidation.</strong> <span id="playbook-vendor-note">Base fund-wide: ~75 portcos × 1,150 endpts = ~86K endpts by Y5</span>. At 15K+ endpts, top vendors extend enterprise pricing (25–35% off); model uses conservative 20%<sup><a class="fn-ref" href="#fn-16">16</a></sup>. FTE productivity lifts ~1.75× ($200K → $350K rev/FTE) via inside sales + AI-triaged workflow<sup><a class="fn-ref" href="#fn-14">14</a></sup>.</div>
+
+    </div>
+  </details>
+
+  <!-- 4 · COMPOUND — Self-financing rollup catches on -->
+  <details class="section" open>
+    <summary><span class="section-num">4 ·</span> <span class="section-headline" id="h-4-hdr">Compound · No burnout, 11 deals across 5 years — retained cash funds next equity</span></summary>
+    <div class="section-body">
+
+      <h4>Retained portfolio cash flow funds the next deal's equity → loop catches for 5 years</h4>
+      <p style="font-size:12px; color:var(--near-black); margin:0 0 8px; line-height:1.55;">Deal count is not a slider — it is <em>derived</em>. Each acquisition is financed standalone (Senior debt + 12% seller note + fund equity; see §6). As portcos mature, their <strong>retained free cash flow</strong> (EBITDA − debt service − central OPEX) recycles into deployable equity, funding the next deal without new LP capital. Loop runs until equity — fund plus recycled cash — is insufficient for the next purchase. That year = <strong>burnout</strong>. Op cap = HoldCo integration bandwidth (deals per year), scenario-scaled: <strong>Bear</strong> 1/1/2/2/2 = <strong>8 max</strong>; <strong>Base</strong> 1/2/4/4/4 = <strong>15 max</strong>; <strong>Bull</strong> 1/3/6/6/6 = <strong>22 max</strong>.</p>
+
+      <h4>Self-financing dynamics<span class="section-meta" id="fin-sec-meta"> · senior debt 2.75× EBITDA + 12% seller note</span></h4>
+      <table class="data">
+        <thead>
+          <tr><th>Year</th><th>New deals</th><th>Cum deals</th><th>Portfolio EBITDA (EOY)</th><th>Cum debt</th><th>Equity remaining</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Y1</td><td id="sim-Y1-deals">1</td><td id="sim-Y1-cum">1</td><td id="sim-Y1-ebitda">$0.5M</td><td id="sim-Y1-debt">$2.1M</td><td id="sim-Y1-eq">$4.5M</td></tr>
+          <tr><td>Y2</td><td id="sim-Y2-deals">2</td><td id="sim-Y2-cum">3</td><td id="sim-Y2-ebitda">$2.0M</td><td id="sim-Y2-debt">$7.4M</td><td id="sim-Y2-eq">$4.5M</td></tr>
+          <tr><td>Y3</td><td id="sim-Y3-deals">4</td><td id="sim-Y3-cum">7</td><td id="sim-Y3-ebitda">$5.5M</td><td id="sim-Y3-debt">$17.9M</td><td id="sim-Y3-eq">$4.5M</td></tr>
+          <tr><td>Y4</td><td id="sim-Y4-deals">4</td><td id="sim-Y4-cum">11</td><td id="sim-Y4-ebitda">$10.4M</td><td id="sim-Y4-debt">$28.4M</td><td id="sim-Y4-eq">$4.5M</td></tr>
+          <tr><td>Y5</td><td id="sim-Y5-deals">4</td><td id="sim-Y5-cum">15</td><td id="sim-Y5-ebitda">$16.1M</td><td id="sim-Y5-debt">$38.9M</td><td id="sim-Y5-eq">$4.5M</td></tr>
+          <tr class="total-row"><td colspan="2"><strong>Burnout year</strong></td><td id="sim-burnout-cell" colspan="4"><strong>Beyond Y5</strong> — self-financing loop still viable at end of hold period</td></tr>
+        </tbody>
+      </table>
+      <div class="formula-note">Bear burns early ($3.65M purchase + fixed $151K/deal eats equity fast). Bull rarely burns (cheap micro entry + fast recycling). Assumptions: Senior debt ~10.5% + seller note ~7% (blended ~9-10%), LP pref 8% compounded, GP carry 20%, 5-yr hold. "Cum debt" = SBA + seller notes outstanding.</div>
+
+    </div>
+  </details>
+
+  <!-- 5 · EXIT — $Y5 ARR → $EV EV → MOIC -->
+  <details class="section" open>
+    <summary><span class="section-num">5 ·</span> <span class="section-headline" id="h-5-hdr">Exit · Consolidated EBITDA sets the band, and the band sets the value</span><span class="section-meta" id="exit-sec-meta"></span></summary>
+    <div class="section-body">
+
+      <h4>Buyer archetypes — priced off the maturity ladder, not off public comparables</h4>
+      <div class="buyer-grid">
+        <div class="buyer-card">
+          <h5>Bear · Regional mid-market PE / broker M&amp;A</h5>
+          <div class="buyer-mult">7–10× EBITDA · Aventis private median 8.9×<sup><a class="fn-ref" href="#fn-3">3</a></sup></div>
+          <p>Exit at private-market median when platform positioning fails to earn public-services premium. Broker-driven auction to mid-tier PE — no sub-sector arbitrage capture.</p>
+          <p class="examples">Trinity Hunt-tier LMM PE, regional roll-ups without cyber narrative, sponsor-to-sponsor at commodity multiples</p>
+        </div>
+        <div class="buyer-card">
+          <h5>Base · PE roll-up platform (secondary)</h5>
+          <div class="buyer-mult">10–14× EBITDA<sup><a class="fn-ref" href="#fn-1">1</a></sup><sup><a class="fn-ref" href="#fn-5">5</a></sup> · Public 3-yr median 12.07×<sup><a class="fn-ref" href="#fn-4">4</a></sup></div>
+          <p>Natural buyer. Already runs an MSP platform; wants tuck-in of regional depth + captive engineering.</p>
+          <p class="examples">Alpine (Evergreen)<sup><a class="fn-ref" href="#fn-16">16</a></sup>, Court Square + Berkshire (Thrive), Oval (New Charter), Trinity Hunt (Dataprise), OceanSound → OMERS (Netrix)</p>
+        </div>
+        <div class="buyer-card">
+          <h5>Bull · Mega-PE / sponsor-to-sponsor</h5>
+          <div class="buyer-mult">12–16× EBITDA<sup><a class="fn-ref" href="#fn-5">5</a></sup> · Softchoice precedent 14.5×</div>
+          <p>When platform crosses $30M+ EBITDA + cyber-heavy positioning. Sponsor-to-sponsor recap; often GP rollover. Public-market "Managed Cloud + Cyber" sub-sector (Solganick taxonomy) trades at 17.8× ceiling<sup><a class="fn-ref" href="#fn-6">6</a></sup>.</p>
+          <p class="examples">Berkshire (Thrive recap), OMERS (Netrix), PSP Partners (Ntiva), Silver Lake / Vista adjacent</p>
+        </div>
+      </div>
+
+      <h4>Y5 exit waterfall</h4>
+      <table class="data">
+        <tr><td>Y5 consolidated ARR (run-rate)</td><td></td><td id="ex-arr">—</td></tr>
+        <tr><td>Y5 consolidated EBITDA (run-rate)<span class="row-sub">Same basis as the ARR line above — margin reads against this pair, not the line below</span></td><td></td><td id="ex-eb-rr">—</td></tr>
+        <tr><td>Exit EBITDA (LTM-adjusted) — valuation basis<span class="row-sub">Age 0 = 0% / age 1 = 40% / age 2+ = 100% credit — M&amp;A convention. Deliberately below run-rate: fresh acquisitions get no platform-multiple treatment</span></td><td></td><td id="ex-eb">$5.9M</td></tr>
+        <tr><td>Exit multiple</td><td></td><td id="ex-mult">—</td></tr>
+        <tr class="section-row"><td colspan="2">Enterprise value</td><td id="ex-ev">$71M</td></tr>
+        <tr><td>Less: outstanding debt (LTM-weighted)</td><td></td><td id="ex-debt">($4.5M)</td></tr>
+        <tr class="subtotal-row"><td>Equity value</td><td></td><td id="ex-eqv">$66.5M</td></tr>
+        <tr><td>Vertical equity called</td><td></td><td id="ex-called">$5M</td></tr>
+        <tr><td>Preferred return (8% × 5 yrs)</td><td></td><td id="ex-pref">$2.3M</td></tr>
+        <tr><td>Return of capital</td><td></td><td id="ex-roc">$5M</td></tr>
+        <tr><td>Profit above pref hurdle</td><td class="row-sub">Split 80/20 LP/GP</td><td id="ex-profit">$59M</td></tr>
+        <tr><td>GP carry (20%)</td><td></td><td id="ex-carry">$11.8M</td></tr>
+        <tr class="total-row"><td>LP net proceeds</td><td></td><td id="ex-lp-net">$54.7M</td></tr>
+        <tr class="total-row"><td>Vertical MOIC (gross, on $5M)</td><td></td><td id="ex-moic">10.9×</td></tr>
+        <tr class="total-row"><td>Vertical IRR (annualized, 5-yr)</td><td></td><td id="ex-irr">61%</td></tr>
+      </table>
+
+      <div class="waterfall">
+        <div class="waterfall-row"><span class="wlabel">Enterprise value</span><span class="wbar"><span class="wfill slate" id="wf-bar-ev" style="width:59%"></span></span><span class="wval" id="wf-ev">$71M</span></div>
+        <div class="waterfall-row"><span class="wlabel">− Debt paydown</span><span class="wbar"><span class="wfill mist" id="wf-bar-debt" style="width:4%"></span></span><span class="wval" id="wf-debt">$4.5M</span></div>
+        <div class="waterfall-row"><span class="wlabel">= Equity value</span><span class="wbar"><span class="wfill" id="wf-bar-eqv" style="width:55%"></span></span><span class="wval" id="wf-eqv">$66.5M</span></div>
+        <div class="waterfall-row"><span class="wlabel">− LP pref return</span><span class="wbar"><span class="wfill mist" id="wf-bar-pref" style="width:2%"></span></span><span class="wval" id="wf-pref">$2.3M</span></div>
+        <div class="waterfall-row"><span class="wlabel">− Return of capital</span><span class="wbar"><span class="wfill mist" id="wf-bar-roc" style="width:4%"></span></span><span class="wval" id="wf-roc">$5M</span></div>
+        <div class="waterfall-row"><span class="wlabel">− GP carry (20%)</span><span class="wbar"><span class="wfill mist" id="wf-bar-carry" style="width:10%"></span></span><span class="wval" id="wf-carry">$11.8M</span></div>
+        <div class="waterfall-row"><span class="wlabel">= LP net proceeds</span><span class="wbar"><span class="wfill" id="wf-bar-net" style="width:46%"></span></span><span class="wval" id="wf-net">$54.7M</span></div>
+      </div>
+
+      <h4>Consolidated P&amp;L<span class="section-meta" id="pnl-sec-meta"></span></h4>
+      <table class="pnl-table">
+        <thead>
+          <tr><th>Line item</th><th>Y1</th><th>Y2</th><th>Y3</th><th>Y4</th><th>Y5</th></tr>
+        </thead>
+        <tbody>
+          <tr class="section-row"><td colspan="6">Revenue</td></tr>
+          <tr><td>Consolidated ARR ($M)</td><td id="pl-arr-y1">$0.0</td><td id="pl-arr-y2">$2.6</td><td id="pl-arr-y3">$6.5</td><td id="pl-arr-y4">$11.4</td><td id="pl-arr-y5">$16.0</td></tr>
+          <tr class="section-row"><td colspan="6">COGS</td></tr>
+          <tr><td>Labor (portco-level)</td><td id="pl-cl-y1">$0.0</td><td id="pl-cl-y2">$1.2</td><td id="pl-cl-y3">$3.0</td><td id="pl-cl-y4">$5.1</td><td id="pl-cl-y5">$7.0</td></tr>
+          <tr><td>Vendor stack</td><td id="pl-cv-y1">$0.0</td><td id="pl-cv-y2">$0.3</td><td id="pl-cv-y3">$0.7</td><td id="pl-cv-y4">$1.1</td><td id="pl-cv-y5">$1.4</td></tr>
+          <tr><td>Other COGS</td><td id="pl-co-y1">$0.0</td><td id="pl-co-y2">$0.1</td><td id="pl-co-y3">$0.3</td><td id="pl-co-y4">$0.7</td><td id="pl-co-y5">$1.0</td></tr>
+          <tr class="subtotal-row"><td>Total COGS ($M)</td><td id="pl-tc-y1">$0.0</td><td id="pl-tc-y2">$1.6</td><td id="pl-tc-y3">$3.8</td><td id="pl-tc-y4">$6.9</td><td id="pl-tc-y5">$8.6</td></tr>
+          <tr class="subtotal-row"><td>Gross profit ($M)</td><td id="pl-gp-y1">$0.0</td><td id="pl-gp-y2">$1.0</td><td id="pl-gp-y3">$2.7</td><td id="pl-gp-y4">$4.5</td><td id="pl-gp-y5">$7.4</td></tr>
+          <tr><td>Gross margin</td><td id="pl-gm-y1">30%</td><td id="pl-gm-y2">40%</td><td id="pl-gm-y3">42%</td><td id="pl-gm-y4">44%</td><td id="pl-gm-y5">46.2%</td></tr>
+          <tr class="section-row"><td colspan="6">Central overhead (MSP share of shared 22-FTE HoldCo)</td></tr>
+          <tr class="subtotal-row"><td>Central OH ($M)<span class="row-sub">Base $1.5M / Bear $2.0M / Bull $0.70M</span></td><td id="pl-coh-y1">$0.18</td><td id="pl-coh-y2">$0.48</td><td id="pl-coh-y3">$0.84</td><td id="pl-coh-y4">$1.18</td><td id="pl-coh-y5">$1.50</td></tr>
+          <tr class="section-row"><td colspan="6">Profitability</td></tr>
+          <tr class="subtotal-row"><td>EBITDA ($M)</td><td id="pl-eb-y1">-$0.18</td><td id="pl-eb-y2">$0.5</td><td id="pl-eb-y3">$1.9</td><td id="pl-eb-y4">$3.3</td><td id="pl-eb-y5">$5.9</td></tr>
+          <tr><td>EBITDA margin</td><td id="pl-ebm-y1">—</td><td id="pl-ebm-y2">21%</td><td id="pl-ebm-y3">29%</td><td id="pl-ebm-y4">29%</td><td id="pl-ebm-y5">37%</td></tr>
+          <tr><td>Interest ($M)</td><td id="pl-int-y1">$0.0</td><td id="pl-int-y2">$0.1</td><td id="pl-int-y3">$0.2</td><td id="pl-int-y4">$0.4</td><td id="pl-int-y5">$0.5</td></tr>
+          <tr class="total-row"><td>Net income ($M)</td><td id="pl-ni-y1">-$0.18</td><td id="pl-ni-y2">$0.4</td><td id="pl-ni-y3">$1.7</td><td id="pl-ni-y4">$2.9</td><td id="pl-ni-y5">$5.4</td></tr>
+        </tbody>
+      </table>
+
+    </div>
+  </details>
+
+  <!-- 6 · CAPITAL STRUCTURE & CAP TABLE — verified financing detail -->
+  <details class="section" open>
+    <summary><span class="section-num">6 ·</span> <span class="section-headline" id="h-cap-hdr">Capital structure · Senior debt 2.75× + 12% seller note + equity — source-agnostic, $151K/deal fixed cost</span></summary>
+    <div class="section-body">
+
+      <p style="font-size:12px; color:var(--near-black); margin:0 0 14px; line-height:1.55;">Inputs on this page are sourced individually; the capital structure is market convention rather than conference data. sources (SBA SOP 50 10 8, GF Data, Carta, BizBuySell, IBBA — see §9). Three layers replace the prior "equity + 4× unitranche" simplification: <strong>(A)</strong> the fixed transaction-cost stack that is the real basis of the small-target thesis, <strong>(B)</strong> the achievable per-deal financing structure, and <strong>(C)</strong> the corporate cap table across funding rounds.</p>
+
+      <!-- Exhibit A — fixed-cost threshold -->
+      <h4>A · Fixed deal costs — not overpayment — are why incumbents can't go small</h4>
+      <p style="font-size:12px; color:var(--near-black); margin:0 0 8px; line-height:1.55;">Buyer-side cost is <strong>~$151K per deal and largely fixed</strong> (QoE $20K + legal $18K + escrow $3K + in-house team $110K; broker excluded — Double-Lehman is seller-paid).<sup><a class="fn-ref" href="#fn-24">24</a></sup> Fixed $/deal is trivial on a $3M-EBITDA platform but confiscatory on a $0.25M-EBITDA micro-firm — that discontinuity, not skill, is the moat. Our edge is driving the fixed number down via an AI-native deal desk, shifting the viable floor left.</p>
+      <table class="data" style="margin-bottom:6px;">
+        <thead><tr><th>Target EBITDA</th><th>Purchase price</th><th>Equity check</th><th>Fixed cost</th><th>Fixed as % of equity</th><th>Incumbent reach</th></tr></thead>
+        <tbody id="cap-a-body"><!-- populated by recalc --></tbody>
+      </table>
+      <div class="formula-note" id="cap-a-note">Fixed $151K = 6% of a $2.6M deal's equity but ~40%+ on a sub-$0.3M-EBITDA micro-deal. Incumbents' $250K+ internal cost/deal makes micro structurally unreachable — the white space we target.</div>
+
+      <!-- Exhibit B — per-deal financing structure -->
+      <h4 style="margin-top:18px;">B · Per-deal financing — <span id="cap-b-scen">Base</span> representative acquisition</h4>
+      <p style="font-size:12px; color:var(--near-black); margin:0 0 8px; line-height:1.55;">Sub-$1M EBITDA targets do <strong>not</strong> qualify for unitranche (floor ≈ $10–15M EBITDA<sup><a class="fn-ref" href="#fn-26">26</a></sup>). The achievable stack is an <strong>senior note</strong> (≤2.75× EBITDA, capped $5M, ~10.5%)<sup><a class="fn-ref" href="#fn-24">24</a></sup> + a <strong>12% seller note</strong> (~7%, on standby)<sup><a class="fn-ref" href="#fn-27">27</a></sup> + fund equity. 4× unitranche only unlocks once the consolidated platform crosses ~$3M EBITDA.</p>
+      <table class="data">
+        <tr><td>Purchase price <span class="row-sub">ARR × entry multiple</span></td><td></td><td id="cap-b-price">$2.6M</td></tr>
+        <tr><td>Senior debt <span class="row-sub" id="cap-b-sba-sub">2.75× EBITDA, capped $5M / 90% price</span></td><td></td><td id="cap-b-sba">$1.4M</td></tr>
+        <tr><td>Seller note (12%, standby)</td><td></td><td id="cap-b-seller">$0.3M</td></tr>
+        <tr class="subtotal-row"><td>Fund equity into deal</td><td></td><td id="cap-b-eq">$0.9M</td></tr>
+        <tr><td>+ Transaction stack (cash, fixed)</td><td></td><td id="cap-b-txn">$0.2M</td></tr>
+        <tr class="total-row"><td>All-in equity outlay</td><td></td><td id="cap-b-allin">$1.0M</td></tr>
+      </table>
+      <div class="waterfall" style="margin-top:10px;">
+        <div class="waterfall-row"><span class="wlabel">Senior debt</span><span class="wbar"><span class="wfill slate" id="cap-b-bar-sba" style="width:55%"></span></span><span class="wval" id="cap-b-wsba">$1.4M</span></div>
+        <div class="waterfall-row"><span class="wlabel">Seller note</span><span class="wbar"><span class="wfill mist" id="cap-b-bar-seller" style="width:12%"></span></span><span class="wval" id="cap-b-wseller">$0.3M</span></div>
+        <div class="waterfall-row"><span class="wlabel">Fund equity</span><span class="wbar"><span class="wfill" id="cap-b-bar-eq" style="width:33%"></span></span><span class="wval" id="cap-b-weq">$0.9M</span></div>
+      </div>
+      <div class="formula-note">Blended cost of debt ≈ 9–10% (senior ~10.5% + seller note ~7%). Lenders at this size typically require a ≥10% buyer equity injection and guarantees from principals.<sup><a class="fn-ref" href="#fn-24">24</a></sup></div>
+
+      <!-- Exhibit C — corporate cap table across rounds -->
+      <h4 style="margin-top:18px;">C · Corporate cap table — founder ownership falls in %, rises in absolute value</h4>
+      <p style="font-size:12px; color:var(--near-black); margin:0 0 8px; line-height:1.55;">Modelled on <strong>Carta median single-round dilution</strong> (2024-26): ~20% at Series A, ~13% at B, ~11% at C<sup><a class="fn-ref" href="#fn-25">25</a></sup> — <em>not</em> the 50–70% per-round figures from memory (those occur only in distressed recaps). Founders/team dilute steadily but their stake compounds as the valuation steps up.</p>
+      <table class="data">
+        <thead><tr><th>Round</th><th>Raise</th><th>Post-money</th><th>New investor</th><th>Founders/team %</th><th>Founders stake $</th></tr></thead>
+        <tbody id="cap-c-body"><!-- populated by recalc --></tbody>
+      </table>
+      <div class="formula-note">Nikolai's thesis holds directionally — % down, absolute up — but the real magnitude is ~20%/round, not half the company at A. If S16 seeks ~50% for $5M, that implies a ~$10M post (seed pricing under an "A" label); the Carta median says negotiate toward ~20%.<sup><a class="fn-ref" href="#fn-25">25</a></sup></div>
+
+    </div>
+  </details>
+
+  <!-- 7 · MOAT — 22-FTE AI-native HoldCo -->
+  <details class="section" open>
+    <summary><span class="section-num">7 ·</span> <span class="section-headline" id="h-6-hdr">Moat · 22-FTE AI-native HoldCo across 5 verticals — Alpine's 50-FTE inherited unretrofittable</span></summary>
+    <div class="section-body">
+
+      <p style="font-size:12px; color:var(--near-black); margin:0 0 12px; line-height:1.55;">The <strong>Counter-Positioning power</strong> (Helmer 7 Powers #4): incumbents cannot retrofit their inherited 40–60 FTE HoldCos without cannibalizing portfolio economics. Base runs 22 FTE at Y5 supporting ~20 portcos across 5 verticals ($7.5M total HoldCo; MSP share $1.5M). Bear (AI thesis fails) collapses to 30–40 FTE / $2M MSP share. Bull extends AI leverage to 18 FTE / $1.2M. Portco headcount separate (~10–35 FTE each).</p>
+
+      <h4>22-FTE HoldCo vs Alpine's 50-FTE — 65% overhead reduction incumbents cannot retrofit</h4>
+      <table class="consol-table">
+        <thead>
+          <tr>
+            <th style="width:22%;">Dimension</th>
+            <th>Alpine · Evergreen</th>
+            <th>Court Square · Thrive</th>
+            <th>Oval · New Charter</th>
+            <th class="us">S16VC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>HoldCo FTE (Y5)</th>
+            <td>50–60<sup><a class="fn-ref" href="#fn-16">16</a></sup></td>
+            <td>45–55<sup><a class="fn-ref" href="#fn-16">16</a></sup></td>
+            <td>40–50<sup><a class="fn-ref" href="#fn-16">16</a></sup></td>
+            <td class="us"><strong>22 AI-augmented</strong></td>
+          </tr>
+          <tr>
+            <th>Central OPEX % of ARR</th>
+            <td>~7–9%</td>
+            <td>~6–8%</td>
+            <td>~7–9%</td>
+            <td class="us"><strong id="cmp-opex">~2.5%</strong></td>
+          </tr>
+          <tr>
+            <th>Tech stack vintage</th>
+            <td>Salesforce · NetSuite (2018–22)</td>
+            <td>Legacy PSA/RMM (pre-2020)</td>
+            <td>ConnectWise / Autotask</td>
+            <td class="us"><strong>AI-native</strong> · LLM agents on shared data layer</td>
+          </tr>
+          <tr>
+            <th>Avg per-target ARR</th>
+            <td>$6–10M (mid-tier)</td>
+            <td>$15M+ (platform)</td>
+            <td>$10M+ (mid-tier)</td>
+            <td class="us"><strong id="cmp-arr">$3.5M</strong> · <span id="cmp-tier">micro/small</span> arbitrage</td>
+          </tr>
+          <tr>
+            <th>Entry EV/EBITDA</th>
+            <td>8–12×</td>
+            <td>8–10×</td>
+            <td>8–10×</td>
+            <td class="us"><strong id="cmp-entry">~5×</strong> (<span id="cmp-mult">0.75×</span> rev @ 15% EBITDA)</td>
+          </tr>
+          <tr>
+            <th>Exit strategy</th>
+            <td>Evergreen · no exit</td>
+            <td>Y5–6 sponsor-to-sponsor recap</td>
+            <td>Long-hold PE</td>
+            <td class="us"><strong>Y5 @ <span id="cmp-exit">—</span></strong><sup><a class="fn-ref" href="#fn-4">4</a></sup></td>
+          </tr>
+          <tr>
+            <th>Can they retrofit?</th>
+            <td>Must dismantle 50-FTE HoldCo → cannibalizes portfolio</td>
+            <td>LP thesis locked at $15M+ tier → cannot go micro</td>
+            <td>Oval fund vintage lock-in (2019 LPA)</td>
+            <td class="us"><strong>Native</strong> — no retrofit gap</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="consol-verdict">
+        <strong>Counter-Positioning verdict.</strong> Each incumbent has a structural blocker to matching S16VC's micro-tier / AI-native / cross-vertical shared HoldCo design. The moat is not "we run cheaper" (at MSP-slice scale ~9% overhead is comparable) — it is "the cost of them going small is greater than the reward for them." Switching costs at portco-customer level (contracted MSAs, integrated tools) are the second moat; the other 5 of Helmer's 7 Powers we do not claim. Sources: Omdia<sup><a class="fn-ref" href="#fn-16">16</a></sup>, Solganick<sup><a class="fn-ref" href="#fn-5">5</a></sup>, ChannelE2E, PitchBook. FTE counts are LinkedIn HQ snapshots — directional, not benchmarked.
+      </div>
+
+    </div>
+  </details>
+
+  <!-- 7 · DOWNSIDE — Bear scenario + AI failure -->
+  <details class="section" open>
+    <summary><span class="section-num">8 ·</span> <span class="section-headline" id="h-7-hdr">Downside · Bear returns no equity — debt exceeds exit value / supplier hikes hit Y2</span></summary>
+    <div class="section-body">
+
+      <h4>Pre-mortem — three risk vectors</h4>
+      <div class="scen-hypos">
+        <div class="scen-hypo-card hypo-bear">
+          <h5>Market risk (not ours)</h5>
+          <ul>
+            <li>PE bidder demand pushes sub-$3M tier out of reach — arbitrage window closes<sup><a class="fn-ref" href="#fn-1">1</a></sup></li>
+            <li>Sellers refuse compressed multiples — deal flow stalls, op cap unreachable</li>
+            <li id="risk-exit-revert">Exit falls a band — 9.0× to 7.5×<sup><a class="fn-ref" href="#fn-3">3</a></sup> — the portfolio drops a maturity band and multiple expansion evaporates</li>
+          </ul>
+        </div>
+        <div class="scen-hypo-card hypo-bear">
+          <h5>Execution risk (risky)</h5>
+          <ul>
+            <li>Uplift under-delivers: cost/rev/price levers miss by 50%+ across cohorts</li>
+            <li>Managed GM stalls below the 51.2% leading cohort<sup><a class="fn-ref" href="#fn-8">8</a></sup></li>
+            <li>Post-close customer flight in first cohorts → playbook never validated → later cohorts inherit no template</li>
+          </ul>
+        </div>
+        <div class="scen-hypo-card hypo-bear">
+          <h5>Tech + supplier risk</h5>
+          <ul>
+            <li>AI stack fails → HoldCo scales to 40 FTE → central OPEX doubles → MOIC halves</li>
+            <li>Kaseya/ConnectWise vendor consolidation → 15–20% price hikes<sup><a class="fn-ref" href="#fn-14">14</a></sup> → cross-portfolio GM compression 2–4 pp</li>
+            <li>Mitigant: multi-vendor stack policy + Huntress/NinjaOne alternate rails<sup><a class="fn-ref" href="#fn-15">15</a></sup><sup><a class="fn-ref" href="#fn-17">17</a></sup></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </details>
+
+  <!-- 8 · BIBLIOGRAPHY -->
+  <details class="section" open>
+    <summary><span class="section-num">9 ·</span> <span class="section-headline">Bibliography — 29 sources</span><span class="section-meta">Cited throughout the document</span></summary>
+    <div class="section-body">
+      <div class="mi-bibliography" style="margin-top:0; padding-top:0; border-top:none;">
+        <ol>
+          <li id="fn-1"><strong>Aventis Advisors.</strong> <em>MSP Valuations Webinar</em>, 2025 — Best-in-class scorecard (p.8), size × margin × recurring valuation grid. <a href="https://github.com/bobroff-cap/roll-ups/blob/main/raw/msp-margin-reports/aventis-msp-valuations-webinar-2025.pdf">PDF</a></li>
+          <li id="fn-2"><strong>eight-m.</strong> <em>MSP Market Multiples</em>, February 2026 — size-tier EV/EBITDA and EV/Revenue ranges. <a href="https://eight-m.com/msp-valuation-multiples/">Web</a></li>
+          <li id="fn-3"><strong>Aventis Advisors.</strong> <em>MSP Valuations Webinar</em>, 2025 — Median MSP transaction 8.9× EBITDA, n = 117, Mergermarket (p.6). <a href="https://github.com/bobroff-cap/roll-ups/blob/main/raw/msp-margin-reports/aventis-msp-valuations-webinar-2025.pdf">PDF</a></li>
+          <li id="fn-4"><strong>Founders Advisors.</strong> <em>Managed IT Services M&amp;A Update, Q4 2023</em>, p.10–11 — Public EV/LTM EBITDA time series Q1 2020 – Q4 2023; 3-year average 12.07 – 13.02×. <a href="https://github.com/bobroff-cap/roll-ups/blob/main/raw/msp-margin-reports/founders-managed-it-services-q4-2023.pdf">PDF</a></li>
+          <li id="fn-5"><strong>Solganick &amp; Co.</strong> <em>Technology Services M&amp;A Update, Q4 2024 &amp; 1H 2025</em>, p.9 — Softchoice 14.5×, Crayon 13.5×, First Derivative 12.7× EBITDA precedents. <a href="https://github.com/bobroff-cap/roll-ups/blob/main/raw/msp-margin-reports/solganick-tech-services-ma-Q4-2024.pdf">Q4 PDF</a> · <a href="https://github.com/bobroff-cap/roll-ups/blob/main/raw/msp-margin-reports/solganick-tech-services-ma-1H-2025.pdf">1H PDF</a></li>
+          <li id="fn-6"><strong>Solganick &amp; Co.</strong> <em>Technology Services M&amp;A Update, 1H 2025</em>, p.17–19 — Public sub-sector multiples: Cloud Computing 17.8× / Cybersecurity 17.6× / IT Consulting US 10.0×. <a href="https://github.com/bobroff-cap/roll-ups/blob/main/raw/msp-margin-reports/solganick-tech-services-ma-1H-2025.pdf">PDF</a></li>
+          <li id="fn-7"><strong>Service Leadership Inc.</strong> <em>2025 Annual IT Solution Provider Industry Profitability Report</em> — Sixth consecutive year of 19%+ adjusted EBITDA for best-in-class MSPs. <a href="https://www.connectwise.com/company/press/releases/service-leadership-announces-findings-of-its-annual-it-solution-provider-industry-profitability-report">Press release</a></li>
+          <li id="fn-8"><strong>Service Leadership Index.</strong> <em>Q2 2024 Data Report</em>, August 2024 — Industry-average managed services gross margin 46.2%. <a href="https://www.globenewswire.com/news-release/2024/08/06/2925161/27043/en/Service-Leadership-Q2-Data-Report-Reveals-Slowing-Managed-Service-Revenue-Growth-Worldwide-but-MSP-Profitability-Remains-Strong.html">Press release</a></li>
+          <li id="fn-9"><strong>Service Leadership Inc.</strong> <em>Annual IT Solution Provider Industry Profitability Report 2024</em> — North America MSP median adjusted EBITDA 8.7%, top quartile 20.6%. Primary report subscription-only; cited via CT Acquisitions "MSP M&amp;A Multiples 2026". <a href="https://ctacquisitions.com/guides/it-managed-services-ma-multiples-2026/">Source</a></li>
+          <li id="fn-10"><strong>U.S. Bureau of Labor Statistics.</strong> <em>Occupational Employment and Wage Statistics (OEWS)</em>, May 2024 — SOC 15-1244 Network &amp; Systems Administrators (median $96.8K), 15-1232 Computer User Support (median $60.3K), 41-3091 Sales Reps Services (median $65K), 43-1011 Dispatch/service coordinators. <a href="https://www.bls.gov/oes/current/oes_nat.htm">BLS OEWS</a></li>
+          <li id="fn-11"><strong>MSP Success.</strong> <em>Owner Income Survey 2024</em> — 44% of $1–5M revenue MSP owners take $100–200K annual comp. <a href="https://mspsuccess.com/">Reference</a></li>
+          <li id="fn-12"><strong>International Business Brokers Association (IBBA).</strong> <em>Double Lehman formula</em> — success fee structure for sub-$5M business transactions (10% first $M + 8% second + 6% third + 4% fourth). <a href="https://www.ibba.org/">IBBA</a></li>
+          <li id="fn-13"><strong>GF Data.</strong> <em>Report 2024</em> — quality-of-earnings (QoE) adjustments for lower-middle-market services acquisitions (owner-spouse payroll, S-corp expenses, secondary lease normalization). <a href="https://gfdata.com/">GF Data</a></li>
+          <li id="fn-14"><strong>ConnectWise IT Nation.</strong> <em>Benchmarks 2024</em> — tech utilization metrics: endpoints per L1–L2 tech (weak 50–80 / median 100–150 / best 200–300), tickets per tech per day, revenue per FTE. <a href="https://itnation.connectwise.com/">ConnectWise IT Nation</a></li>
+          <li id="fn-15"><strong>AIMultiple.</strong> <em>RMM Pricing Guide 2024</em> — public pricing tiers for RMM platforms (NinjaOne, Kaseya VSA, Datto), consolidated benchmark for vendor stack modeling. <a href="https://research.aimultiple.com/">AIMultiple</a></li>
+          <li id="fn-16"><strong>Omdia.</strong> <em>Alpine Investors / Evergreen MSP Roll-up Model, 2024</em> — documented volume-tier vendor discount pattern at 250+ endpoint threshold; central platform build-out mechanics. <a href="https://omdia.tech.informa.com/">Omdia</a></li>
+          <li id="fn-17"><strong>Huntress.</strong> <em>MDR + EDR public pricing, 2024–2026</em> — SMB-focused managed detection &amp; response tier used for cyber cross-sell modeling. <a href="https://www.huntress.com/">Huntress</a></li>
+          <li id="fn-18"><strong>McKinsey &amp; Company.</strong> <em>M&amp;A Synergy Realization Report, 2023</em> — 70–85% of announced cost synergies realized within 18 months; revenue synergies at 25–35% of announced over 18–36 months. <a href="https://www.mckinsey.com/">McKinsey</a></li>
+          <li id="fn-19"><strong>Zylo.</strong> <em>SaaS Management Index 2024</em> — post-M&amp;A SaaS consolidation captures 15–30% of overlap spend on redundant licenses. <a href="https://zylo.com/">Zylo</a></li>
+          <li id="fn-20"><strong>3CX.</strong> <em>Public pricing tiers, 2024–2026</em> — phone/PBX platform pricing used for MSP back-office consolidation modeling. <a href="https://www.3cx.com/">3CX</a></li>
+          <li id="fn-21"><strong>Insureon.</strong> <em>MSP business insurance benchmarks</em> — general liability, E&amp;O, and cyber insurance quotes for lower-mid-market IT services firms. <a href="https://www.insureon.com/">Insureon</a></li>
+          <li id="fn-22"><strong>Everstage.</strong> <em>MSP Sales Compensation Guide 2026</em> — SDR-per-portco activation pattern for platform-integrated MSPs; commission structure benchmarks. <a href="https://www.everstage.com/">Everstage</a></li>
+          <li id="fn-23"><strong>Flexpoint.</strong> <em>MSP Profitability Report 2026</em> — owner-operator baseline 30% GM vs. best-in-class 46% GM confirms 16pp pricing/discipline gap driving price uplift lever. <a href="https://www.getflexpoint.com/">Flexpoint</a></li>
+          <li id="fn-24"><strong>U.S. Small Business Administration.</strong> <em>SOP 50 10 8 (eff. 6/1/2025) &amp; 7(a) Fees FY2026</em> — acquisition financing: $5M loan cap, 10-yr goodwill term, ≥10% equity injection, personal guarantee for 20%+ owners, ~Prime+3% (~10–11.5% effective), guaranty fee 3.5% on $700K–5M portion, seller-note full-standby rules. <a href="https://www.sba.gov/partners/lenders/7a-loan-program/terms-conditions-eligibility">SBA</a></li>
+          <li id="fn-25"><strong>Carta.</strong> <em>State of Private Markets &amp; Founder Ownership, 2024–2026</em> — median single-round dilution: Seed ~20%, Series A ~20%, Series B ~13%, Series C ~10–13%; dilution declines monotonically by round (no standard round approaches 50–70%). <a href="https://carta.com/data/state-of-private-markets-q4-2025/">Carta</a></li>
+          <li id="fn-26"><strong>GF Data / Houlihan Lokey.</strong> <em>Q4 2025 Leverage Report; Private Credit Market Newsletter, Jan 2026</em> — lower-middle-market senior leverage ~3.1× / total ~4.0× at $10–25M+ TEV; unitranche practical floor ≈ $10–15M EBITDA, all-in SOFR+500–700bps. Confirms 4× unitranche unavailable sub-$1M EBITDA. <a href="https://gfdata.com/">GF Data</a></li>
+          <li id="fn-27"><strong>BizBuySell / Livmo / Hadley Capital.</strong> <em>Insight Report 2024–2025; seller-financing guides</em> — seller notes 10–15% of price (sub-$25M avg ~12%), fixed 6–8%, 4–5 yr amortizing; ~28% of sellers open to seller financing amid tight credit. <a href="https://www.bizbuysell.com/insight-report/">BizBuySell</a></li>
+          <li id="fn-29"><strong>584 &amp; Cogent Growth Partners.</strong> <em>“What is my MSP worth?” valuation scorecard</em>, April 2025, presented at ChannelCon 2025 — adjusted-EBITDA bands 1–3× / 3–6× ($250K–1M) · 5–8× ($1–2.5M) · 6–9× ($2.5–4M) · 8–10×+ ($4–5M+). Three caveats stated by the presenter and carried into the model: the chart scores a <em>single MSP offered for sale</em>, not a platform (“that’s not an MSP any more… platforms trade at different multiples”); EBITDA is one of eight scored rows alongside MRR share, retention, client concentration, systems and management; and the presenter describes it as “not exact math… aggregating a lot of sources.” The 1–3× rung applies to declining revenue and is excluded here, since the model assumes steady revenue. Bands are interpolated rather than stepped.</li>
+        <li id="fn-28"><strong>IBBA / M&amp;A Source; EBIT Community; Bedrock.</strong> <em>Market Pulse Q4 2025; QoE cost guides 2025–2026</em> — buyer-side transaction costs sub-$1M EBITDA: QoE $15–25K, legal $12–25K, escrow/misc $2–5K; Double-Lehman broker fee (10/8/6%) customarily seller-paid; no R&amp;W insurance below ~$15–25M EV. <a href="https://www.prnewswire.com/news-releases/the-ibba-and-ma-source-announce-the-market-pulse-q4-2025-survey-results-302691992.html">IBBA Market Pulse</a></li>
+        </ol>
+      </div>
+    </div>
+  </details>
+
+
+</main>
+
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+// State — 8 slider vars + 6 baseline constants (set by setScenario).
+// Deal count is DERIVED via self-financing rollup loop, not a slider input.
+const state = {
+  scenario: 'base',
+  // 8 UI sliders (Base defaults)
+  mult: 0.435, exit: 7.5, gmt: 40.5, copex: 1.5, leverage: 2.75,
+  price: 25, revlift: 12, churn: 5,
+  // 6 baseline constants (Base defaults)
+  mrr: 292, staff: 17, gm: 30, endpts: 1150, cost: 12, owner: 9
+};
+
+// ============================================================
+// CAP-TABLE LAYER — verified against official sources (2026-07-16)
+// ============================================================
+// Every constant below is sourced (see §Bibliography). Replaces the prior
+// "4× unitranche @10%" simplification with the financing structure actually
+// achievable at sub-$1M EBITDA: Senior debt + seller note + fund equity,
+// plus the fixed transaction-cost stack that is the real basis of the
+// small-target thesis (fixed $/deal → prohibitive on micro deals for incumbents).
+const CAPTABLE = {
+  // Layer A — transaction-cost stack (buyer-side, fixed $M per deal)
+  txnQoE:             0.020,  // Quality of Earnings, sub-$1M EBITDA: $15–25K (EBIT Community 2025; Bedrock QoE 2026)
+  txnLegal:           0.018,  // legal/closing, $3M MSP: $12–25K (DueDilio 2025; ContractsCounsel 2026)
+  txnEscrow:          0.003,  // escrow/filing/misc (DealRoom 2025)
+  txnInternalPerDeal: 0.110,  // in-house deal team, fully-loaded: $75–150K/deal (Charles Aris 2025; Robert Half 2026)
+  // (broker fee excluded — Double-Lehman is customarily seller-paid; proprietary sourcing removes it)
+  // Layer B — financing structure (verified achievable for sub-$1M EBITDA)
+  sbaSeniorTurns:  2.75,   // Senior debt leverage × EBITDA (GF Data 2025: 4× is $10M+ TEV, not micro)
+  sbaLoanCapM:     5.0,    // SBA 7(a) max loan (SBA SOP 50 10 8, eff 6/1/2025)
+  sbaLtvCap:       0.90,   // max share of price financeable via SBA
+  sbaGuarantyFee:  0.035,  // guaranty fee on $700K–5M portion, financed into principal (SBA 7(a) fees FY2026)
+  sbaRate:         0.105,  // effective SBA rate, Prime+3% (SBA 2025-26)
+  sellerNotePct:   0.12,   // seller note as % of price; market avg sub-$25M (BizBuySell 2024-25)
+  sellerNoteRate:  0.07,   // seller-note interest, fixed 6–8% (Livmo/Hadley 2024)
+  minEquityInject: 0.10,   // SBA minimum buyer equity injection
+  // Layer C — corporate cap table (Carta median single-round dilution, 2024-26)
+  rounds: [
+    { name: 'Series A · S16',  raiseM: 5.0,  postM: 25.0,  dilution: 0.20 },  // Carta Series A median ~20%
+    { name: 'Series B',        raiseM: 15.0, postM: 115.0, dilution: 0.13 },  // Carta Series B median ~13%
+    { name: 'Series C',        raiseM: 40.0, postM: 360.0, dilution: 0.11 },  // Carta Series C median ~10-13%
+  ],
+};
+const TXN_FIXED_PER_DEAL = CAPTABLE.txnQoE + CAPTABLE.txnLegal + CAPTABLE.txnEscrow + CAPTABLE.txnInternalPerDeal; // ≈ $0.151M
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function fmt$M(v) {
+  if (v === null || v === undefined || isNaN(v)) return '$—';
+  const abs = Math.abs(v);
+  if (abs >= 1000) return (v < 0 ? '-' : '') + '$' + (abs/1000).toFixed(1) + 'B';
+  if (abs >= 1) return (v < 0 ? '-' : '') + '$' + abs.toFixed(1) + 'M';
+  return (v < 0 ? '-' : '') + '$' + (abs*1000).toFixed(0) + 'K';
+}
+function fmt$K(v) { return '$' + Math.round(v).toLocaleString('en-US'); }
+function fmtPct(v, d=1) { if (isNaN(v)) return '—'; return v.toFixed(d) + '%'; }
+
+// ============================================================
+// SCENARIO SWITCHER (Bear / Base / Bull)
+// ============================================================
+// Scenarios drive target size (Bear $7M ARR / Base $3.5M / Bull $2M) + purchase/exit multiples + playbook uplift.
+// Numbers anchored to Section 1 Market benchmarks (Aventis tiers, Solganick multiples, SLI GM).
+// Central OPEX = MSP share of shared 22-FTE HoldCo across all 5 verticals.
+// Leverage = Senior debt multiple on EBITDA (sub-$1M EBITDA tier); 2.5-3× achievable.
+// Exit multiple follows the 584 & Cogent Growth Partners maturity ladder (April 2025).
+// Source caveats, stated by the presenter: the chart scores a SINGLE MSP for sale, not a
+// platform ("that's not an MSP anymore... platforms trade at different multiples"), it
+// aggregates several sources and is "not exact math", and EBITDA is one of eight scored
+// rows alongside MRR share, retention, concentration, systems and management.
+// The 1-3x band (declining revenue) is omitted here: the model assumes steady revenue.
+// keyed to consolidated adjusted EBITDA. Replaces the flat public-market median.
+// Band midpoints from the 584 & Cogent ladder, interpolated rather than stepped:
+// the source scores a company across eight rows, so a dollar of EBITDA either side
+// of a band edge does not move the multiple by a turn and a half.
+const LADDER = [
+  { eb: 0.50, mult: 4.5 },   // $250K-1M, steady revenue: 3-6x
+  { eb: 1.75, mult: 6.5 },   // $1-2.5M:  5-8x
+  { eb: 3.25, mult: 7.5 },   // $2.5-4M:  6-9x
+  { eb: 6.00, mult: 9.0 },   // $4-5M+:   8-10x
+];
+function multFor(eb) {
+  if (eb <= LADDER[0].eb) return LADDER[0].mult;
+  const last = LADDER[LADDER.length - 1];
+  if (eb >= last.eb) return last.mult;
+  for (let i = 0; i < LADDER.length - 1; i++) {
+    const a = LADDER[i], b = LADDER[i + 1];
+    if (eb <= b.eb) return a.mult + (b.mult - a.mult) * (eb - a.eb) / (b.eb - a.eb);
+  }
+  return last.mult;
+}
+
+const FUND_EQUITY_PER_VERTICAL_M = 5.0;  // hard cap per vertical
+const scenarios = {
+  bear: {
+    // UI sliders (8)
+    mult:0.522, exit:6.5,  gmt:37.0, copex:2.0, leverage:2.5, price:10, revlift:5,  churn:16.8,
+    // Target profile (Bear: $5–10M scaled tier — 35 FTE, ~200 endpts/FTE, ~$200K rev/FTE)
+    mrr:583, staff:35, gm:26, endpts:2350, cost:5,  owner:12
+  },
+  base: {
+    mult:0.435, exit:7.5,  gmt:40.5, copex:1.5, leverage:2.75, price:25, revlift:12, churn:6.2,
+    // Target profile (Base: $3–5M small tier — 17 FTE, ~68 endpts/FTE)
+    mrr:292, staff:17, gm:30, endpts:1150, cost:12, owner:9
+  },
+  bull: {
+    mult:0.348, exit:9.0,  gmt:42.0, copex:1.2, leverage:3.0, price:40, revlift:20, churn:4.9,
+    // Target profile (Bull: <$3M micro tier — 10 FTE)
+    mrr:167, staff:10, gm:33, endpts:670,  cost:20, owner:6
+  },
+};
+
+function setScenario(name) {
+  const s = scenarios[name];
+  if (!s) return;
+  document.querySelectorAll('.scen-btn').forEach(el => {
+    el.classList.toggle('active', el.dataset.scenario === name);
+  });
+  state.scenario = name;
+  // Snap 8 UI sliders to scenario values
+  document.getElementById('sl-mult').value     = s.mult;
+  // exit multiple no longer has a control — it is read off the maturity ladder
+  document.getElementById('sl-gmt').value      = s.gmt;
+  document.getElementById('sl-copex').value    = s.copex;
+  document.getElementById('sl-leverage').value = s.leverage;
+  document.getElementById('sl-price').value    = s.price;
+  document.getElementById('sl-revlift').value  = s.revlift;
+  document.getElementById('sl-churn').value    = s.churn;
+  // Baseline constants stored in state (no sliders — updated by scenario click)
+  state.mrr    = s.mrr;
+  state.staff  = s.staff;
+  state.gm     = s.gm;
+  state.endpts = s.endpts;
+  state.cost   = s.cost;
+  state.owner  = s.owner;
+  recalc();
+}
+
+// ============================================================
+// RESET
+// ============================================================
+function resetAll() {
+  // Reset to Base scenario values
+  setScenario('base');
+}
+
+// ============================================================
+// RECALC
+// ============================================================
+function recalc() {
+  try {
+    recalcInner();
+  } catch (e) {
+    console.error('recalc() failed:', e);
+    const sbMoicEl = document.getElementById('sb-moic');
+    if (sbMoicEl) sbMoicEl.textContent = 'ERR';
+    const sbIrrEl = document.getElementById('sb-irr');
+    if (sbIrrEl) sbIrrEl.textContent = e.message.slice(0, 20);
+  }
+}
+
+function recalcInner() {
+  // Read 8 UI sliders
+  state.mult     = parseFloat(document.getElementById('sl-mult').value);
+  // exit multiple is derived from the maturity ladder, not user-set; see recalc below
+  state.gmt      = parseFloat(document.getElementById('sl-gmt').value);
+  state.copex    = parseFloat(document.getElementById('sl-copex').value);
+  state.leverage = parseFloat(document.getElementById('sl-leverage').value);
+  state.price    = parseFloat(document.getElementById('sl-price').value);
+  state.revlift  = parseFloat(document.getElementById('sl-revlift').value);
+  state.churn    = parseFloat(document.getElementById('sl-churn').value);
+  // state.mrr, staff, gm, endpts, cost, owner — set by setScenario, not sliders
+
+  // Update slider labels
+  document.getElementById('v-mult').textContent     = state.mult.toFixed(2) + '×';
+
+  document.getElementById('v-gmt').textContent      = state.gmt.toFixed(1) + '%';
+  document.getElementById('v-copex').textContent    = '$' + state.copex.toFixed(1) + 'M';
+  document.getElementById('v-leverage').textContent = state.leverage.toFixed(1) + '×';
+  document.getElementById('v-price').textContent    = state.price + '%';
+  document.getElementById('v-revlift').textContent  = state.revlift + '%';
+  document.getElementById('v-churn').textContent    = state.churn + '%';
+
+
+  // Per-target economics
+  const mrrDollars = state.mrr * 1000;
+  const arr = mrrDollars * 12;
+  const purchasePrice = arr * state.mult;
+
+  // Baseline COGS
+  const laborBase = 45833 * (state.staff / 6);
+  const vendorScale = state.endpts / 400;
+  const vendorBase = 9980 * vendorScale;  // Section 6 canonical stack total (advisor-validated)
+  const vendorPost = 9080 * vendorScale;
+  const vendorConsol = 7264 * vendorScale;
+  const otherCogsBase = 8000;
+  const otherCogsPost = 3500;
+
+  const cogsM0 = laborBase + vendorBase + otherCogsBase;
+  const gpM0 = mrrDollars - cogsM0;
+  const gmM0 = gpM0 / mrrDollars * 100;
+
+  const mrrM3 = mrrDollars * (1 + state.revlift/100 * (3/12));
+  const laborM3 = laborBase * (1 - state.cost/100 * 0.4);
+  const cogsM3 = laborM3 + vendorPost + otherCogsPost;
+  const gpM3Raw = mrrM3 - cogsM3;
+  const gmM3Raw = gpM3Raw / mrrM3 * 100;
+  const gmM3 = Math.min(gmM3Raw, state.gmt);  // cap at post-integration GM ceiling
+  const gpM3 = mrrM3 * gmM3 / 100;
+
+  const mrrM12 = mrrDollars * (1 - state.churn/100) * (1 + (state.revlift + state.price)/100);
+  const laborM12 = laborBase - (14583 * (state.staff/6));
+  const cogsM12 = laborM12 + vendorPost + otherCogsPost;
+  const gpM12Raw = mrrM12 - cogsM12;
+  const gmM12Raw = gpM12Raw / mrrM12 * 100;
+  const gmM12 = Math.min(gmM12Raw, state.gmt);  // cap
+  const gpM12 = mrrM12 * gmM12 / 100;
+
+  const mrrSS = mrrDollars * (1 - state.churn/100) * (1 + (state.revlift + state.price)/100) * 1.02;
+  const cogsSS = laborM12 + vendorConsol + otherCogsPost;
+  const gpSSRaw = mrrSS - cogsSS;
+  const gmSSRaw = gpSSRaw / mrrSS * 100;
+  const gmSS = Math.min(gmSSRaw, state.gmt);  // cap
+  const gpSS = mrrSS * gmSS / 100;
+
+  // Target profile table
+  document.getElementById('t-mrr').textContent = fmt$K(mrrDollars);
+  document.getElementById('t-arr').textContent = fmt$K(arr);
+  document.getElementById('t-cogs').textContent = fmt$K(cogsM0);
+  document.getElementById('t-cogs-y').textContent = fmt$K(cogsM0 * 12);
+  document.getElementById('t-gp').textContent = fmt$K(gpM0);
+  document.getElementById('t-gp-y').textContent = fmt$K(gpM0 * 12);
+  document.getElementById('t-gm').textContent = fmtPct(gmM0);
+  // Labor subtotal + vendor stack + biz expense % — scenario-scaled row cells
+  const tLabEl = document.getElementById('t-lab'); if (tLabEl) tLabEl.textContent = fmt$K(laborBase);
+  const tLabYEl = document.getElementById('t-lab-y'); if (tLabYEl) tLabYEl.textContent = fmt$K(laborBase * 12);
+  const tLabPctEl = document.getElementById('t-lab-pct'); if (tLabPctEl) tLabPctEl.textContent = fmtPct(laborBase / mrrDollars * 100);
+  const tVenEl = document.getElementById('t-ven'); if (tVenEl) tVenEl.textContent = fmt$K(vendorBase);
+  const tVenYEl = document.getElementById('t-ven-y'); if (tVenYEl) tVenYEl.textContent = fmt$K(vendorBase * 12);
+  const tVenPctEl = document.getElementById('t-ven-pct'); if (tVenPctEl) tVenPctEl.textContent = fmtPct(vendorBase / mrrDollars * 100);
+  const tBizPctEl = document.getElementById('t-biz-pct'); if (tBizPctEl) tBizPctEl.textContent = fmtPct(8000 / mrrDollars * 100);
+  // NOTE: t-price is created dynamically inside pp-formula innerHTML rebuild below (line ~1450); no static id in HTML.
+
+  // Purchase price meta in header + Section 5 stack header
+  const priceLabel = purchasePrice >= 1_000_000
+    ? '$' + (purchasePrice/1_000_000).toFixed(2) + 'M'
+    : '$' + Math.round(purchasePrice/1000) + 'K';
+  const tgtMetaEl = document.getElementById('tgt-price-meta'); if (tgtMetaEl) tgtMetaEl.textContent = priceLabel;
+
+  // Update purchase price formula (Section 2)
+  const ppFormulaEl = document.getElementById('pp-formula');
+  if (ppFormulaEl) {
+    ppFormulaEl.innerHTML = '$' + state.mrr + 'K MRR × 12 months × ' + state.mult.toFixed(2) + '× = <strong id="t-price">' + fmt$K(purchasePrice) + '</strong>';
+  }
+
+  // Uplift worksheet
+  document.getElementById('u-mrr-m0').textContent = fmt$K(mrrDollars);
+  document.getElementById('u-mrr-m3').textContent = fmt$K(mrrM3);
+  document.getElementById('u-mrr-m12').textContent = fmt$K(mrrM12);
+  document.getElementById('u-mrr-ss').textContent = fmt$K(mrrSS);
+  document.getElementById('u-arr-m0').textContent = fmt$K(mrrDollars * 12);
+  document.getElementById('u-arr-m3').textContent = fmt$K(mrrM3 * 12);
+  document.getElementById('u-arr-m12').textContent = fmt$K(mrrM12 * 12);
+  document.getElementById('u-arr-ss').textContent = fmt$K(mrrSS * 12);
+  document.getElementById('u-lab-m0').textContent = fmt$K(laborBase);
+  document.getElementById('u-lab-m3').textContent = fmt$K(laborM3);
+  document.getElementById('u-lab-m12').textContent = fmt$K(laborM12);
+  document.getElementById('u-lab-ss').textContent = fmt$K(laborM12);
+  document.getElementById('u-ven-m0').textContent = fmt$K(vendorBase);
+  document.getElementById('u-ven-m3').textContent = fmt$K(vendorPost);
+  document.getElementById('u-ven-m12').textContent = fmt$K(vendorPost);
+  document.getElementById('u-ven-ss').textContent = fmt$K(vendorConsol);
+  document.getElementById('u-cogs-m0').textContent = fmt$K(cogsM0);
+  document.getElementById('u-cogs-m3').textContent = fmt$K(cogsM3);
+  document.getElementById('u-cogs-m12').textContent = fmt$K(cogsM12);
+  document.getElementById('u-cogs-ss').textContent = fmt$K(cogsSS);
+  document.getElementById('u-gp-m0').textContent = fmt$K(gpM0);
+  document.getElementById('u-gp-m3').textContent = fmt$K(gpM3);
+  document.getElementById('u-gp-m12').textContent = fmt$K(gpM12);
+  document.getElementById('u-gp-ss').textContent = fmt$K(gpSS);
+  document.getElementById('u-gm-m0').textContent = fmtPct(gmM0);
+  document.getElementById('u-gm-m3').textContent = fmtPct(gmM3);
+  document.getElementById('u-gm-m12').textContent = fmtPct(gmM12);
+  document.getElementById('u-gm-ss').textContent = fmtPct(gmSS);
+
+  // SG&A below gross profit — sales, admin, dispatch, rent, insurance, owner comp.
+  // Pre-acquisition the target carries its own complete back office. Post-acquisition
+  // accounting, HR, procurement and marketing centralize into the HoldCo; the saving
+  // IS the roll-up thesis, so it is shown as a line rather than assumed away.
+  // Entry level is set so M0 EBITDA margin lands on the 8.7% median adjusted EBITDA
+  // the portfolio model buys at; steady state on the 25pp that leaves 15.5% net.
+  // Benchmark cross-check: a company at 8.7% net interpolates to ~40.0% GM and
+  // ~31.3pp SG&A between the bottom (32.8/4.3) and leading (51.2/15.5) cohorts.
+  const ENTRY_EB_MARGIN = 8.7, SS_EB_MARGIN = 15.5;
+  const sgaPctM0 = gmM0 - ENTRY_EB_MARGIN;
+  const sgaPctSS = state.gmt - SS_EB_MARGIN;
+  const sgaPctAt = (t) => sgaPctM0 + (sgaPctSS - sgaPctM0) * t;
+  const sgaM0  = mrrDollars * sgaPctM0 / 100;
+  const sgaM3  = mrrM3  * sgaPctAt(0.25) / 100;   // 90 days in: integration barely started
+  const sgaM12 = mrrM12 * sgaPctAt(0.80) / 100;   // owner exited, back office mostly centralized
+  const sgaSS  = mrrSS  * sgaPctSS / 100;
+  const ebM0 = gpM0 - sgaM0;
+  const ebM3 = gpM3 - sgaM3;
+  const ebM12 = gpM12 - sgaM12;
+  const ebSS = gpSS - sgaSS;
+  document.getElementById('u-sga-m0').textContent = fmt$K(sgaM0);
+  document.getElementById('u-sga-m3').textContent = fmt$K(sgaM3);
+  document.getElementById('u-sga-m12').textContent = fmt$K(sgaM12);
+  document.getElementById('u-sga-ss').textContent = fmt$K(sgaSS);
+  document.getElementById('u-sgap-m0').textContent = fmtPct(sgaPctM0);
+  document.getElementById('u-sgap-m3').textContent = fmtPct(sgaPctAt(0.25));
+  document.getElementById('u-sgap-m12').textContent = fmtPct(sgaPctAt(0.80));
+  document.getElementById('u-sgap-ss').textContent = fmtPct(sgaPctSS);
+  document.getElementById('u-eb-m0').textContent = fmt$K(ebM0);
+  document.getElementById('u-eb-m3').textContent = fmt$K(ebM3);
+  document.getElementById('u-eb-m12').textContent = fmt$K(ebM12);
+  document.getElementById('u-eb-ss').textContent = fmt$K(ebSS);
+  document.getElementById('u-ebm-m0').textContent = fmtPct(ebM0 / mrrDollars * 100);
+  document.getElementById('u-ebm-m3').textContent = fmtPct(ebM3 / mrrM3 * 100);
+  document.getElementById('u-ebm-m12').textContent = fmtPct(ebM12 / mrrM12 * 100);
+  document.getElementById('u-ebm-ss').textContent = fmtPct(ebSS / mrrSS * 100);
+
+  // ============================================================
+  // SELF-FINANCING ROLLUP SIMULATION
+  // ============================================================
+  // Self-financing mechanic: each portco we buy adds EBITDA → banks lend
+  // leverage × EBITDA → new debt capacity funds next deal → loop until either
+  // (a) fund equity exhausted OR (b) debt capacity insufficient for purchase.
+  // The first year we cannot buy any deal = BURNOUT.
+  const safeSet = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+  const targetARR_M      = state.mrr * 12 / 1000;              // millions
+  const purchasePrice_M  = targetARR_M * state.mult;
+  const targetEBITDA_M   = targetARR_M * 0.087;                // Y0 pre-uplift, median adj EBITDA (Service Leadership 2026)
+  const targetMargin_ss  = state.gmt/100 - 0.25;               // steady-state EBITDA margin (GM − 25pp SGA typical for MSP; aligns with SLI top-quartile 20.6%)
+  const targetMargin_pre = 0.087;
+
+  // Age → EBITDA margin ramp (age 0 = pre-uplift, age 2+ = steady state)
+  const ebitdaMarginForAge = (age) => Math.min(
+    targetMargin_ss,
+    targetMargin_pre + (targetMargin_ss - targetMargin_pre) * Math.min(1, age / 2)
+  );
+  // Age → ARR uplift scale (price + revlift − churn ramped over 2 years)
+  const arrScaleForAge = (age) => {
+    if (age <= 0) return 1.0;
+    if (age === 1) return (1 - state.churn/100) * (1 + (state.revlift/2 + state.price/2) / 100);
+    return (1 - state.churn/100) * (1 + (state.revlift + state.price) / 100);
+  };
+
+  // Central OPEX (MSP share of shared HoldCo), ramped Y1-Y5 — defined here so the
+  // self-financing loop can recycle retained portfolio free cash flow into equity.
+  const copexRatio  = [0.117, 0.319, 0.559, 0.787, 1.0];
+  const centralOpex = copexRatio.map(r => state.copex * r);
+
+  // ── Verified deal financing (Layer B): each acquisition is a STANDALONE
+  //    senior note + seller note + fund equity. No pooled unitranche
+  //    (unitranche floor ≈ $10-15M EBITDA — GF Data 2025). Transaction-cost stack
+  //    (Layer A) is paid in cash at close as a FIXED $/deal. Self-financing now
+  //    recycles retained portfolio free cash flow into deployable equity.
+  const txnPerDeal      = TXN_FIXED_PER_DEAL;   // ≈ $0.151M fixed cost per acquisition
+  let equityRemaining   = FUND_EQUITY_PER_VERTICAL_M;
+  let cumSbaSim         = 0;   // cumulative senior debt outstanding
+  let cumSellerSim      = 0;   // cumulative seller notes outstanding
+  let cumTxnSim         = 0;   // cumulative transaction costs spent (equity drag)
+  let cumDealsScalar    = 0;
+  const portfolio       = [];   // [{ yearBought, currentEBITDA }]
+  let burnoutYear       = null;
+  const dealsByYear           = [0, 0, 0, 0, 0];
+  const cumDealsByYear        = [0, 0, 0, 0, 0];
+  const cumDebtByYear         = [0, 0, 0, 0, 0];   // SBA + seller note (downstream compat)
+  const cumSbaByYear          = [0, 0, 0, 0, 0];
+  const cumSellerByYear       = [0, 0, 0, 0, 0];
+  const equityRemainingByYear = [0, 0, 0, 0, 0];
+  const portfolioEbitdaEOY    = [0, 0, 0, 0, 0];
+
+  for (let y = 1; y <= 5; y++) {
+    // Update portfolio EBITDA based on age at start of year y
+    portfolio.forEach(p => {
+      const age = y - p.yearBought;
+      p.currentEBITDA = targetARR_M * ebitdaMarginForAge(age);
+    });
+    const portfolioEBITDA = portfolio.reduce((s, p) => s + p.currentEBITDA, 0);
+
+    // Recycle prior portfolio free cash flow into deployable equity (self-financing):
+    // retained FCF = portfolio EBITDA − debt service − central OPEX (floored at 0).
+    if (y > 1) {
+      const debtService = cumSbaSim * CAPTABLE.sbaRate + cumSellerSim * CAPTABLE.sellerNoteRate;
+      const retainedFCF = Math.max(0, portfolioEBITDA - debtService - centralOpex[y-2]);
+      equityRemaining += retainedFCF;
+    }
+
+    // Operational cap: HoldCo integration bandwidth — scenario-scaled.
+    // Bear = expensive targets, slow integration. Bull = micro targets, fast intake.
+    const opCap = {
+      bear: [1, 1, 2, 2, 2],   // 8 max
+      base: [1, 2, 4, 4, 4],   // 15 max
+      bull: [1, 3, 6, 6, 6]    // 22 max
+    };
+    const capArr = opCap[state.scenario] || opCap.base;
+    const maxDealsPerYear = capArr[y - 1];
+    let dealsThisYear = 0;
+
+    while (dealsThisYear < maxDealsPerYear) {
+      // Per-deal financing (verified): senior debt + seller note + equity; txn cost in cash.
+      //   senior debt = min(2.75× dealEBITDA, 90% of price, $5M cap)
+      //   Seller note = 12% of price (on standby)
+      //   Equity = price − SBA − seller note + fixed txn stack
+      const dealEBITDA = targetEBITDA_M;                                   // Y0 pre-uplift
+      const sbaSenior  = Math.min(state.leverage * dealEBITDA, CAPTABLE.sbaLtvCap * purchasePrice_M, CAPTABLE.sbaLoanCapM);
+      const sellerNote = CAPTABLE.sellerNotePct * purchasePrice_M;
+      const equityUsed = purchasePrice_M - sbaSenior - sellerNote + txnPerDeal;
+      if (equityUsed > equityRemaining + 1e-6) break;
+
+      equityRemaining -= equityUsed;
+      cumSbaSim       += sbaSenior;
+      cumSellerSim    += sellerNote;
+      cumTxnSim       += txnPerDeal;
+      portfolio.push({ yearBought: y, currentEBITDA: dealEBITDA });
+      cumDealsScalar++;
+      dealsThisYear++;
+    }
+
+    dealsByYear[y-1]           = dealsThisYear;
+    cumDealsByYear[y-1]        = cumDealsScalar;
+    cumSbaByYear[y-1]          = cumSbaSim;
+    cumSellerByYear[y-1]       = cumSellerSim;
+    cumDebtByYear[y-1]         = cumSbaSim + cumSellerSim;
+    equityRemainingByYear[y-1] = equityRemaining;
+    portfolioEbitdaEOY[y-1]    = portfolio.reduce((s, p) => s + p.currentEBITDA, 0);
+
+    if (dealsThisYear === 0 && burnoutYear === null) burnoutYear = y;
+  }
+  // 0 sentinel = never burned out during 5-yr hold
+  if (burnoutYear === null) burnoutYear = 0;
+
+  // Populate self-financing dynamics table (§9)
+  for (let y = 1; y <= 5; y++) {
+    const idx = y - 1;
+    safeSet('sim-Y'+y+'-deals',  dealsByYear[idx]);
+    safeSet('sim-Y'+y+'-cum',    cumDealsByYear[idx]);
+    safeSet('sim-Y'+y+'-ebitda', fmt$M(portfolioEbitdaEOY[idx]));
+    safeSet('sim-Y'+y+'-debt',   fmt$M(cumDebtByYear[idx]));
+    safeSet('sim-Y'+y+'-eq',     fmt$M(equityRemainingByYear[idx]));
+  }
+  const burnoutLabel = burnoutYear === 0
+    ? 'Beyond Y5 — self-financing loop still viable at end of hold period'
+    : 'Y' + burnoutYear + ' — self-financing loop stalled (equity + debt capacity insufficient for next deal)';
+  const burnoutCell = document.getElementById('sim-burnout-cell');
+  if (burnoutCell) burnoutCell.innerHTML = '<strong>' + burnoutLabel + '</strong>';
+
+  // ============================================================
+  // CONSOLIDATED P&L — derived per year from portfolio state
+  // ============================================================
+  // For each year y, iterate every portco with yearBought ≤ y:
+  //   ARR uplift (age-ramped), GM (age-ramped state.gm → state.gmt), portco EBITDA = ARR × (GM − 25pp SG&A)
+  // Then subtract central OPEX (ramped Y1-Y5, defined above) and blended debt interest.
+  const plARR      = [0, 0, 0, 0, 0];
+  const plGP       = [0, 0, 0, 0, 0];
+  const plPortcoEB = [0, 0, 0, 0, 0];
+  const gmY        = [0, 0, 0, 0, 0];
+
+  for (let y = 1; y <= 5; y++) {
+    const idx = y - 1;
+    let sumARR = 0, sumGP = 0, sumEB = 0;
+    portfolio.forEach(p => {
+      if (p.yearBought > y) return;
+      const age = y - p.yearBought;
+      const arr_p = targetARR_M * arrScaleForAge(age);
+      const gm = Math.min(
+        state.gmt/100,
+        (state.gm/100) + (state.gmt/100 - state.gm/100) * Math.min(1, age / 2)
+      );
+      const ebMargin = Math.max(0, gm - 0.25);  // 25pp SGA (services industry standard)
+      sumARR += arr_p;
+      sumGP  += arr_p * gm;
+      sumEB  += arr_p * ebMargin;
+    });
+    plARR[idx]      = sumARR;
+    plGP[idx]       = sumGP;
+    plPortcoEB[idx] = sumEB;
+    gmY[idx]        = sumARR > 0 ? (sumGP / sumARR) * 100 : 0;
+  }
+
+  const plCogs = plARR.map((a, i) => a - plGP[i]);
+  const plEB   = plPortcoEB.map((eb, i) => eb - centralOpex[i]);
+
+  // Interest — blended: senior debt (~10.5%) + seller note (~7%), on average outstanding balances.
+  const cumDebt  = cumDebtByYear.slice();   // SBA + seller note; alias for exit waterfall compatibility
+  const avgBal = (arr, i) => (arr[i] + (i === 0 ? 0 : arr[i-1])) / 2;
+  const interestY = cumDebt.map((_, i) =>
+    avgBal(cumSbaByYear, i) * CAPTABLE.sbaRate + avgBal(cumSellerByYear, i) * CAPTABLE.sellerNoteRate
+  );
+  const plNI = plEB.map((eb, i) => eb - interestY[i]);
+
+  for (let i = 0; i < 5; i++) {
+    const y = i + 1;
+    document.getElementById('pl-arr-y'+y).textContent = fmt$M(plARR[i]);
+    document.getElementById('pl-cl-y'+y).textContent  = fmt$M(plCogs[i] * 0.75);
+    document.getElementById('pl-cv-y'+y).textContent  = fmt$M(plCogs[i] * 0.17);
+    document.getElementById('pl-co-y'+y).textContent  = fmt$M(plCogs[i] * 0.08);
+    document.getElementById('pl-tc-y'+y).textContent  = fmt$M(plCogs[i]);
+    document.getElementById('pl-gp-y'+y).textContent  = fmt$M(plGP[i]);
+    document.getElementById('pl-gm-y'+y).textContent  = plARR[i] > 0 ? fmtPct(gmY[i], 1) : '—';
+    const cohEl = document.getElementById('pl-coh-y'+y);
+    if (cohEl) cohEl.textContent = fmt$M(centralOpex[i]);
+    document.getElementById('pl-eb-y'+y).textContent  = fmt$M(plEB[i]);
+    document.getElementById('pl-ebm-y'+y).textContent = plARR[i] > 0 ? fmtPct(plEB[i]/plARR[i]*100, 0) : '—';
+    document.getElementById('pl-int-y'+y).textContent = fmt$M(interestY[i]);
+    document.getElementById('pl-ni-y'+y).textContent  = fmt$M(plNI[i]);
+  }
+
+  // Fund equity per vertical is HARD CAPPED at $5M.
+  // Self-financing loop above deploys equity as needed; unused equity stays uncalled.
+  // Portco-level debt is derived from state.leverage × EBITDA (portfolio + new target capacity).
+  const fundSize = FUND_EQUITY_PER_VERTICAL_M;
+  const totalEquity = fundSize;  // legacy alias for downstream refs
+
+  // Exit waterfall — LTM (last-twelve-months) age-weighted factor per M&A convention.
+  // Fresh acquisitions don't get platform-multiple treatment: they exit at cost (buyer pays purchase, debt paid off — net wash).
+  // Factor: age 0 = 0% (just bought), age 1 = 40% (partial uplift), age 2+ = 100% (mature).
+  const ltmFactor = (age) => age <= 0 ? 0 : (age === 1 ? 0.4 : 1.0);
+  let exitPortcoEB_M_ltm = 0;
+  portfolio.forEach(p => {
+    const age = 5 - p.yearBought;
+    const arr_p = targetARR_M * arrScaleForAge(age);
+    const gm = Math.min(state.gmt/100, (state.gm/100) + (state.gmt/100 - state.gm/100) * Math.min(1, age / 2));
+    const ebMargin = Math.max(0, gm - 0.25);  // 25pp SGA (services industry standard)
+    exitPortcoEB_M_ltm += arr_p * ebMargin * ltmFactor(age);
+  });
+  // Only mature portcos' debt counted against equity value — fresh portcos wash out (bought at cost, sold at cost)
+  const totalDeals = portfolio.length;
+  const weightedLtm = totalDeals > 0 ? portfolio.reduce((s, p) => s + ltmFactor(5 - p.yearBought), 0) / totalDeals : 0;
+
+  const y5EBITDA = plEB[4];                                    // full P&L EBITDA (Y5 run-rate, shown in P&L)
+  const exitEBITDA = exitPortcoEB_M_ltm - centralOpex[4];      // LTM-adjusted for valuation
+  const exitMult = multFor(exitEBITDA);   // maturity ladder, not a slider
+  state.exit = exitMult;
+  const ev = exitEBITDA * exitMult;
+  const debtOut = cumDebt[4];   // debt is owed in full, irrespective of portco age
+  const equityValue = Math.max(0, ev - debtOut + equityRemainingByYear[4]);   // undeployed cash returns to LPs
+  const underwater = (ev - debtOut) <= 0;
+  const fundEquity = fundSize;
+  const prefRate = 8;
+  const years = 5;  // 5-year hold
+  const prefReturn = fundEquity * ((Math.pow(1 + prefRate/100, years)) - 1);
+  const roc = fundEquity;
+  const profitAbovePref = Math.max(0, equityValue - roc - prefReturn);
+  const gpCarry = profitAbovePref * 0.20;
+  const lpNet = equityValue - gpCarry;
+  const moic = fundEquity > 0 ? lpNet / fundEquity : 0;
+  const irr = moic > 0 ? Math.pow(moic, 1/years) - 1 : 0;
+
+  {
+    document.getElementById('ex-arr').textContent = fmt$M(plARR[4]);
+    document.getElementById('ex-eb-rr').textContent = fmt$M(y5EBITDA);
+    document.getElementById('ex-eb').textContent = fmt$M(exitEBITDA);
+    document.getElementById('ex-mult').textContent = exitMult.toFixed(1) + '×';
+    document.getElementById('ex-ev').textContent = fmt$M(ev);
+    document.getElementById('ex-debt').textContent = '(' + fmt$M(debtOut) + ')';
+    document.getElementById('ex-eqv').textContent = fmt$M(equityValue);
+    document.getElementById('ex-called').textContent = fmt$M(fundEquity);
+    document.getElementById('ex-pref').textContent = fmt$M(prefReturn);
+    document.getElementById('ex-roc').textContent = fmt$M(roc);
+    document.getElementById('ex-profit').textContent = fmt$M(profitAbovePref);
+    document.getElementById('ex-carry').textContent = fmt$M(gpCarry);
+    document.getElementById('ex-lp-net').textContent = fmt$M(lpNet);
+    document.getElementById('ex-moic').textContent = moic.toFixed(2) + '×';
+    document.getElementById('ex-irr').textContent = (irr*100).toFixed(0) + '%';
+
+    // Waterfall visualization live update
+    document.getElementById('wf-ev').textContent = fmt$M(ev);
+    document.getElementById('wf-debt').textContent = fmt$M(debtOut);
+    document.getElementById('wf-eqv').textContent = fmt$M(equityValue);
+    document.getElementById('wf-pref').textContent = fmt$M(prefReturn);
+    document.getElementById('wf-roc').textContent = fmt$M(roc);
+    document.getElementById('wf-carry').textContent = fmt$M(gpCarry);
+    document.getElementById('wf-net').textContent = fmt$M(lpNet);
+    // Live-update waterfall bar widths — scaled RELATIVE to EV (the largest bar = 100%),
+    // per the documented fix: absolute references flatten bars when EV scale differs.
+    // EV is always the top of the waterfall, so every other bar is a proper fraction of it.
+    const vizRef = ev > 0 ? ev : 1;
+    const pctOfMax = (v) => Math.max(2, Math.min(100, (v / vizRef) * 100));
+    document.getElementById('wf-bar-ev').style.width = pctOfMax(ev) + '%';
+    document.getElementById('wf-bar-debt').style.width = pctOfMax(debtOut) + '%';
+    document.getElementById('wf-bar-eqv').style.width = pctOfMax(equityValue) + '%';
+    document.getElementById('wf-bar-pref').style.width = pctOfMax(prefReturn) + '%';
+    document.getElementById('wf-bar-roc').style.width = pctOfMax(roc) + '%';
+    document.getElementById('wf-bar-carry').style.width = pctOfMax(gpCarry) + '%';
+    document.getElementById('wf-bar-net').style.width = pctOfMax(lpNet) + '%';
+  }
+
+  // Sidebar KPI tiles — MOIC + IRR + Max deals + Burnout, live updated on scenario switch or slider move
+  const sbMoicEl = document.getElementById('sb-moic');
+  if (sbMoicEl) sbMoicEl.textContent = underwater ? 'debt > EV' : moic.toFixed(1) + '×';
+  const sbIrrEl = document.getElementById('sb-irr');
+  if (sbIrrEl) sbIrrEl.textContent = Math.round(irr*100) + '%';
+  const sbMaxDealsEl = document.getElementById('sb-maxdeals');
+  if (sbMaxDealsEl) sbMaxDealsEl.textContent = cumDealsScalar;
+  const sbBurnoutEl = document.getElementById('sb-burnout');
+  if (sbBurnoutEl) sbBurnoutEl.textContent = burnoutYear === 0 ? 'Y5+' : 'Y' + burnoutYear;
+
+  // Section metas — live-updated on scenario/slider changes
+  const finMetaEl = document.getElementById('fin-sec-meta');
+  if (finMetaEl) finMetaEl.textContent = ' · Portco leverage ' + state.leverage.toFixed(1) + '× EBITDA';
+  const pnlMetaEl = document.getElementById('pnl-sec-meta');
+  if (pnlMetaEl) pnlMetaEl.textContent = ' · ' + cumDealsScalar + ' portcos · central OPEX Y5 $' + state.copex.toFixed(1) + 'M';
+  const acqMetaEl = document.getElementById('acq-sec-meta');
+  if (acqMetaEl) acqMetaEl.textContent = '';
+  const exitMetaEl = document.getElementById('exit-sec-meta');
+  if (exitMetaEl) exitMetaEl.textContent = '';
+  const upliftMetaEl = document.getElementById('uplift-sec-meta');
+  if (upliftMetaEl) upliftMetaEl.textContent = '';
+  // CAC ceiling meta — computed live from current-scenario numbers
+  const targetEBITDA_M_meta = targetARR_M * 0.15;
+  const upliftedEBITDA_M_meta = targetARR_M * (state.gmt/100 - 0.05);
+  const exitValueM_meta = upliftedEBITDA_M_meta * state.exit;
+  const requiredMoic = 2.5;
+  const cacCeiling_M = Math.max(0, (exitValueM_meta / requiredMoic) - purchasePrice/1e6);
+  // cac-sec-meta removed from HTML — formula lives in body
+
+  // ============================================================
+  // Dynamic section headlines (BCG action title principle — reader gets thesis from titles alone)
+  // ============================================================
+  const dealsCount = cumDealsScalar;
+  const burnoutTag = burnoutYear === 0 ? 'no burnout' : 'burnout Y' + burnoutYear;
+  const setHdr = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+
+  setHdr('h-1-hdr', {
+    bear: 'Market · Arbitrage compressed — 7× entry, 8.9× exit (thin but real)',
+    base: 'Market · The multiple is a staircase — entry at 5× EBITDA, exit set by the band the portfolio reaches',
+    bull: 'Market · Arbitrage widest — 4× micro entry, 14.5× cyber-cloud premium'
+  }[state.scenario] || 'Market · Arbitrage exists');
+
+  setHdr('h-2-hdr', {
+    bear: 'Entry · $5M funds ' + dealsCount + ' deals (op cap 8 max) — expensive targets, thin leverage',
+    base: 'Entry · $5M funds ' + dealsCount + ' deals at ' + state.mult.toFixed(2) + '× revenue — senior debt ' + state.leverage.toFixed(2) + '× EBITDA + 12% seller note',
+    bull: 'Entry · $5M funds ' + dealsCount + ' deals (op cap 22 max) — micro targets, high leverage'
+  }[state.scenario] || 'Entry · $5M funds ' + dealsCount + ' deals');
+
+  setHdr('h-3-hdr', {
+    bear: 'Playbook · 90 days delivers 40% GM (below best-in-class)',
+    base: 'Playbook · Two years lifts net margin from 8.7% to the 15.5% leading-cohort benchmark',
+    bull: 'Playbook · 90 days delivers 50%+ GM (best-in-class tier)'
+  }[state.scenario] || 'Playbook · 90 days delivers ' + state.gmt.toFixed(1) + '% GM');
+
+  setHdr('h-4-hdr', {
+    bear: 'Compound · ' + (burnoutYear === 0 ? 'No burnout' : 'Burnout Y' + burnoutYear) + ' at ' + dealsCount + ' deals — expensive targets exhaust equity fast',
+    base: 'Compound · ' + (burnoutYear === 0 ? 'No burnout' : 'Burnout Y' + burnoutYear) + ', ' + dealsCount + ' deals across 5 years — retained cash funds next equity',
+    bull: 'Compound · ' + (burnoutYear === 0 ? 'No burnout' : 'Burnout Y' + burnoutYear) + ', ' + dealsCount + ' deals at op cap — high leverage extends catch'
+  }[state.scenario] || 'Compound · ' + dealsCount + ' deals · ' + burnoutTag);
+
+  const arrY5Str = fmt$M(plARR[4]);
+  const evStr    = fmt$M(ev);
+  const moicStr  = moic.toFixed(1) + '×';
+  setHdr('h-5-hdr', 'Exit · ' + arrY5Str + ' ARR → ' + evStr + ' EV → ' + moicStr + ' MOIC on $5M');
+
+  const moatByScen = {
+    bear: 'Moat · AI-native thesis at risk (40-FTE HoldCo fallback) — Counter-Positioning weakens if AI fails',
+    base: 'Moat · 22-FTE AI-native HoldCo across 5 verticals — Alpine\'s 50-FTE inherited unretrofittable',
+    bull: 'Moat · 18-FTE AI-augmented HoldCo, fastest cross-vertical shared services — moat widens'
+  };
+  setHdr('h-6-hdr', moatByScen[state.scenario] || moatByScen.base);
+
+  setHdr('h-7-hdr', {
+    bear: 'Downside · Bear active — MOIC ' + moicStr + ', ' + burnoutTag + ', seller resistance real',
+    base: 'Downside · Bear returns no equity — exit value falls below debt / supplier hikes hit Y2',
+    bull: 'Downside · Even Bull risks — AI plateau, portco churn spike, exit multiple compression'
+  }[state.scenario] || 'Downside · Bear scenario + AI failure + supplier concentration');
+
+  // ============================================================
+  // Body cell reactivity — dynamic CAC / structural comparison / worked examples per scenario
+  // ============================================================
+
+  // §2 CAC ceiling — compute per current scenario
+  const targetARR_M_cac    = targetARR_M;                                  // already M
+  const targetEBITDA_M_cac = targetARR_M_cac * 0.15;                       // pre-uplift 15% EBITDA
+  const upliftedEB_M_cac   = targetARR_M_cac * (state.gmt/100 - 0.25);     // steady state EBITDA
+  const exitValueDeal_M    = upliftedEB_M_cac * state.exit;                // per-portco exit value
+  const valueBudget_M      = exitValueDeal_M / 2.5;                        // required 2.5× hurdle
+  const entryPrice_M       = purchasePrice / 1e6;
+  const cacCeiling_M2      = Math.max(0, valueBudget_M - entryPrice_M);
+  // CAC actual — verified buyer-side stack. Proprietary sourcing → no buyer-paid broker
+  // (Double-Lehman is customarily seller-paid). Transaction portion = verified fixed stack
+  // (QoE+legal+escrow+in-house team, ≈$151K), then integration + working capital on top.
+  const brokerFee_M = 0;
+  const cacActual_M  = brokerFee_M + TXN_FIXED_PER_DEAL + 0.22 + 0.175;  // txn stack + integration + WC (fixed-ish)
+  const cacHeadroom_M = cacCeiling_M2 - cacActual_M;
+  const cacHeadroomPct = cacCeiling_M2 > 0 ? (cacHeadroom_M / cacCeiling_M2 * 100) : 0;
+
+  const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setText('cac-entry',        fmt$M(entryPrice_M));
+  setText('cac-exit',         fmt$M(exitValueDeal_M));
+  setText('cac-budget',       fmt$M(valueBudget_M));
+  setText('cac-ceiling',      fmt$M(cacCeiling_M2));
+  setText('cac-actual',       cacActual_M >= 1 ? fmt$M(cacActual_M) : '$' + Math.round(cacActual_M * 1000) + 'K');
+  setText('cac-headroom',     cacHeadroom_M >= 0.5 ? fmt$M(cacHeadroom_M) : '$' + Math.round(cacHeadroom_M * 1000) + 'K');
+  setText('cac-headroom-pct', Math.round(cacHeadroomPct) + '%');
+  setText('cac-mult-note',    state.mult.toFixed(2) + '×');
+  setText('cac-arr-note',     '$' + targetARR_M_cac.toFixed(1) + 'M');
+  setText('cac-exit-mult',    state.exit.toFixed(2) + '×');
+
+  // §3 Playbook — worked example dynamic
+  const msaCount = Math.round(state.mrr * 1000 / 270);  // MRR / typical $270 per MSA
+  const upliftPerMonth = Math.round(state.mrr * 1000 * state.price / 100);
+  const worked = document.getElementById('playbook-worked');
+  if (worked) worked.textContent = state.scenario + ' worked ($' + targetARR_M_cac.toFixed(1) + 'M target, ' + msaCount + ' MSAs × $270/mo): +' + state.price + '% = +$' + (upliftPerMonth >= 1000 ? (upliftPerMonth/1000).toFixed(1)+'K' : upliftPerMonth) + '/mo';
+
+  // §3 Vendor consolidation — endpoint totals per scenario
+  const endptsTotal = cumDealsScalar * state.endpts;
+  const vendorNote = document.getElementById('playbook-vendor-note');
+  if (vendorNote) vendorNote.textContent = state.scenario + ' fund-wide: ' + (cumDealsScalar * 5) + ' portcos × ' + state.endpts + ' endpts = ~' + Math.round(endptsTotal * 5 / 1000) + 'K endpts by Y5 (MSP-alone ~' + Math.round(endptsTotal / 1000) + 'K)';
+
+  // ============================================================
+  // CAP-TABLE EXHIBITS (§6) — populate A/B/C from verified params
+  // ============================================================
+  const capScenLabel = { bear:'Bear', base:'Base', bull:'Bull' }[state.scenario] || 'Base';
+  const setW = (id, frac) => { const el = document.getElementById(id); if (el) el.style.width = Math.max(2, Math.round(frac*100)) + '%'; };
+
+  // Exhibit B — representative single-deal financing at current scenario
+  const capEBITDA = targetEBITDA_M;
+  const capSba    = Math.min(state.leverage * capEBITDA, CAPTABLE.sbaLtvCap * purchasePrice_M, CAPTABLE.sbaLoanCapM);
+  const capSeller = CAPTABLE.sellerNotePct * purchasePrice_M;
+  const capEq     = purchasePrice_M - capSba - capSeller;
+  const capTxn    = TXN_FIXED_PER_DEAL;
+  const capBarBase = purchasePrice_M > 0 ? purchasePrice_M : 1;
+  setText('cap-b-scen',    capScenLabel);
+  setText('cap-b-price',   fmt$M(purchasePrice_M));
+  setText('cap-b-sba',     fmt$M(capSba));
+  setText('cap-b-seller',  fmt$M(capSeller));
+  setText('cap-b-eq',      fmt$M(capEq));
+  setText('cap-b-txn',     fmt$M(capTxn));
+  setText('cap-b-allin',   fmt$M(capEq + capTxn));
+  setText('cap-b-wsba',    fmt$M(capSba));
+  setText('cap-b-wseller', fmt$M(capSeller));
+  setText('cap-b-weq',     fmt$M(capEq));
+  setText('cap-b-sba-sub', state.leverage.toFixed(2) + '× EBITDA, capped $5M / 90% price');
+  setW('cap-b-bar-sba',    capSba / capBarBase);
+  setW('cap-b-bar-seller', capSeller / capBarBase);
+  setW('cap-b-bar-eq',     Math.max(0, capEq) / capBarBase);
+
+  // Exhibit A — fixed-cost threshold across EBITDA tiers (entry ≈ 5× EBITDA ⇒ 0.75× ARR at 15% margin)
+  const capTiers = [0.25, 0.5, 1.0, 3.0];
+  const reachLabel = (eb) => eb < 0.5 ? 'Out of reach' : (eb < 1.0 ? 'Marginal' : 'Served');
+  let capABody = '';
+  capTiers.forEach(eb => {
+    const price  = eb * 5;
+    const sba    = Math.min(2.75 * eb, CAPTABLE.sbaLtvCap * price, CAPTABLE.sbaLoanCapM);
+    const seller = CAPTABLE.sellerNotePct * price;
+    const eq     = Math.max(0.001, price - sba - seller);
+    const fixedPct = TXN_FIXED_PER_DEAL / eq * 100;
+    const isCur  = Math.abs(eb - capEBITDA) < 0.13;
+    capABody += '<tr' + (isCur ? ' class="subtotal-row"' : '') + '><td>$' + eb.toFixed(2) + 'M'
+      + (isCur ? ' <span class="row-sub">← current scenario</span>' : '') + '</td><td>' + fmt$M(price)
+      + '</td><td>' + fmt$M(eq) + '</td><td>' + fmt$K(TXN_FIXED_PER_DEAL * 1e6) + '</td><td>'
+      + fixedPct.toFixed(0) + '%</td><td>' + reachLabel(eb) + '</td></tr>';
+  });
+  const capABodyEl = document.getElementById('cap-a-body');
+  if (capABodyEl) capABodyEl.innerHTML = capABody;
+
+  // Exhibit C — corporate cap table across rounds (founder ownership path)
+  let foundersPct = 1.0;
+  let capCBody = '<tr><td>Pre-Series A</td><td>—</td><td>—</td><td>—</td><td>100.0%</td><td>—</td></tr>';
+  CAPTABLE.rounds.forEach(r => {
+    foundersPct *= (1 - r.dilution);
+    capCBody += '<tr><td>' + r.name + '</td><td>' + fmt$M(r.raiseM) + '</td><td>' + fmt$M(r.postM)
+      + '</td><td>' + (r.dilution * 100).toFixed(0) + '%</td><td>' + (foundersPct * 100).toFixed(1)
+      + '%</td><td>' + fmt$M(foundersPct * r.postM) + '</td></tr>';
+  });
+  const capCBodyEl = document.getElementById('cap-c-body');
+  if (capCBodyEl) capCBodyEl.innerHTML = capCBody;
+
+  // §6 Structural comparison — S16VC column
+  const opexRatio = plARR[4] > 0 ? (state.copex / plARR[4] * 100) : 0;
+  setText('cmp-opex', '~' + opexRatio.toFixed(1) + '% ($' + state.copex.toFixed(1) + 'M ÷ $' + plARR[4].toFixed(0) + 'M ' + state.scenario + ' Y5)');
+  setText('cmp-arr',  '$' + targetARR_M_cac.toFixed(1) + 'M');
+  const tierLabel = { bear: 'small/scaled', base: 'micro/small', bull: 'micro-tier' }[state.scenario] || 'micro/small';
+  setText('cmp-tier', tierLabel);
+  const entryEBIT = (state.mult / 0.087).toFixed(1);
+  setText('cmp-entry', '~' + entryEBIT + '×');
+  setText('cmp-mult', state.mult.toFixed(2) + '×');
+  setText('cmp-exit', state.exit.toFixed(2) + '×');
+
+  // §7 Risk bullet — exit revert dynamic magnitude
+  const riskExit = document.getElementById('risk-exit-revert');
+  if (riskExit) {
+    const revertDelta = (state.exit - 8.9).toFixed(1);
+    const revertText = state.scenario === 'bear'
+      ? 'Exit already at Aventis private median 8.9× — this risk is baseline, not downside'
+      : 'Exit reverts from your assumed ' + state.exit.toFixed(2) + '× to Aventis private median 8.9× — multiple loss ' + revertDelta + '× × EBITDA';
+    riskExit.innerHTML = revertText + '<sup><a class="fn-ref" href="#fn-3">3</a></sup>';
+  }
+}
+
+function onSlider() { recalc(); }
+
+// Initial paint — start at Base scenario (snaps all sliders to precise Base values)
+setScenario('base');
+</script>
+
+</body>
+</html>
