@@ -53,6 +53,13 @@ blockquote{margin:12px 0;padding:10px 16px;background:var(--silver-mist);border-
 <h1 class="doc">Roll-up Studio — Strategy</h1>
 <div class="sub">A selection tree. Part I narrows the market from the whole economy to a single acquisition profile; Part II sets the model; Part III sets execution. Each node states the option that wins and the evidence it rests on. Primary sources: ChannelCon 2026 — 36 recorded sessions and 100 slides, 3–5 August · Service Leadership Index 2026 · 584 &amp; Cogent Growth Partners, Q4 2025.</div>
 
+<table style="margin-bottom:6px"><thead><tr><th style="width:21%">Criterion — probability-weighted founder cash-out</th><th>Driven by</th><th>Decided in</th></tr></thead><tbody>
+<tr><th>Multiple at exit</th><td>Recurring share · contract assignability · buyer-side scorecard · narrative tier</td><td>01 · 03 · 05</td></tr>
+<tr><th>Scale of EBITDA</th><td>Targets available at our price · margin added per asset</td><td>03 · 06</td></tr>
+<tr><th>Retained ownership</th><td>Capital source — debt against equity, dilution per round</td><td>07</td></tr>
+<tr><th>Probability of exit</th><td>Depth of the buyer market · cyclicality · regulatory exposure</td><td>04 · 09</td></tr>
+</tbody></table>
+
 <div class="node">
 <div class="node-no">Node 00</div><h2>Where we stand</h2>
 <details open class="lvl1"><summary class="thesis">The software leg earns $5M. The MSP leg earns $150K. The plan begins from the leg we do not have yet — and that is the central risk of this document.</summary><div class="det1">
@@ -68,118 +75,120 @@ blockquote{margin:12px 0;padding:10px 16px;background:var(--silver-mist);border-
 
 </div></details><div class="node">
 <div class="node-no">Node 01</div><h2>Industry</h2>
-<details open class="lvl1"><summary class="thesis">The screen ranked MSP second. It is selected first — because the ranking weights what an industry is, and we are buying what we can do to it.</summary><div class="det1">
+<details open class="lvl1"><summary class="thesis">MSP came second on the screen and first on re-weighting: it is the only family where the margin we can add is mechanical and the price we will be paid is published.</summary><div class="det1">
 
-<h3>The question this node answers</h3>
-<p>Among the industries reachable by an operator with US market access, sub-$1M-EBITDA acquisition capability and AI deployment capability — which one maximises <em>probability-weighted founder cash-out at exit</em>? That quantity decomposes into four terms, and every figure below is graded against one of them.</p>
-<table><thead><tr><th style="width:22%">Term</th><th>What it depends on</th><th>Where it is decided</th></tr></thead><tbody>
-<tr><th>Multiple at exit</th><td>Recurring share, contract assignability, buyer-side scorecard, narrative tier</td><td>This node · Node 03 · Node 05</td></tr>
-<tr><th>Scale of EBITDA</th><td>Number of targets available, margin uplift achievable per asset</td><td>This node · Node 03</td></tr>
-<tr><th>Retained ownership</th><td>Capital source — debt versus equity, dilution per round</td><td>Node 07</td></tr>
-<tr><th>Probability of exit</th><td>Depth of the buyer market, cyclicality, regulatory exposure</td><td>This node · Node 09</td></tr>
+<table><thead><tr><th style="width:13%">Cut</th><th>In</th><th>Filter</th><th>Out</th></tr></thead><tbody>
+<tr><th>Sector</th><td>20 NAICS 2-digit</td><td>Six hard gates — geography, capital intensity, regulatory access, coherence, M&amp;A precedent at $20–150M EV, secular direction</td><td>11</td></tr>
+<tr><th>Sub-sector</th><td>25</td><td>Gates re-applied, then weighted score on seven criteria, pass ≥&nbsp;6.5</td><td>7 pass · 4 conditional</td></tr>
+<tr><th>Six-digit</th><td>1,012 cells</td><td>Fragmentation ≥&nbsp;80% · recurring ≥&nbsp;50% · EBITDA ≥&nbsp;18%</td><td>22 verticals · 8 families</td></tr>
+<tr><th>Family</th><td>8 back-office families</td><td>Re-weighted for deployable AI compression and buyer-side price discovery</td><td class="win">MSP</td></tr>
 </tbody></table>
 
-<h3>How the field was narrowed — four cuts, 20 sectors to 1</h3>
-<table><thead><tr><th style="width:14%">Cut</th><th>Universe in</th><th>Filter applied</th><th>Out</th></tr></thead><tbody>
-<tr><th>Sector</th><td>20 NAICS 2-digit sectors, US + EU</td><td>Six hard gates: geography · capital intensity · regulatory access · sector coherence · M&amp;A precedent at $20–150M EV · secular direction</td><td>11 consider · 9 discard</td></tr>
-<tr><th>Sub-sector</th><td>25 sub-sectors inside the 11</td><td>Six hard gates re-applied, then weighted score across seven soft criteria</td><td>7 pass · 4 conditional · 14 eliminate</td></tr>
-<tr><th>Six-digit</th><td>1,012 six-digit NAICS cells</td><td>Fragmentation ≥&nbsp;80% · recurring revenue ≥&nbsp;50% · EBITDA margin ≥&nbsp;18%</td><td>22 hell-yes verticals in 8 back-office families</td></tr>
-<tr><th>Family</th><td>8 families: accounting · IT&nbsp;/&nbsp;MSP · HR · legal back-office · marketing · translation · collections · telemarketing</td><td>Re-weighted for deployable AI margin compression and buyer-side price discovery — see below</td><td class="win">MSP</td></tr>
-</tbody></table>
-<p style="font-size:12.5px;color:#666">Nine sectors were discarded at the first cut with documented cause — retail and education on secular displacement, utilities and mining on capital intensity, food service on a structural sub-8% margin, public administration on closed-shop access. The audit trail sits in the working artefacts, not in this document.</p>
-
-<h3>Scoring methodology — the weights are the argument</h3>
-<p>Sub-sectors that cleared the hard gates were scored 0–10 on seven criteria and combined as:</p>
-<blockquote style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">Score = S1×0.20 + S2×0.18 + S3×0.15 + S4×0.15 + S5×0.12 + S6×0.10 + S7×0.10</blockquote>
-<p>S1 fragmentation · S2 succession pressure · S3 addressable market · S4 recurring revenue · S5 AI compressibility · S6 cyclical resilience · S7 headroom against private-equity saturation. Thresholds: pass ≥&nbsp;6.5, conditional 5.5–6.5, eliminate below 5.5, or any hard-gate failure regardless of score.</p>
-<div class="note"><b>The scores are estimates, and the document should say so.</b> They rest on M&amp;A precedent, IBISWorld baselines and transaction comps — not on named PitchBook screens or primary interviews. The methodology was deliberately calibrated toward false negatives: it would rather drop a good vertical than admit a bad one. That bias matters for reading the four-hundredths of a point that separate first from second.</p></div>
-
-<h3>What the screen returned</h3>
-<table><thead><tr><th style="width:20%">Sub-sector</th><th>S1 Frag</th><th>S2 Succ</th><th>S3 TAM</th><th>S4 Recur</th><th>S5 AI</th><th>S6 Cycl</th><th>S7 PE</th><th>Score</th></tr></thead><tbody>
-<tr><th>Home Care</th><td>10</td><td class="win">9</td><td>9</td><td>8</td><td>8</td><td class="win">9</td><td>7</td><td class="win">8.73</td></tr>
-<tr><th>Managed IT / MSP</th><td>10</td><td>7</td><td>9</td><td class="win">10</td><td class="win">9</td><td>7</td><td class="win">8</td><td>8.69</td></tr>
-<tr><th>Insurance brokerage</th><td>10</td><td>10</td><td>10</td><td>10</td><td>6</td><td>5</td><td class="out">3</td><td>8.32</td></tr>
-<tr><th>Fire protection</th><td>9</td><td>9</td><td>6</td><td>9</td><td>9</td><td>7</td><td>7</td><td>8.15</td></tr>
-<tr><th>Property management</th><td>9</td><td>8</td><td>6</td><td>10</td><td>8</td><td>6</td><td>6</td><td>7.80</td></tr>
-<tr><th>Accounting / tax</th><td>8</td><td>8</td><td>7</td><td>8</td><td class="out">2</td><td>5</td><td>4</td><td class="out">5.96</td></tr>
-</tbody></table>
-<p>Insurance brokerage scores third on fundamentals and is unbuyable in practice: an S7 of 3 means every asset is contested by capital that arrived twenty years earlier. Accounting fails on the opposite axis — an S5 of 2 says AI absorbs the service itself within 24–36 months, so the acquirer is buying a melting asset. Both are instructive: <b>a high total score is not a decision, and the binding constraint differs by vertical.</b></p>
-
-<h3>Why the runner-up is selected — the two criteria that decide it</h3>
-<p>MSP and Home Care are separated by 0.04 of a point, which is noise inside a qualitative scoring frame. The choice cannot rest on the ranking, and pretending otherwise would be false precision. It rests on where the two verticals differ:</p>
-<table><thead><tr><th style="width:20%"></th><th>Home Care</th><th>Managed IT / MSP</th></tr></thead><tbody>
-<tr><th>Where it wins</th><td class="win">Succession 9 vs 7 — caregiver crisis produces forced sellers. Cyclicality 9 vs 7 — demand is demographic, not economic.</td><td class="win">Recurring 10 vs 8 — contracted MRR, not visit-based billing. PE headroom 8 vs 7.</td></tr>
-<tr><th>Margin under our ownership</th><td class="out">Labour is the service. AI reaches scheduling and intake; it does not reach the visit.</td><td class="win">Labour is 44% of revenue and the compressible half of it is documented line by line: EBITDA 13.0% → 21.5%, +8.5 pp on a $6M unit.</td></tr>
-<tr><th>Who sets the price</th><td class="out">Negotiated per deal.</td><td class="win">Published. A buyer-side scorecard in open circulation converts operating metrics into a multiple before the negotiation starts.</td></tr>
-<tr><th>Revenue payer</th><td class="out">Medicaid reimbursement — a rate decision by a third party sits upstream of the P&amp;L.</td><td class="win">The client, on a contract we can rewrite at renewal.</td></tr>
-</tbody></table>
-<p><b>The screen weights what an industry is. We are buying what we can do to it.</b> S5 carries 0.12 of the weight — appropriate for ranking industries in the abstract, too low for an operator whose only durable edge is AI deployment into acquired assets. Raise S5 to 0.25 against the same scores and the order inverts: <b>MSP 8.83, Home Care 8.58.</b> The break-even weight sits near 0.15. The honest statement is not that MSP won the screen — it is that the screen was weighted for a generic buyer, and re-weighting for this buyer puts MSP first.</p>
-
-<h3>What the vertical is worth once the margin thesis holds</h3>
+<h3>Benchmarks that carry the rest of the document</h3>
 <table><thead><tr><th style="width:26%"></th><th>Figure</th><th>Consequence</th></tr></thead><tbody>
-<tr><th>US market</th><td>$95–110B, ~40–45K providers, median $2–5M revenue and 15–30 staff</td><td>Supply of targets is not the binding constraint — see Node 03</td></tr>
-<tr><th>Margin, as bought</th><td>EBITDA 13% median · 18–25% top quartile</td><td>The gap <em>is</em> the value creation, and it is operational rather than financial</td></tr>
-<tr><th>Margin, after deployment</th><td class="win">21.5% on the modelled unit — L1 deflection 40%, SOC Tier-1 −35%, documentation −50–60%, against +$150K of AI tooling</td><td>Lands the asset in the published best-in-class band</td></tr>
-<tr><th>Entry / exit</th><td>5–7× at sub-$2M EBITDA · 10–14× at $20–50M EBITDA scale</td><td>Multiple arbitrage of roughly 2× before any EBITDA growth</td></tr>
-<tr><th>Specialisation premium</th><td>Compliance focus carries +20–40% on revenue, +3–5 pp on EBITDA</td><td>Feeds directly into the vertical choice in Node 02</td></tr>
+<tr><th>Market</th><td>$95–110B US · ~40–45K providers · median $2–5M revenue, 15–30 staff</td><td>Target supply is not the constraint — Node 03</td></tr>
+<tr><th>Margin as bought</th><td>13% median · 18–25% top quartile · 19%+ held six years by best-in-class</td><td>The spread is the value creation, and it is operational</td></tr>
+<tr><th>Margin after deployment</th><td class="win">21.5% modelled — L1 deflection 40%, SOC Tier-1 −35%, documentation −50–60%, against +$150K tooling on a $6M unit</td><td>Reaches the published best-in-class band without scale</td></tr>
+<tr><th>Entry / exit</th><td>5–7× under $2M EBITDA · 10–14× at $20–50M · 15–16× at $40M+ deal size</td><td>~2× on multiple before EBITDA growth — Node 03</td></tr>
+<tr><th>Recurring</th><td>55–65% at the median, 75–90% MRR at the top of the range</td><td>Sets the perimeter question — Node 05</td></tr>
+<tr><th>Specialisation</th><td>Compliance focus: +20–40% revenue, +3–5 pp EBITDA</td><td>Priced in the vertical choice — Node 02</td></tr>
 </tbody></table>
 
-<div class="cut">
-<div><b>Selected</b>MSP, decided 17 July 2026, re-confirmed against ChannelCon evidence 3–5 August.</div>
-<div><b>Price of the cut</b>No vertical diversification before year three. Concentration is deliberate: the AI playbook only amortises if it is deployed repeatedly into the same operating model.</div>
-<div><b>Held open</b>Home Care remains a listening post rather than a rejection — it lost on our weighting, not on its own merits, and a different capital structure would revive it.</div>
-</div>
+<h3>Why the runner-up was selected</h3>
+<p>Home Care scored 8.73 against MSP at 8.69 — a gap inside the noise of a qualitative frame. The screen weights AI compressibility at 0.12, right for ranking industries in the abstract, low for a buyer whose only durable edge is deployment. At 0.25 the order inverts — <b>MSP 8.83, Home Care 8.58</b>, break-even near 0.15. The substantive difference behind the arithmetic: in home care labour <em>is</em> the service and Medicaid sets the rate, so neither margin nor price is ours to move. Home Care stays a listening post rather than a rejection.</p>
+<div class="note"><b>The two verticals that scored well and are still unbuyable.</b> Insurance brokerage ranks third on fundamentals with PE-headroom of 3 — every asset contested by capital that arrived twenty years ago. Accounting fails from the opposite end with AI-compressibility of 2: the service itself is absorbed inside 24–36 months, so the buyer acquires a melting asset. A high score is not a decision, and the binding constraint differs by vertical.</div>
 
-<h3>What this choice rests on</h3>
-<p>Three assumptions carry it, and each is testable rather than rhetorical. First, that the modelled margin uplift survives contact with an acquired asset — 13% → 21.5% is built from vendor-published deflection rates and named customer cases, not from our own operating history. Second, that the buyer-side scorecard stays in circulation and stays honest, because the exit multiple is read off it. Third, that AI compressibility is an advantage we hold rather than one the whole industry acquires simultaneously — <b>if every MSP deploys the same tooling, the uplift becomes table stakes and prices in at entry rather than at exit.</b> That last one is the thesis-level risk of this document and it is priced nowhere in it.</p>
-
-<h3>What would change this decision</h3>
-<p>Margin uplift below +4 pp on the first two assets — half the modelled figure — removes the operating case and leaves multiple arbitrage alone, which is a financial trade rather than a studio. Entry multiples above 7× across a full year of screening would mean the sub-radar window has closed, which is the same signal from the other end. And accounting or another back-office family showing an S5 above 6 on evidence rather than estimate would force a re-run of the family cut, because the re-weighting argument above cuts both ways.</p>
-
-<p style="font-size:12.5px;color:#666">Evidence: NAICS screen Stage 1–2, 30 April 2026 · six-digit economy map, 1,012 cells · P&amp;L baseline and with-AI models, MSP unit · Service Leadership Index 2026 · CompTIA IT Industry Outlook 2025 · Datto Global MSP Report 2024 · BLS OEWS May 2024 · ChannelCon 2026, 36 recorded sessions, 3–5 August.</p>
+<p style="font-size:12.5px;color:#666">Evidence: NAICS screen Stage 1–2, 30 April 2026 · six-digit economy map, 1,012 cells · MSP P&amp;L baseline and with-AI models · Service Leadership Index 2026 · CompTIA IT Industry Outlook 2025 · Datto Global MSP Report 2024 · BLS OEWS May 2024.</p>
 </div>
 
 </div></details>
 <div class="node">
 <div class="node-no">Node 02</div><h2>Vertical</h2>
-<details open class="lvl1"><summary class="thesis">Specialisation is not positioning, it is price: CMMC readiness alone carries $4–8K per client per month on top of everything else.</summary><div class="det1">
-<table><thead><tr><th style="width:19%">Vertical</th><th>Case for</th><th>Case against</th><th>Verdict</th></tr></thead><tbody>
-<tr><th>Financial services<br><span style="font-weight:400;font-size:12px">banks · CPAs · advisory</span></th><td class="win">Low risk tolerance, high willingness to pay for data protection and reputation. Existing domain knowledge — the team built software for crypto trading firms.</td><td>Compliance load is real; 7×24 coverage is a precondition, not an upsell.</td><td class="win"><span class="tag tag-pass">Selected</span></td></tr>
-<tr><th>Municipal &amp; government</th><td>Ranked first by the 25-year veteran: constrained budgets, one IT director, everything else outsourced.</td><td class="out">Procurement and cancellation-for-convenience clauses price like month-to-month. Nicolas: “we will never work out the American government.”</td><td class="out"><span class="tag tag-rej">Rejected</span></td></tr>
-<tr><th>Healthcare / legal</th><td>Proven density plays — dental-only in Dallas, legal-only in Atlanta, hundreds of small clients each.</td><td class="hold">No domain edge for us; incumbents hold twenty-year reputations.</td><td class="hold"><span class="tag tag-warn">Reserve</span></td></tr>
-<tr><th>Horizontal, product-led<br><span style="font-weight:400;font-size:12px">one service across all industries</span></th><td>Deep expertise, no vertical lock-in.</td><td class="out">The case study in the record: a database-only specialist at $750K revenue after three decades — high margin, no growth engine, cannot win new clients.</td><td class="out"><span class="tag tag-rej">Rejected</span></td></tr>
+<details open class="lvl1"><summary class="thesis">Specialisation is priced, not positioned — but the record contains two different theories of what to specialise in, and they lead to different companies.</summary><div class="det1">
+
+<h3>The question, and the competing framings of it</h3>
+<p>An MSP can specialise along two axes, and the conference argued both. <b>Framing A — client industry:</b> pick the vertical, learn its compliance language, become the firm that says «all we do is what you do». <b>Framing B — mandated workflow:</b> ignore the industry, find a workflow a regulator forces a business to <em>prove</em> it performs, automate it once, then sell that automation to every MSP carrying the same obligation. The two framings differ in what is scarce. A treats domain reputation as the moat; B treats the compliance mandate as the moat and is indifferent to the industry attached to it.</p>
+<div class="note"><b>Framing B was argued against this thesis directly.</b> A solution provider challenged the premise of the search itself — that leverage comes not from finding the perfect market but from exploiting the gap between a business's belief in its resilience and the evidence of its recovery capability, which regulation forces into the open. On that view, choosing the industry first is optimising the wrong variable. Framing B is not adopted here, and Node 05 explains why: it is a product strategy, and it presupposes a channel we do not yet have.</div>
+
+<h3>Option space and how each is priced</h3>
+<table><thead><tr><th style="width:16%">Vertical</th><th>What it pays for</th><th>Density of targets</th><th>Our edge</th><th>Binding constraint</th><th>Verdict</th></tr></thead><tbody>
+<tr><th>Financial services<br><span style="font-weight:400;font-size:12px">mid-market, 50–500 staff</span></th><td class="win">Low risk tolerance; data protection and reputation are board-level. PCI and examiner readiness are recurring, not project.</td><td>Fragmented, no incumbent density play observed</td><td class="win">Domain knowledge from building software for crypto trading firms — the only vertical where we hold one</td><td>7×24 coverage is a precondition, not an upsell — priced into Node 08</td><td class="win"><span class="tag tag-pass">Selected</span></td></tr>
+<tr><th>Municipal &amp; government</th><td>Constrained budgets, one IT director, everything else outsourced — named a secondary high-potential vertical at the conference</td><td>High and reachable</td><td>None</td><td class="out">Procurement cycles and cancellation-for-convenience clauses price the contract like month-to-month, which is exactly what Node 03 says halves the multiple</td><td class="out"><span class="tag tag-rej">Rejected</span></td></tr>
+<tr><th>Healthcare &amp; legal</th><td>HIPAA and privilege obligations; proven density economics — a Dallas MSP on oral healthcare alone, an Atlanta MSP on legal alone, an Arizona firm 22 years in law firms</td><td class="win">Highest observed — hundreds of small clients per operator</td><td class="out">None, against incumbents holding twenty-year reputations in the same rooms</td><td>Entry means displacing a specialist, not converting a generalist</td><td class="hold"><span class="tag tag-warn">Reserve</span></td></tr>
+<tr><th>Defence supply chain<br><span style="font-weight:400;font-size:12px">CMMC-obligated contractors</span></th><td class="win">The single largest quantified premium in the record: CMMC readiness adds <b>$4–8K per client per month</b> on top of the managed-services line</td><td>Concentrated around primes</td><td>None today; buildable — it is a certification, not a relationship</td><td>Certification lead time; the obligation is the product, so the window closes as competitors certify</td><td class="hold"><span class="tag tag-warn">Overlay on the selected vertical</span></td></tr>
+<tr><th>Horizontal, product-led</th><td>Deep expertise, no vertical lock-in</td><td>n/a</td><td>—</td><td class="out">The case in the record is terminal: a database-only specialist at $750K revenue after three decades — high margin, no growth engine, cannot win new clients</td><td class="out"><span class="tag tag-rej">Rejected</span></td></tr>
 </tbody></table>
-<h3>The sweet spot is mid-market: enterprise means bidding against giants, SMB decides on price alone</h3>
-<p>Not enterprise — that is competition with very large firms. Not SMB — “their decisions are largely driven on cost.” The mid-market outsources by preference, resists headcount, and is willing to spend. <span class="src">25-year MSP owner, Inc. 5000 six years running</span></p>
-<div class="note"><b>Correction to the working brief.</b> The range circulating internally is “15–500 employees.” The source said <b>50–500</b>. The 15–50 band is precisely the price-driven SMB the same expert ruled out — carrying it into the ICP would import the segment we were warned against.</div>
-<p><b>What this vertical buys:</b> 7×24 coverage · strategic consultancy · AI services delivered as domain expertise, not as a technology pitch.</p>
+
+<h3>Why financial services, given that it is not the densest option</h3>
+<p>Healthcare and legal have the better economics on the evidence — the density plays are proven and repeatable, which is precisely why they are already occupied. Selecting them means buying our way into a room where the incumbent has a twenty-year head start and no reason to sell cheaply. Financial services is chosen on a different logic: it is the only vertical where the <em>acquirer</em> brings something the incumbent does not, because the team has already built software for trading firms and can speak the risk language without hiring it in. That is the whole of the differentiation, and it should be stated as narrowly as that.</p>
+<p><b>CMMC sits on top rather than beside.</b> It is the highest-priced obligation in the record and it is a certification rather than a reputation — meaning it can be acquired on a schedule rather than earned over years. It is treated here as an overlay to be added to acquired assets, not as a vertical to be entered on its own.</p>
+
+<h3>Segment — and a correction to the working brief</h3>
+<p>Not enterprise, which is bidding against very large firms. Not SMB, whose decisions are «largely driven on cost». The mid-market outsources by preference, resists headcount and is willing to spend.</p>
+<div class="note"><b>The range circulating internally is 15–500 employees. The source said 50–500.</b> The 15–50 band is the price-driven SMB the same expert ruled out; carrying it into the ICP imports the segment we were warned against and drags the entry multiple with it.</div>
+
+<h3>What this rests on, and what would change it</h3>
+<p>It rests on one assumption doing all the work: <b>that domain credibility transfers from crypto trading software to mid-market financial-services IT.</b> Adjacent is not the same as inside, and the claim is untested against a buyer in that segment. Two signals would overturn the choice. If the first ten conversations in financial services do not convert faster than a generalist pitch, the edge is imaginary and the vertical is arbitrary — at which point healthcare density becomes the better bet despite the incumbents. And if CMMC engagements price above the vertical's own premium, the obligation is worth more than the industry, which is Framing B winning on evidence and a different company.</p>
+
+<p style="font-size:12.5px;color:#666">Evidence: ChannelCon 2026 — 22-year Arizona MSP owner (law firms and compliance-based businesses); RMM/ticketing product lead on PCI and HIPAA specialisation; density cases in Dallas and Atlanta; the solution-provider challenge to vertical-first framing; consultation on mid-market financial services, 50–500 employees. Premium figures: CMMC $4–8K per client per month; compliance focus +20–40% revenue and +3–5 pp EBITDA per Node 01.</p>
 </div>
 
-</div></details><div class="node">
+</div></details>
+<div class="node">
 <div class="node-no">Node 03</div><h2>Acquisition profile</h2>
-<details open class="lvl1"><summary class="thesis">The arbitrage begins below the private-equity radar. Above $1M of EBITDA we stop buying and start bidding.</summary><div class="det1">
-<table><thead><tr><th style="width:22%">Maturity</th><th>1–3×</th><th>3–6×</th><th>5–8×</th><th>6–9×</th><th>8–10×+</th></tr></thead><tbody>
-<tr><th>Adjusted EBITDA</th><td class="win">$250K–1M</td><td class="win">$250K–1M</td><td>$1–25M</td><td>$2.5–4M</td><td>$4–5M+</td></tr>
-<tr><th>Revenue trend</th><td>up and down</td><td>steady</td><td>steady / growing</td><td>high growth</td><td>high growth</td></tr>
-<tr><th>Recurring share</th><td>under 50%</td><td>—</td><td>majority</td><td>majority</td><td>majority</td></tr>
-<tr><th>Client concentration</th><td>high</td><td>average</td><td>average</td><td>low</td><td>low</td></tr>
-<tr><th>Systems &amp; KPIs</th><td>none</td><td>average</td><td>average</td><td>strong</td><td>strong</td></tr>
-<tr><th>Management team</th><td>“what is that?”</td><td>average</td><td>average</td><td>excellent</td><td>experts lead divisions</td></tr>
-<tr><th>Where we buy</th><td class="win"><span class="tag tag-pass">Buy here</span></td><td class="win"><span class="tag tag-pass">Buy here</span></td><td class="out"><span class="tag tag-rej">PE territory</span></td><td class="out"><span class="tag tag-rej">PE territory</span></td><td class="out"><span class="tag tag-rej">This is what we sell into</span></td></tr>
+<details open class="lvl1"><summary class="thesis">Buying below the PE radar is not the edge — the margin we add is. It cuts the effective entry multiple from 5× to about 3×, and that, not the discount, is what the exit arbitrage rests on.</summary><div class="det1">
+
+<h3>Where the maturity scale prices an asset</h3>
+<table><thead><tr><th style="width:20%">Adjusted EBITDA</th><th>$250K–1M</th><th>$1–25M</th><th>$2.5–4M</th><th>$4–5M+</th></tr></thead><tbody>
+<tr><th>Multiple paid</th><td class="win">1–3× · 3–6×</td><td>5–8×</td><td>6–9×</td><td>8–10×+</td></tr>
+<tr><th>Recurring share</th><td>under 50% → —</td><td>majority</td><td>majority</td><td>majority</td></tr>
+<tr><th>Systems, KPIs, management</th><td>none to average</td><td>average</td><td>strong</td><td>experts lead divisions</td></tr>
+<tr><th>Position</th><td class="win"><span class="tag tag-pass">Buy here</span></td><td class="out"><span class="tag tag-rej">PE territory</span></td><td class="out"><span class="tag tag-rej">PE territory</span></td><td class="out"><span class="tag tag-rej">This is what we sell into</span></td></tr>
 </tbody></table>
-<p style="font-size:12.5px;color:#666">Source: 584 &amp; Cogent Growth Partners, Q4 2025, as presented by IT Partners. At $40–50M deal size the market has paid 15–16×.</p>
-<h3>Two practitioners, thirty-seven deals between them, converge on the same line</h3>
-<p><b>Kevin Damghani</b>, seven deals, IT Partners: target profile is <b>60%+ recurring revenue and $150–850K EBITDA</b> — “generally under a million, because PE gets excited about a million or more.”</p>
-<p><b>Steve</b>, thirty deals, peer-group operator: “I would go even smaller, because I want to be below the radar of all the PE money.” The line sits near <b>$500K</b>. The reason is arithmetic — “I want companies we can get at five or six times, not the ones we have to take to seven, eight, nine to compete with another buyer.”</p>
-<h3>The first deal is the exception</h3>
-<p>It has to be larger, to give the platform a footprint the smaller ones can be folded into: <b>revenue $2–3M, net profit 15–20%, price $3–3.5M</b>, several consecutive years of that profit. Fastest close on record from the same source: <b>90 days</b>; with cash ready and counsel in place, a month is possible.</p>
-<div class="note"><b>Two contract clauses decide the multiple.</b> Agreements must be <b>assignable</b> — without that clause a sale falls to state law, which differs everywhere. And a three-year agreement with a 90-day exit is a month-to-month agreement: “your business is worth about half the multiple you think it is.” One-year terms instead of three cost roughly <b>1.5× of multiple</b>.</div>
-<div class="note" style="background:var(--shade-1)"><b>Waiting is the most expensive option on the table.</b> A live case from the buyer’s side: $2M offered in the autumn; the owner waited and lost three key contracts; the January offer was $1.1M, and it closed at that. Six months of hesitation cost nearly a million dollars.</div>
+<p>Two practitioners with thirty-seven deals between them converge on the same line without coordinating. <b>Kevin Damghani</b>, seven deals: 60%+ recurring and $150–850K EBITDA — «generally under a million, because PE gets excited about a million or more». <b>Steve</b>, thirty deals: «I would go even smaller, because I want to be below the radar of all the PE money», with the line near $500K and the reason stated as arithmetic — companies obtainable at five or six, not ones that have to be taken to eight or nine to beat another bidder.</p>
+
+<h3>What the discount is actually worth once the margin thesis is applied</h3>
+<p>The sub-radar discount is commonly described as the edge. It is not, and the distinction decides how much capital the plan needs.</p>
+<table><thead><tr><th style="width:34%"></th><th>Bought and held as-is</th><th>Bought and improved</th></tr></thead><tbody>
+<tr><th>Asset EBITDA at entry</th><td>~$400K — the middle of the target band</td><td>~$400K</td></tr>
+<tr><th>Price paid at 5×</th><td>~$2.0M</td><td>~$2.0M</td></tr>
+<tr><th>EBITDA after deployment</th><td class="out">$400K — no change</td><td class="win">~$660K, on the 13% → 21.5% uplift in Node 01</td></tr>
+<tr><th class="win">Effective entry multiple</th><td class="out">5.0×</td><td class="win">~3.0×</td></tr>
+<tr><th>Arbitrage against a 12× exit</th><td>2.4×</td><td class="win">~4.0×</td></tr>
+</tbody></table>
+<p style="font-size:12.5px;color:#666">Illustrative arithmetic on published benchmarks, not a model output. The financial model is being rebased on industry data captured at ChannelCon; these figures set the order of magnitude and the direction, not the plan.</p>
+<div class="note"><b>This is the single most important sentence in Part I.</b> If the uplift does not land, the strategy degrades from an operating thesis into a financial trade — buying cheap and hoping to sell dear, with no reason the next buyer pays more than we did. Node 10 tests it on the first two assets for exactly this reason.</div>
+
+<h3>How many assets the target implies — and whether that rate has ever been achieved</h3>
+<p>The arithmetic was done out loud at the conference. Working back from a $500M outcome at a 12× exit: «if I take five hundred divided by twelve, I need forty-one EBITDA» — and then the consequence, that assembling it out of small firms at 5–8× means «almost two hundred million», which is why a fund enters the picture at all.</p>
+<table><thead><tr><th style="width:26%"></th><th>Implication</th></tr></thead><tbody>
+<tr><th>EBITDA required</th><td>~$41M at a 12× exit for $500M · ~$25M for $300M</td></tr>
+<tr><th>Per asset, post-deployment</th><td>~$660K</td></tr>
+<tr><th class="win">Deals implied</th><td class="win">~62 for $500M · ~38 for $300M</td></tr>
+<tr><th>Rate required over five years</th><td class="win">~12 per year · ~8 per year</td></tr>
+<tr><th>Rate achieved by the reference consolidators</th><td>Evergreen Services Group: 80+ deals since 2017, ~10 per year, PE-backed. New Charter: 25+ since 2019, ~4 per year. IT Partners: 7 deals, 18 months in, on a $30M facility.</td></tr>
+</tbody></table>
+<div class="note"><b>The $500M path requires a deal rate above the best observed in the industry, run by a first-time acquirer.</b> The $300M path sits at roughly Evergreen's rate. Neither is impossible; only one has a precedent. This is the constraint that should set the target figure in Node 00 — the target has been chosen first and the rate inferred afterwards, and it should run the other way.</div>
+
+<h3>Is there enough supply</h3>
+<p>No. Supply is not the binding constraint, and it is worth stating plainly so that effort is not spent widening the funnel. Against ~40–45K US providers with median revenue of $2–5M and median EBITDA near 13%, the majority of the market sits inside the $150–850K band by construction. Applying a 60%+ recurring filter removes roughly half. What remains is measured in thousands against a requirement measured in dozens.</p>
+<p><b>The binding constraint is integration throughput.</b> Sourcing is a network problem with a known solution — peer groups hold ~130 owners across 14–15 groups and «almost all of them want to sell at some point», and access there is brokered rather than bought. Absorbing twelve companies a year without losing the margin uplift is an operating problem with no solution in the record. That is where the organisational build should be pointed, and it is the reason the integration lead is named before the M&amp;A lead.</p>
+
+<h3>The first deal is deliberately the exception</h3>
+<p>It has to be large enough to give the platform a footprint the smaller ones fold into: <b>revenue $2–3M, net 15–20%, price $3–3.5M</b>, with several consecutive years of that profit. Fastest close on record from the same source is 90 days; with cash ready and counsel in place, a month is possible.</p>
+
+<h3>Two clauses decide the multiple, and one of them is worth more than the discount</h3>
+<p>Agreements must be <b>assignable</b> — without that clause a sale falls to state law, which differs everywhere. And a three-year agreement with a 90-day exit is a month-to-month agreement: «your business is worth about half the multiple you think it is». One-year terms instead of three cost roughly <b>1.5× of multiple</b> — larger than the entire sub-radar discount, and available for the price of a renewal negotiation rather than an acquisition.</p>
+<div class="note" style="background:var(--shade-1)"><b>Waiting is the most expensive option on the table.</b> From the buyer's side of a live case: $2M offered in the autumn; the owner waited, lost three key contracts, and the January offer was $1.1M — which closed. Six months of hesitation cost nearly a million dollars.</div>
+
+<h3>The window is closing while the thesis is being written</h3>
+<p>Transactions ran 435 → 675 → 782 → 1,000+ across 2022–2025, average deal size doubled from $2.5M to $5.0M, and average enterprise value rose ~15% in a single year. Consolidation is outpacing market growth, which means the same assets are being bid by more capital each year. <b>Entry multiples are the thing that moves first.</b> The plan assumes 5–6× at entry; that assumption has a shelf life, and the sub-radar band is the last place it survives — which is an argument for speed rather than for a wider mandate.</p>
+
+<p style="font-size:12.5px;color:#666">Evidence: 584 &amp; Cogent Growth Partners maturity scale, Q4 2025, as presented by IT Partners · Damghani and Steve, ChannelCon 2026 · exit comps of 15–16× at $40–50M deal size, per Stephen · Evergreen, New Charter and IT Partners deal histories · CompTIA provider counts · Service Leadership Index 2026.</p>
 </div>
 
-
-
-</div></details><div class="node">
+</div></details>
+<div class="node">
 <div class="node-no">Part II · Node 04</div><h2>Consolidation model</h2>
 <details open class="lvl1"><summary class="thesis">The field splits by capital source, not by integration style. Private equity buys control; debt buys independence — and the operator who took debt is the only one who kept it.</summary><div class="det1">
 <table><thead><tr><th style="width:17%"></th><th>Evergreen · Blue Charter</th><th>IT Partners</th><th>Classic PE platform</th></tr></thead><tbody>
