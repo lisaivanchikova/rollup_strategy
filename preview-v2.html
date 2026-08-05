@@ -177,4 +177,63 @@ blockquote{margin:12px 0;padding:10px 16px;background:var(--silver-mist);border-
 <div class="note"><b>The two are not alternatives at the same moment.</b> Debt is priced off portfolio EBITDA, which the first platform deal has to create. The sequence that fits the evidence is equity first to buy the anchor, debt second once the portfolio can carry it — which makes the size of the first round a function of one deal, not of a five-year plan.</div>
 </div>
 
+
+
+<div class="node">
+<div class="node-no">Part II · Node 08</div><h2>Decision cube</h2>
+<div class="thesis">Three axes remain open after the market is narrowed. The evidence already closes two of them; the third is the only one that needs a simulation.</div>
+<table><thead><tr><th style="width:16%">Axis</th><th>Option A</th><th>Option B</th><th>What the record says</th></tr></thead><tbody>
+<tr><th>A · First acquisition</th><td class="hold">Platform-first — pay up for finished processes</td><td class="win">Below the PE radar at 5–6×, but the <b>first</b> deal larger: $2–3M revenue, 15–20% net, price $3–3.5M</td><td>Both practitioners converge on staying under the radar; Steve adds the single exception — the first deal needs a footprint the rest can fold into. <span class="src">Damghani · Steve</span></td></tr>
+<tr><th>B · Software</th><td class="out">Build the product first, then find MSPs to sell it to</td><td class="win">Channel first; productise one regulator-mandated workflow afterwards</td><td>“Automate that critical workflow and it becomes your product — then you sell it to MSP after MSP.” Nicolas independently: building software first “turns us back into SaaS.” <span class="src">McHugh · Nicolas, 4 Aug</span></td></tr>
+<tr><th>C · Delivery base</th><td class="hold">Onshore</td><td class="hold">Offshore — Portugal and Georgia today</td><td class="hold"><b>Open.</b> Financial mid-market demands 7×24 cover; the veteran named the choice as “an AI help desk or a staffed help desk,” and noted an AI-native MSP holds a cost advantage a people-heavy incumbent cannot match.</td></tr>
+</tbody></table>
+<details open><summary>What the simulation has to answer</summary><div class="det">
+<p>Axes A and B are settled by evidence, so the cube collapses from eight branches to two: <b>offshore-led</b> and <b>onshore-led</b>, both entered below the PE radar with the channel built before the product. The simulation is therefore not a search for the winning branch — it is a stress test of one question: at what integration churn and what utilisation ramp does the offshore-led branch stop paying?</p>
+<p>Inputs are known from the benchmark set and belong in the financial model, not here: entry multiple 4–6×, exit 8–10× (15–16× at $40M+), gross margin 40% → 51.2% leading, monthly churn 0.5% at leading versus 1.3% at the bottom quartile, utilisation 61% → 70%.</p>
+<div class="note"><b>Deferred by decision.</b> The Monte-Carlo run lives in the financial model, which is being rebuilt separately. This node carries the branch structure and the question; the probabilities attach when the model is rebased on the benchmark set above.</div>
+</div>
+
+</div></details><div class="node">
+<div class="node-no">Part III · Node 09</div><h2>Go-to-market</h2>
+<div class="thesis">Outbound does not work even for mature MSPs. The leaders spend 1.5% of revenue winning work — the shrinking quartile spends 0.4%.</div>
+<table><thead><tr><th style="width:22%">Channel</th><th>Evidence</th><th>Position</th></tr></thead><tbody>
+<tr><th>Industry conferences</th><td class="win">Ranked first by Nicolas from his own operating experience. Damghani: “the best conversations happen when you aren’t for sale.”</td><td class="win"><span class="tag tag-pass">Primary</span></td></tr>
+<tr><th>Partnerships &amp; resellers</th><td class="win">MSPs act as distributors for dozens of vendors; the RMM vendors are the route to market for productised workflow.</td><td class="win"><span class="tag tag-pass">Primary</span></td></tr>
+<tr><th>Peer groups</th><td class="win">~130 owners across 14–15 groups; “almost all of them want to sell at some point.” Access is brokered, not bought — an operator cannot join.</td><td class="win"><span class="tag tag-pass">Deal flow</span></td></tr>
+<tr><th>Outbound</th><td class="hold">“Outbound sales hasn’t always worked for us very well” — 25-year owner; peers confirmed the same across the room.</td><td class="hold"><span class="tag tag-warn">Secondary</span></td></tr>
+<tr><th>Outsourced sales</th><td class="out">One vendor on the floor offers it as a service — built a client’s sales team in six months on $150K of payroll. No evidence of it working for MSP acquisition.</td><td class="out"><span class="tag tag-rej">Rejected</span></td></tr>
+</tbody></table>
+<details open><summary>Who we sell to</summary><div class="det">
+<p>Not the IT director. From a 30-year specialist: for small and mid-sized businesses, “CTOs and CIOs don’t know a lot… it never ceases to surprise me how little they know.” His own conclusion on what he would change: “sell to the CEO and not the CIO — I still haven’t cracked that nut.” The craft is selling a complex technical proposition to a non-technical buyer.</p>
+</div></details><details open><summary>Spend, benchmarked</summary><div class="det">
+<p>Sales and marketing as a share of revenue: bottom quartile <b>0.4%</b>, leading peer group <b>1.5%</b>, top quartile <b>2.6%</b>. The bottom quartile is also the one losing half a point of recurring revenue every month. As the deck put it: “the shrinking is a decision, not weather.” <span class="src">Alternative Payments benchmark, 30 KPIs</span></p>
+</div>
+
+</div></details><div class="node">
+<div class="node-no">Part III · Node 10</div><h2>What must be true</h2>
+<div class="thesis">Six assumptions carry the thesis. Each has a number from the benchmark set and a test that can fail it.</div>
+<table><thead><tr><th style="width:26%">Assumption</th><th>Threshold</th><th>Test</th></tr></thead><tbody>
+<tr><th>Sellers exist at our price</th><td>LOI at 5–6× adjusted EBITDA, assignable contracts, 3-year terms</td><td class="win">50 targets in CRM · 20 live seller conversations · 1 signed LOI</td></tr>
+<tr><th>Margin uplift is real</th><td>Gross margin 40% → 51.2% · net 4.3% → 15.5%</td><td>90 days on the first asset</td></tr>
+<tr><th>Utilisation moves</th><td>61% → 70% (not 85% — the gap is onboarding and dispatch, not sales)</td><td>Ticket and dispatch data, one quarter</td></tr>
+<tr><th>Retention holds through integration</th><td>Monthly churn ≤0.5% (leading) against 1.3% at the bottom quartile</td><td>Cohort retention, 6 months post-close</td></tr>
+<tr><th>Specialisation carries a premium</th><td>CMMC readiness $4–8K per client per month</td><td>Two signed compliance engagements in the vertical</td></tr>
+<tr><th>Owners accept equity over cash</th><td>Roll-equity split accepted by ≥1 of first 3 sellers</td><td>First three negotiations</td></tr>
+</tbody></table>
+<div class="note"><b>The assumption that is not on this list.</b> That the channel can be built at all. It carries every other line, and today the MSP leg is seven people and one anchor client at 25 seats.</div>
+</div>
+
+<div class="node">
+<div class="node-no">Part III · Node 11</div><h2>Next gate</h2>
+<div class="thesis">The next milestone is one signed LOI — not a plan, a partner or a round.</div>
+<div class="cut">
+<div><b>Gate</b>One LOI at ≤5–6× adjusted EBITDA, with an assignability clause and three-year terms. Target profile: 60%+ recurring, $150–850K EBITDA, owner seeking options rather than an exit.</div>
+<div><b>Kill criterion</b>100 contacts and zero LOIs across two quarters means sellers will not transact at our price — the entry model, not the vertical, is what failed.</div>
+<div><b>Cost of delay</b>A live case from the buyer’s side: $2M offered in autumn, $1.1M in January after three contracts were lost. Six months cost nearly a million.</div>
+</div>
+<details open><summary>What is still open</summary><div class="det">
+<p>The target figure — $100M, $300–500M or $1B — has moved three times in three weeks and sets the entry price, the number of deals and whether an outside round is needed at all. The composition of the $5M software line. The perimeter of the Series A. The Monte-Carlo run, pending the financial model rebase.</p>
+</div>
+
 </div></body></html>
+</div></details>
