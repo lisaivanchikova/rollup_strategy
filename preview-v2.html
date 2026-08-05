@@ -1,0 +1,87 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Roll-up Studio · Strategy v2 — Selection Tree (preview)</title>
+<style>
+:root{--deep-slate:#31435B;--petrol-teal:#2E7780;--soft-steel:#A9C5D6;--silver-mist:#DCE5EC;--near-black:#151A1F;--cool-gray:#C9D2DC;--off-white:#FAF9F6;--rule:#D8DEE5;--shade-1:#F4F2EE;--accent:#2E7780;--warn:#C5874A;--reject:#7A3030}
+*{box-sizing:border-box}
+body{margin:0;background:var(--off-white);color:var(--near-black);font:15px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:48px 28px 80px}
+.eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700}
+h1.doc{font-size:30px;line-height:1.25;margin:6px 0 4px;color:var(--deep-slate);font-weight:700;letter-spacing:-.01em}
+.sub{color:#5A6875;font-size:14px;margin-bottom:34px}
+.node{border-top:1px solid var(--rule);padding-top:34px;margin-top:40px}
+.node-no{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700}
+h2{font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--deep-slate);margin:4px 0 14px;font-weight:700}
+.thesis{font-size:20px;line-height:1.45;color:var(--deep-slate);font-weight:600;letter-spacing:-.005em;margin:0 0 22px;padding-left:16px;border-left:3px solid var(--petrol-teal)}
+table{width:100%;border-collapse:collapse;margin:18px 0 8px;font-size:13.5px}
+th,td{border:1px solid var(--rule);padding:10px 12px;vertical-align:top;text-align:left}
+thead th{background:var(--deep-slate);color:#fff;font-size:11px;letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+tbody th{background:var(--shade-1);color:var(--deep-slate);font-weight:600;width:20%;font-size:12.5px}
+td.win{background:rgba(46,119,128,.09)}
+td.hold{background:rgba(197,135,74,.10)}
+td.out{background:rgba(122,48,48,.07);color:#6B5B5B}
+.tag{display:inline-block;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:11px;font-weight:700}
+.tag-pass{background:var(--petrol-teal);color:#fff}
+.tag-warn{background:var(--warn);color:#fff}
+.tag-rej{background:var(--reject);color:#fff}
+h3{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--deep-slate);margin:26px 0 8px;font-weight:700}
+p{margin:0 0 12px}
+.src{color:var(--petrol-teal);font-weight:600}
+blockquote{margin:12px 0;padding:10px 16px;background:var(--silver-mist);border-left:3px solid var(--petrol-teal);font-size:13.5px;color:#2C3A48}
+.note{background:var(--shade-1);border-left:3px solid var(--warn);padding:12px 16px;margin:16px 0;font-size:13.5px}
+.cut{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.cut div{flex:1 1 240px;border:1px solid var(--rule);padding:12px 14px;background:#fff}
+.cut b{display:block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--petrol-teal);margin-bottom:5px}
+</style></head><body><div class="wrap">
+
+<div class="eyebrow">Bobroff Capital · Internal · Working draft v2.0 · 5 August 2026</div>
+<h1 class="doc">Roll-up Studio — Strategy</h1>
+<div class="sub">A selection tree. Each node narrows the field by one decision, states which option wins, and shows the evidence it rests on. Sources: ChannelCon 2026 (36 recorded sessions, 100 slides), Service Leadership Index 2026, 584 &amp; Cogent Growth Partners.</div>
+
+<div class="node">
+<div class="node-no">Node 01</div>
+<h2>Industry</h2>
+<div class="thesis">Of the eight back-office families that survived the economy-wide screen, MSP is the only one where recurring revenue converts into a published valuation multiple.</div>
+<p>The whole tree is graded against one quantity: founder cash-out at exit — <em>multiple × scale × retained ownership</em>, weighted by the probability of an exit on horizon. Every node below narrows the field against that number.</p>
+<p>The screen ran across 1,012 six-digit NAICS cells and produced 22 hell-yes verticals, clustering into eight back-office families: accounting, IT&nbsp;/&nbsp;MSP, HR, legal back-office, marketing, translation, collections, telemarketing. Industry filter: fragmentation ≥&nbsp;80%, recurring revenue ≥&nbsp;50%, EBITDA margin ≥&nbsp;18%.</p>
+<div class="cut">
+<div><b>Selected</b>MSP — decision of 17 July 2026. Home Care stepped down to a listening post; HR and accounting closed.</div>
+<div><b>Why it wins</b>MSP is the one family with a public, buyer-side scorecard: contracted recurring revenue maps directly onto a known multiple range. The others price on negotiation, not on a table.</div>
+<div><b>Price of the cut</b>No vertical diversification before year three. The bet is concentrated by design.</div>
+</div>
+</div>
+
+<div class="node">
+<div class="node-no">Node 02</div>
+<h2>Perimeter</h2>
+<div class="thesis">One perimeter today, separation on a trigger. We build the channel around software that already works — not software around a channel that does not yet exist.</div>
+<table>
+<thead><tr><th style="width:20%"></th><th>A · One perimeter, channel first</th><th>B · Two entities now</th><th>C · Software only, wind down MSP</th></tr></thead>
+<tbody>
+<tr><th>How the group is priced</th><td class="win">On EBITDA. 8–10× at platform maturity; 15–16× observed at $40–50M deal size</td><td class="hold">Services on EBITDA, software on revenue — two scorecards, two buyers</td><td class="out">On revenue, discounted for project mix</td></tr>
+<tr><th>Evidence behind it</th><td class="win">584 &amp; Cogent scorecard · Damghani (7 deals) · Steve (30 deals)</td><td class="hold">No source. Software multiples were never discussed at ChannelCon</td><td class="out">No source</td></tr>
+<tr><th>Starting position</th><td class="win">Software $5M (project-based) · MSP $150K · 7 FTE · first anchor client at 25 seats</td><td class="hold">Same</td><td class="out">Same</td></tr>
+<tr><th>What it costs</th><td class="win">The channel has to be built almost from zero — three to four years</td><td class="hold">Two sets of books, two teams, while only one leg earns</td><td class="out">Gives up the recurring revenue the MSP was started for</td></tr>
+<tr><th>Verdict</th><td class="win"><span class="tag tag-pass">Selected</span></td><td class="hold"><span class="tag tag-warn">Deferred to trigger</span></td><td class="out"><span class="tag tag-rej">Rejected</span></td></tr>
+</tbody></table>
+
+<h3>Why A wins</h3>
+<p><b>The value is created by the recurring leg, not the software one.</b> Software brings $5M, but it is project revenue — in his own words, <em>“most of it is project based, and I want recurring revenue.”</em> Project revenue is priced on a services scorecard, at a discount. Managed-services revenue lands on the <span class="src">584 &amp; Cogent</span> scale, where the ceiling is 8–10× and, at $40M+ scale, the market has paid 15–16×. The multiple expansion comes from the leg we barely have.</p>
+<p><b>A product cannot exist before the channel does.</b> <span class="src">Jeff McHugh</span> put the sequence plainly: automate one critical, regulator-mandated workflow for one MSP in a regulated industry, and only then does that automation become a product you sell onward — through the RMM vendors, not directly to the MSPs you are also buying.</p>
+<blockquote>“First you buy the client base, then you build software on top of it… I don’t believe in building software and then running around trying to push it onto every MSP — that just turns us back into SaaS.” — Nicolas, 4 August</blockquote>
+<p><b>The revenue mix has to move toward recurring anyway.</b> <span class="src">Damghani</span>: the highest multiples go to an 80% MRR / 20% hardware-and-projects mix on three-year agreements with an assignability clause. Today the group sits on the inverse mix.</p>
+
+<h3>Why not B</h3>
+<p>There is nothing to separate yet. A line of business turning over $150K is a pilot, not an asset; splitting it out buys two sets of accounts and two teams while a single leg carries the group. The claim that software would fetch more on its own rests on no source in the record — software multiples were not discussed at ChannelCon at all.</p>
+
+<h3>Why not C</h3>
+<p>It removes the recurring revenue the MSP was started to create, and leaves the group inside the project-based model it is trying to leave.</p>
+
+<div class="note"><b>What the choice rests on.</b> A single assumption: that the channel can in fact be built. This is the weakest joint in the tree — the MSP today is seven people and one anchor client at 25 seats, while phase B of the roadmap builds a billion-dollar outcome on a client base that does not exist yet.</div>
+
+<div class="cut">
+<div><b>Trigger to revisit</b>External software sales start to require the trust of MSPs we are not acquiring · the fund demands separate perimeters for separate assets · twelve months pass without a first platform deal.</div>
+<div><b>Still open</b>How the market prices software revenue inside a services holdco · the composition of the $5M (project vs recurring, margin, concentration) · the perimeter of the Series A.</div>
+</div>
+</div>
+
+</div></body></html>
