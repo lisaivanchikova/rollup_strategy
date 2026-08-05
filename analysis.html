@@ -85,8 +85,59 @@ td.out{background:var(--silver-mist);color:var(--deep-slate)}
 
 <div class="lvl">
 <div class="lvl-no">Level 2</div>
-<h2>Seven filters cut 40,000 providers to our slice</h2>
-<div class="pending">In progress — axis of specialisation, client vertical, client size, states, asset size, recurring share, availability. Draws on the supply-side slice screen of 5 August.</div>
+<h2>Seven filters cut 40,000 providers to somewhere between 70 and 220 firms — and only the first two rest on published data</h2>
+
+<p>Each filter below removes a degree of freedom and states what it costs to remove it. They are applied in sequence, and <b>the order matters</b>: each cut runs against the slice the previous one left, so a filter applied too early removes firms that would have survived a later one.</p>
+
+<h3>Exhibit 1 · The cascade</h3>
+<table><thead><tr><th style="width:36%">Filter</th><th>What survives</th><th>Firms remaining</th><th>Basis</th></tr></thead><tbody>
+<tr><th>—</th><td>US managed service providers</td><td class="win">40,000 – 50,000</td><td>Published</td></tr>
+<tr><th>1 · Axis of specialisation</th><td>Vertical specialists; generalists and single-service shops out</td><td class="win">23,200 – 29,000</td><td>Published — CompTIA, 58%</td></tr>
+<tr><th>2 · Client vertical</th><td>Financial-services orientation</td><td class="win">11,200 – 14,000</td><td>Published — CompTIA, 28% of the field</td></tr>
+<tr><th>3 · Depth of concentration</th><td>40%+ of revenue in the vertical</td><td>3,400 – 5,600</td><td class="out">Estimate</td></tr>
+<tr><th>4 · Client size band</th><td>Client base is mid-market, 50–500 employees</td><td>1,000 – 2,200</td><td class="out">Estimate</td></tr>
+<tr><th>5 · States</th><td>New York, Texas, Florida</td><td>150 – 400</td><td class="out">Estimate</td></tr>
+<tr><th>6 · Asset size and staffing</th><td>$1.2–6.5M revenue, has employees</td><td class="win">70 – 220</td><td class="out">Estimate</td></tr>
+<tr><th>7 · Recurring share</th><td>60%+ contracted recurring</td><td class="out">removes almost nobody — see below</td><td>Published</td></tr>
+</tbody></table>
+<div class="note"><b>The honest reading of that last column.</b> Two filters are measured and five are judgement, and the five multiply. Four successive estimates of «about a third» compound into an answer with very wide error bars — the range 70 to 220 is an order of magnitude, not a count. What can be said with confidence is that the addressable pool is in the <b>low hundreds, not the thousands</b>, and that we need thirteen of them. <b>That is a conversion of roughly one in ten of every firm that exists in our slice</b>, which is the real measure of how narrow the strategy is.</div>
+
+<h3>Filter 1 · Specialise, and the choice of axis is not free</h3>
+<p>Two axes of specialisation were observed in the same room and they exclude each other. By client industry — learn one sector's language and compliance load, and <span class="src">«walk into any vertical because everyone there knows me»</span>. By service — one capability sold industry-agnostically, the working example being an operator who does nothing but database administration.</p>
+<p>The economics decide it. Vertical specialists price at <b>$250–350 per seat against $100–120</b> for generalists and carry roughly <b>23% more margin</b>. The service-specialist route is not refuted so much as capped: the database-only operator had reached <b>$750K of revenue after three decades</b> — high margin, no growth engine, unable to win new clients. On the supply-side screen of 5 August, generalist MSPs score 5.10 and eliminate, on the largest available pool and the cheapest entry, because no moat and compressed pricing cannot be offset.</p>
+<p>The constraint on the middle is stated flatly and it is a decision rule, not a preference: <span class="src">«I don't think the middle options — I'm not here, not there, undecided — are good or fit. It means we simply haven't done our homework.»</span></p>
+
+<h3>Filter 2 · Financial services, and within it the slice is narrower than «finance»</h3>
+<p>The screen of 5 August ran twenty client-vertical slices on acquirer-side criteria. Three passed: <b>MSPs serving broker-dealers and RIAs (6.96), banks and credit unions (6.74), healthcare providers (6.56)</b>. The separation inside financial services is mechanical — banks carry the heavier compliance load but their core systems resist automation and the slice is more consolidated, so the margin we can add is smaller. Broker-dealers give almost the same regulatory moat with more compressible work.</p>
+<p>What the vertical actually sells is an evidentiary obligation the client cannot meet alone: SEC Regulation S-P, FINRA Rules 3110 and 4370, FINRA 17a-4(f) on records, and the GLBA Safeguards Rule enforced across advisers and lenders. <b>FINRA examinations and GLBA audits require documentation a generic provider cannot produce</b> — which is why the barrier converts into price per seat rather than into a marketing claim.</p>
+<div class="note"><b>Healthcare is third, and it loses on crowding rather than on quality.</b> It is the largest specialist pool — 34% of MSPs serve it — and the most consolidated, rising from 18% of MSP vertical concentration in 2021 to 31% in 2022, with financial services second and moving the same way, 13% to 23%. <b>Our two best verticals are the two most contested in the market.</b> And the exit data does not separate them: the premium of 0.75–1.5 turns applies to regulated verticals as one category, with no ranking inside it.</div>
+
+<h3>Filter 3 · Concentration, and the ceiling nobody expected</h3>
+<p>Serving a vertical is not specialising in it. The transaction data attaches the premium to <b>40%+ of revenue</b> in regulated verticals — and attaches a ceiling to it as well: the premium optimises in the <b>40–60% band</b>, above which buyers begin discounting for customer concentration.</p>
+<p><b>That cuts against the instinct to specialise as hard as possible.</b> A pure-play single-vertical MSP is not the most valuable configuration, and at our asset size — three to sixteen clients — a single vertical is likely to be the entire book. The reconciliation is a live question for Level 4 rather than a settled one: it may mean the assembled group should hold a deliberate minority of adjacent revenue rather than driving the vertical to 100%.</p>
+
+<h3>Filter 4 · Client size, and the figure that travelled wrong</h3>
+<p>Mid-market: not enterprise, which means bidding against very large firms, and not SMB, whose decisions are <span class="src">«largely driven on cost»</span>. The mid-market outsources by preference and is willing to spend.</p>
+<p>The range circulating internally has been 15–500 employees. <b>The source said 50–500.</b> The veteran gave it as fifty to five hundred; it was repeated back as fifteen within the same exchange and went uncorrected. The 15–50 band is precisely the price-driven SMB the same expert ruled out, so carrying it into the profile imports the segment we were warned against.</p>
+
+<h3>Filter 5 · States, and California as a mechanism rather than a warning</h3>
+<p>«Where should we operate» is three questions with three answers: where buyable assets are, where the demand sits, and where technicians sit. Merging them is how the choice gets made badly. This filter answers the first two; delivery remains open.</p>
+<p>The warning received was that California has difficult legislation and few MSPs. Half is unsupported — California is a recognised cluster and on raw counts is not thin. The other half is supported, and the mechanism is more useful than the claim. <b>California overtime triggers after eight hours in a day rather than forty in a week; a missed meal break above five hours costs an extra hour of pay; and a technician monitoring a server through a break converts that break into compensable time.</b> A rational owner stops at four employees, and a firm that never hired has no transferable operation to buy.</p>
+<div class="note"><b>The finding, stated properly: California does not lack MSPs, it lacks MSPs with employees — the only kind that can be acquired.</b> Low asset supply is the output of the labour regime, not a separate fact about the state. And it collides with the vertical: financial services makes 7×24 coverage a precondition, which means night shifts, on-call rotations and monitored breaks — the three exposures California prices highest. <b>The vertical and that state are the worst available pairing</b>, which is why the anchor is New York and the expansion is Texas.</div>
+
+<h3>Filter 6 · Asset size — the band where private equity is not looking</h3>
+<p>$150–850K of EBITDA at a 13% median margin implies <b>$1.2–6.5M of revenue</b>. The upper bound is not a preference but a defence: <span class="src">«hardly anyone looks at companies below two or three million of enterprise value, and that is exactly our segment»</span>. Below that line entry runs at 4–5× against a platform range of 8–10×, and the spread is the return. The lower bound is staffing — a solo practice has nothing transferable, which is the same test California failed.</p>
+
+<h3>Filter 7 · Recurring share is not a filter, and it is worth saying so</h3>
+<p>Every target profile in circulation, including the one used by the most active comparable acquirer, specifies 60%+ contracted recurring revenue. The benchmark data says the leading peer group runs <b>76% recurring and the bottom quartile 62%</b>.</p>
+<div class="note"><b>A 60% threshold therefore removes almost nobody.</b> It reads as a selective criterion and functions as a hygiene check. This matters in two ways: the target profile is less discriminating than it sounds, so it should not be relied on to do screening work; and the real differentiator in revenue quality is not the 60% line but the distance from it to 76%, together with contract term and assignability — where a 90-day cancellation clause is valued as month-to-month regardless of what the recurring share says.</div>
+
+<h3>What the cascade implies for the funnel we have to build</h3>
+<p>A pool in the low hundreds cannot be worked with broad marketing; it has to be enumerated by name. It also puts one figure from Level 4 in a different light: the advisor under discussion runs peer groups containing around <b>130 owners across 14–15 groups</b>, which is roughly the size of the entire estimated pool. <b>His network is not a lead source — at this scale it is plausibly a large fraction of the market itself</b>, which is what the retainer is actually pricing, and what makes the terms worth restructuring rather than refusing.</p>
+
+<h3>What is not established at this level</h3>
+<p>Five of seven filters are estimates, and the compounded range is wide enough that the pool could be seventy firms or three hundred. <b>Hardening it is a data purchase, not an analysis task</b> — establishment counts by sector, state and employee band, cross-referenced against provider directories. It is the cheapest open item in the programme and it gates the funnel in Level 4. The concentration ceiling from Filter 3 is also unresolved, and it is the one filter that argues against the strategy rather than for it.</p>
+<p class="foot">Sources: CompTIA vertical-specialisation shares, 58% specialising against 39% in 2021, and vertical distribution · MSP vertical concentration trend 2021→2022 · supply-side slice screen, 5 August 2026 · MSP M&amp;A multiples 2026, regulated-vertical premium and the 40–60% concentration band · SEC, FINRA and FTC GLBA rule texts · California Labor Code overtime and meal-period provisions · defence award concentration by state, FY2023 · «Financial Mastery for MSPs» masterclass, ChannelCon 2026, for recurring-revenue quartiles · ChannelCon 2026 field material for the two axes, the middle-path constraint, the database-only case, the client-size range and the sub-$3M entry line.</p>
 </div>
 
 <div class="lvl">
