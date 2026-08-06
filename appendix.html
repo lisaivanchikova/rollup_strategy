@@ -1,0 +1,685 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Roll-up Studio — Strategy</title>
+<style>
+:root{--deep-slate:#31435B;--petrol-teal:#2E7780;--soft-steel:#A9C5D6;--silver-mist:#DCE5EC;--near-black:#151A1F;--cool-gray:#C9D2DC;--off-white:#FAF9F6;--rule:#DCE5EC;--accent:#2E7780;--steel-blue:#A9C5D6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--off-white);color:var(--near-black);font:15px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:48px 28px 80px}
+.eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700}
+h1.doc{font-size:30px;line-height:1.25;margin:6px 0 4px;color:var(--deep-slate);font-weight:700;letter-spacing:-.01em}
+.sub{color:#7B8590;font-size:14px;margin-bottom:34px}
+.node{border-top:1px solid var(--rule);padding-top:34px;margin-top:40px}
+.node-no{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--petrol-teal);font-weight:700}
+h2{font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--deep-slate);margin:4px 0 14px;font-weight:700}
+summary.thesis{font-size:19.5px;line-height:1.45;color:var(--deep-slate);font-weight:600;letter-spacing:-.005em;margin:0 0 6px;padding:2px 0 2px 18px;border-left:3px solid var(--petrol-teal);cursor:pointer;list-style:none;text-transform:none;display:block;position:relative}
+summary.thesis::-webkit-details-marker{display:none}
+summary.thesis::before{content:"";position:absolute;left:-14px;top:11px;width:7px;height:7px;border-right:1.8px solid var(--petrol-teal);border-bottom:1.8px solid var(--petrol-teal);transform:rotate(-45deg);transition:transform .18s ease}
+details.lvl1[open]>summary.thesis::before{transform:rotate(45deg)}
+summary.thesis:hover{color:var(--petrol-teal)}
+.det1{padding-top:14px}
+details.lvl1{margin:0}
+table{width:100%;border-collapse:collapse;margin:18px 0 8px;font-size:13.5px}
+th,td{border:1px solid var(--rule);padding:10px 12px;vertical-align:top;text-align:left}
+thead th{background:var(--deep-slate);color:var(--off-white);font-size:11px;letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+tbody th{background:var(--shade-1);color:var(--deep-slate);font-weight:600;width:20%;font-size:12.5px}
+td.win{background:var(--petrol-teal);color:var(--off-white);font-weight:600}
+td.win b,td.win em{color:var(--off-white)}
+td.win 
+td.hold{background:var(--steel-blue);color:var(--deep-slate)}
+td.out{background:var(--silver-mist);color:var(--deep-slate)}
+.tag{display:inline-block;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:11px;font-weight:700}
+.tag-pass{background:var(--off-white);color:var(--petrol-teal)}
+.tag-warn{background:var(--deep-slate);color:var(--off-white)}
+.tag-rej{background:var(--cool-gray);color:var(--deep-slate)}
+details{margin:22px 0 0;border-top:1px solid var(--rule)}
+summary{cursor:pointer;list-style:none;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--deep-slate);font-weight:700;padding:14px 0 10px;display:flex;align-items:center;gap:9px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"";width:7px;height:7px;border-right:1.6px solid var(--petrol-teal);border-bottom:1.6px solid var(--petrol-teal);transform:rotate(-45deg);transition:transform .18s ease;flex:0 0 auto;margin-top:-3px}
+details[open]>summary::before{transform:rotate(45deg);margin-top:1px}
+summary:hover{color:var(--petrol-teal)}
+.det{padding-bottom:6px}
+h3{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--deep-slate);margin:26px 0 9px;font-weight:700;line-height:1.4}
+p{margin:0 0 12px}
+.src{color:var(--petrol-teal);font-weight:600}
+
+blockquote{margin:12px 0;padding:10px 16px;background:var(--silver-mist);border-left:3px solid var(--petrol-teal);font-size:13.5px;color:var(--deep-slate)}
+.note{background:var(--silver-mist);border-left:3px solid var(--deep-slate);padding:12px 16px;margin:16px 0;font-size:13.5px}
+.cut{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.cut div{flex:1 1 240px;border:1px solid var(--rule);padding:12px 14px;background:var(--off-white)}
+.cut b{display:block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--petrol-teal);margin-bottom:5px}
+</style></head><body><div class="wrap">
+
+<div class="eyebrow">Bobroff Capital · Internal · 5 August 2026</div>
+<h1 class="doc">Roll-up Studio — Strategy</h1>
+<div class="sub">A sequence of cuts. Each node removes a degree of freedom and states what it cost to remove it: the field of games narrows to one archetype, the economy to one industry, the industry to one vertical, one set of states and one asset profile — and what remains is the entry model into that square. Evidence runs in two layers. <b>Primary, unpublished:</b> ChannelCon 2026 — 36 recorded sessions and 100 slides, 3–5 August — practitioners describing what they actually paid and how they actually integrated. <b>Independent and checkable:</b> Service Leadership Index 2026 · 584 &amp; Cogent Growth Partners Q4 2025 · 2026 MSP M&amp;A multiple reports across 120 transactions · CompTIA and Canalys channel counts · DoD CMMC final rule and DFARS timeline · BLS OEWS 2024. Where the two layers disagree, the disagreement is shown rather than resolved silently.</div>
+
+<table style="margin-bottom:6px"><thead><tr><th style="width:21%">Criterion — probability-weighted founder cash-out</th><th>Driven by</th><th>Decided in</th></tr></thead><tbody>
+<tr><th>Multiple at exit</th><td>Recurring share · contract assignability · buyer-side scorecard · narrative tier</td><td>03 · 04 · 05</td></tr>
+<tr><th>Scale of EBITDA</th><td>Targets available at our price · margin added per asset · states where they can be owned</td><td>02c · 03 · 09</td></tr>
+<tr><th>Retained ownership</th><td>Capital source — debt against equity, dilution per round</td><td>04 · 07</td></tr>
+<tr><th>Probability of exit</th><td>Depth of the buyer market · cyclicality · regulatory exposure</td><td>04 · 11</td></tr>
+</tbody></table>
+
+<div class="node">
+<div class="node-no">Summary</div><h2>The proposition, in one page</h2>
+
+<p><b>Buy small managed-service providers serving mid-market financial firms, standardise them onto one AI-native delivery platform, and sell the group in five years.</b> Thirteen acquisitions at roughly $2M each, about $30M of acquisition capital, a target of $100M of enterprise value. The market is consolidating at over a thousand transactions a year and average enterprise values rose 15% in twelve months, so the window is priced and moving.</p>
+
+<h3>The square we cut to</h3>
+<table><thead><tr><th style="width:20%">Cut</th><th>To</th><th>Because</th></tr></thead><tbody>
+<tr><th>Industry</th><td class="win">Managed services</td><td>Scored second of eight back-office families on the April screen and first once AI-compressibility is weighted at the level this thesis actually requires</td></tr>
+<tr><th>Vertical</th><td class="win">Financial services, mid-market, 50–500 employees</td><td>Specialists price at $250–350 a seat against $100–120 and carry 23% more margin. The barrier is evidentiary — a generic provider cannot produce what a FINRA examination demands</td></tr>
+<tr><th>Geography</th><td class="win">New York anchor, Texas expansion</td><td>Supply, demand and delivery cost do not point at the same states. California prices covered hours highest, which is exactly what this vertical obliges</td></tr>
+<tr><th>Asset</th><td class="win">$150–850K EBITDA, 60%+ recurring, under the private-equity radar</td><td>Entry at 4–5× against a platform range of 8–10×. At this size an asset is three to sixteen clients, so concentration is the shape of the asset rather than a risk to score</td></tr>
+</tbody></table>
+
+<h3>The entry model</h3>
+<p>Buy finished expertise rather than shells — the premium is a bounded one-off, the delay it removes compounds against a consolidating market. Run a <b>centralised platform</b>: one operating standard, owners kept as owners on rolled equity rather than cashed out. Build the AI-native delivery layer on our own operation and the first purchase; from the second deal onward, <b>migration onto that platform is the integration</b>. The software becomes a separate company only once it has a paying customer outside our own portfolio — before that it is internal tooling, and internal tooling is priced as cost.</p>
+
+<h3>The three numbers that carry it</h3>
+<table><thead><tr><th style="width:26%"></th><th>Figure</th><th>What it decides</th></tr></thead><tbody>
+<tr><th>Client value</th><td class="win">$400–600K a year, $30–50K MRR</td><td>Derived two independent ways. Sets the size of every asset we look at</td></tr>
+<tr><th>Path to target</th><td class="win">~13 deals · ~$30M · ~2.5–3 a year</td><td>Slower than a two-year-old platform already achieves. The $500M version needs ~62 deals and ~$124M — a fund, not a round</td></tr>
+<tr><th>Cost of a client</th><td class="win">~$135K, payback under a year</td><td>Sound economics, wrong accounting: organic growth is a capital line, not a 1.5% operating line</td></tr>
+</tbody></table>
+
+<h3>What argues against it</h3>
+<p>Three things, none of them soft. <b>The plan begins from the leg that does not exist</b> — the managed-services business is seven people and one anchor client, run by a buyer who has not yet bought anything. <b>Integration capacity, not deal sourcing, is what kills roll-ups</b>: private-equity deals with more than two add-ons returned 19.9% against 23.1% for standalone buyouts, and over 70% of integrations miss the synergies modelled at close — we are proposing thirteen. And <b>the vertical is chosen on a claim about ourselves</b>, not on market data: healthcare grows faster and exits higher, and what selects financial services is transferable domain knowledge from crypto-trading software that has never been tested in this market.</p>
+
+<h3>What we are asking for now</h3>
+<p><b>One signed LOI at 5–6× adjusted EBITDA.</b> Not a round, not a partner, not another quarter of research. That single event prices our client-acquisition cost, tests the integration claim, gives a lender a borrowing base and converts the thesis into a measurable operation. The kill criterion is equally small: a hundred contacts and no LOI across two quarters means sellers will not transact at our price, and it is the entry model that failed rather than the vertical.</p>
+
+</div>
+<div class="node">
+<div class="node-no">Node 00</div><h2>Narrowing</h2>
+<details open class="lvl1"><summary class="thesis">This document is a set of cuts, not a plan. Everything below removes a degree of freedom — and the newest constraint contradicts the archetype chosen in May, which is the first thing to settle.</summary><div class="det1">
+
+<h3>What was already decided, and on what basis</h3>
+<p>The May work ran the full field: fourteen archetypes available to an operator holding three enablers — US market access, SMB acquisition capability, AI deployment capability — scored on eight parameters against founder cash-out at exit. Its honest finding was that <b>no archetype scores in the top quartile on all eight; every game carries a structural trade-off.</b> The combined utility of the three enablers concentrated in one archetype, and the posture memo fixed it as <b>AI-Native Operating Holdco with paid pre-acquisition pilots</b>, with the two runner-up paths failing four of five structural tests.</p>
+
+<h3>The cuts since, and what each removed</h3>
+<table><thead><tr><th style="width:18%">Cut</th><th>Degrees of freedom removed</th><th>When</th></tr></thead><tbody>
+<tr><th>Archetype</th><td>14 games → 1: AI-Native Operating Holdco</td><td>May</td></tr>
+<tr><th>Industry</th><td>8 back-office families → MSP; Home Care to a listening post, HR and accounting closed</td><td>17 July</td></tr>
+<tr><th>Deal size</th><td>Any scale → acquisitions under $3–5M, below the private-equity radar</td><td>August</td></tr>
+<tr><th>Client vertical</th><td>Open → financial services, mid-market; municipal ruled out on principle</td><td>August, provisional</td></tr>
+<tr><th>Sales model</th><td>Outsourced sales removed entirely; own sales engine mandatory</td><td>4 August</td></tr>
+<tr><th>Sequence</th><td>Software-first removed — client base first, software on top</td><td>4 August</td></tr>
+</tbody></table>
+<div class="note"><b>The method is stated by the principal, and it governs the format of this document.</b> «We cut degrees of freedom — not all verticals but MSP, not all business models but acquisitions no larger than three to five million. We cut our own small square out of that huge field and look for the go-to-market entry into it with minimum energy and maximum profit.» With the explicit constraint that follows from it: <b>not a hundred-page sprawl.</b> As the work moves from desk research to the field, documents are supposed to contract, not expand.</div>
+
+<h3>Where the firm actually stands</h3>
+<table><thead><tr><th style="width:20%">Leg</th><th>Today</th><th>What it means for the plan</th></tr></thead><tbody>
+<tr><th>Software</th><td class="win">$5M revenue · working sales engine · 2–3 SDRs and one closer, automated</td><td>Earns today, priced on a services scorecard at a discount. Becomes the second company — Node 05</td></tr>
+<tr><th>Managed services</th><td class="out">~$150K/year · first anchor client at 25 seats · 7 FTE across both legs</td><td>Not yet a business. It is the leg that carries the multiple, and it is near zero</td></tr>
+<tr><th>Delivery base</th><td class="hold">Portugal and Georgia, cost-optimised</td><td>Pre-decides part of the offshore question — Node 06</td></tr>
+</tbody></table>
+<p>Stated plainly, because the fund will state it anyway: <b>the plan begins from the leg that does not exist yet, run by a buyer who has not yet bought anything.</b> That is the central risk of this document, and no amount of market evidence below reduces it.</p>
+
+<h3>The contradiction to settle first</h3>
+<p>May chose an archetype that installs AI inside every acquired operating company — deep integration by construction. August introduced an integration scale that places exactly that behaviour at the far end and calls it high-risk.</p>
+<table><thead><tr><th style="width:16%">Position</th><th>Evergreen</th><th>ITPartners+</th><th>Radical AI-native</th></tr></thead><tbody>
+<tr><th>Integration</th><td class="out">Zero — finance and HR only; a manager replaces the owner</td><td class="hold">Presented as: assess, keep the strengths, absorb the weak functions. <b>Corrected in Node 04</b> — that describes the owner’s role; the operation is centralised</td><td class="win">Total — the acquired operation is replaced, only the clients are kept</td></tr>
+<tr><th>Precondition</th><td class="out">Fund-scale permanent capital — «we are not a billion-and-a-half fund, we are not Evergreen»</td><td class="hold">A credible offer to owners; 7 deals executed</td><td class="out">Capital and standing we do not have — «we are nobody in this market»</td></tr>
+<tr><th>Prize</th><td>Financial arbitrage</td><td>Workable entry</td><td class="win">«Only disruptive innovation has billions in it»</td></tr>
+<tr><th>May archetype maps to</th><td>—</td><td>—</td><td class="win">Here</td></tr>
+<tr><th>August judgement</th><td class="out">Unavailable</td><td class="win">«Possibly the only way for us, the weak ones, to enter this market»</td><td class="hold">High-risk, radical — and where the billion would be</td></tr>
+</tbody></table>
+<div class="note"><b>Both readings cannot hold.</b> Either the AI-native archetype stands and the entry model is the radical right-hand column — in which case the target can be argued upward and the risk is concentration. Or the middle path is taken as the realistic entry — in which case the May archetype is diluted at the moment of purchase, because an owner who keeps running his firm is not an operating company being rebuilt around AI. <b>This is the single decision that orders everything downstream.</b> It is resolved in Node 04, and it resolves in neither direction: <b>the middle column below is a description of the offer, not of the operating model</b> — the platform it describes is centralised, and the archetype survives by being sequenced rather than by winning the argument.</p></div>
+
+<h3>The target, as stated</h3>
+<p>Not open any longer, and the two figures are not variants of one ambition. <b>$100M</b> — «visible, understandable, viable, but a serious game: bite down and grind». <b>$1B</b> — «I don't see any model for it anywhere near», with the observation that the pull toward that figure comes from the fund side. The billion, if it exists, sits in the right-hand column above. This document is written for the hundred and marks where the billion would have to come from.</p>
+
+<h3>What remains open</h3>
+<p>Four questions, in the order they get decided: which vertical survives the test in Node 04 rather than intuition · which entry quadrant wins in Node 06 · where on the integration scale we actually stand, Node 07 · onshore or offshore. Everything else in this document is a cut that has already been made.</p>
+
+<p style="font-size:10.5px;color:#7B8590">Sources: game-selection framework and posture memos, May 2026 · vertical decision, 17 July · Nicolas, recordings of 4 August — segment, entry quadrant, integration scale, two-company split.</p>
+</div>
+
+</div></details>
+<div class="node">
+<div class="node-no">Node 01</div><h2>Industry</h2>
+<details open class="lvl1"><summary class="thesis">MSP came second on the screen and first on re-weighting: it is the only family where the margin we can add is mechanical and the price we will be paid is published.</summary><div class="det1">
+
+<table><thead><tr><th style="width:13%">Cut</th><th>In</th><th>Filter</th><th>Out</th></tr></thead><tbody>
+<tr><th>Sector</th><td>20 NAICS 2-digit</td><td>Six hard gates — geography, capital intensity, regulatory access, coherence, M&amp;A precedent at $20–150M EV, secular direction</td><td>11</td></tr>
+<tr><th>Sub-sector</th><td>25</td><td>Gates re-applied, then weighted score on seven criteria, pass ≥&nbsp;6.5</td><td>7 pass · 4 conditional</td></tr>
+<tr><th>Six-digit</th><td>1,012 cells</td><td>Fragmentation ≥&nbsp;80% · recurring ≥&nbsp;50% · EBITDA ≥&nbsp;18%</td><td>22 verticals · 8 families</td></tr>
+<tr><th>Family</th><td>8 back-office families</td><td>Re-weighted for deployable AI compression and buyer-side price discovery</td><td class="win">MSP</td></tr>
+</tbody></table>
+
+<h3>Benchmarks that carry the rest of the document</h3>
+<table><thead><tr><th style="width:26%"></th><th>Figure</th><th>Consequence</th></tr></thead><tbody>
+<tr><th>Market</th><td>US $120–140B of a $420B global market · 40–50K US providers · 87.8% under 50 staff, 1.7% above 250 · top global players under 10% combined share</td><td>Fragmentation is structural, not cyclical — target supply is not the constraint, Node 03</td></tr>
+<tr><th>Margin as bought</th><td>13% median · 18–25% top quartile · 19%+ held six years by best-in-class</td><td>The spread is the value creation, and it is operational</td></tr>
+<tr><th>Margin after deployment</th><td class="win">21.5% modelled — L1 deflection 40%, SOC Tier-1 −35%, documentation −50–60%, against +$150K tooling on a $6M unit</td><td>Reaches the published best-in-class band without scale</td></tr>
+<tr><th>Entry / exit</th><td>5–7× under $2M EBITDA · 10–14× at $20–50M · 15–16× at $40M+ deal size</td><td>~2× on multiple before EBITDA growth — Node 03</td></tr>
+<tr><th>Recurring</th><td>55–65% at the median, 75–90% MRR at the top of the range</td><td>Sets the perimeter question — Node 05</td></tr>
+<tr><th>Specialisation</th><td>Compliance focus: +20–40% revenue, +3–5 pp EBITDA</td><td>Priced in the vertical choice — Node 02</td></tr>
+</tbody></table>
+
+<h3>Why the runner-up was selected</h3>
+<p>Home Care scored 8.73 against MSP at 8.69 — a gap inside the noise of a qualitative frame. The screen weights AI compressibility at 0.12, right for ranking industries in the abstract, low for a buyer whose only durable edge is deployment. At 0.25 the order inverts — <b>MSP 8.83, Home Care 8.58</b>, break-even near 0.15. The substantive difference behind the arithmetic: in home care labour <em>is</em> the service and Medicaid sets the rate, so neither margin nor price is ours to move. Home Care stays a listening post rather than a rejection.</p>
+<div class="note"><b>The two verticals that scored well and are still unbuyable.</b> Insurance brokerage ranks third on fundamentals with PE-headroom of 3 — every asset contested by capital that arrived twenty years ago. Accounting fails from the opposite end with AI-compressibility of 2: the service itself is absorbed inside 24–36 months, so the buyer acquires a melting asset. A high score is not a decision, and the binding constraint differs by vertical.</div>
+
+<p style="font-size:10.5px;color:#7B8590">Evidence: NAICS screen Stage 1–2, 30 April 2026 · six-digit economy map, 1,012 cells · MSP P&amp;L baseline and with-AI models · Service Leadership Index 2026 · CompTIA IT Industry Outlook 2025 · Datto Global MSP Report 2024 · BLS OEWS May 2024.</p>
+</div>
+
+</div></details>
+<div class="node">
+<div class="node-no">Node 02</div><h2>Segment</h2>
+<details open class="lvl1"><summary class="thesis">Specialisation is not a marketing posture, it is a 23% margin difference and a 2.5× difference in price per seat. The axis of specialisation is a real choice; the middle of it is not available.</summary><div class="det1">
+
+<h3>The question, and the rule that constrains the answer</h3>
+<p>Two mutually exclusive axes of specialisation exist, both observed at the conference in the same room. <b>By client industry</b> — learn one sector's language and compliance load, build the reputation, «walk into any vertical because everyone there knows me». <b>By service</b> — a single capability sold industry-agnostically; the working example was an operator doing nothing but database administration. Two operators, two opposite theories, both viable.</p>
+<div class="note"><b>The constraint is on the middle, and it is stated flatly.</b> «I don't think the middle options — I'm not here, not there, undecided — are good or fit. It means we simply haven't done our homework.» Everything below therefore has to pick an axis, not blend them.</div>
+
+<h3>Whether specialisation pays at all — the part that was intuition and is now measurable</h3>
+<table><thead><tr><th style="width:26%"></th><th>Generalist</th><th>Vertical specialist</th></tr></thead><tbody>
+<tr><th>Price per seat</th><td class="out">$100–120, compressing</td><td class="win">$250–350 — sold on outcome and compliance assurance</td></tr>
+<tr><th>Profit margin</th><td>Baseline</td><td class="win">+23% against generalists (CompTIA); some measurements to +30%</td></tr>
+<tr><th>EBITDA</th><td>Median band from Node 01</td><td class="win">25%+ sustained, while still funding specialist talent</td></tr>
+<tr><th>Willingness to pay</th><td>—</td><td class="win">10–20% premium for domain knowledge</td></tr>
+<tr><th>At exit</th><td class="out">Width is discounted</td><td class="win">Depth is paid for — a $3M EBITDA healthcare MSP trades above a $5M EBITDA generalist in absolute dollars</td></tr>
+</tbody></table>
+<p>This settles the axis question in favour of industry specialisation for our case, and it does so on economics rather than preference. The service-specialist route is not refuted — it is simply the weaker version of the same moat, because a capability can be hired while a compliance record cannot. <b>The counter-example from the conference makes the same point from the other side:</b> the database-only operator sat at $750K of revenue after three decades — high margin, no growth engine, unable to win new clients.</p>
+
+<h3>Which vertical — and the honest ranking</h3>
+<p>Revenue growth among leading MSPs concentrated in three verticals: <b>healthcare 28%, financial services 18%, manufacturing 11%.</b> Financial services is not the fastest-growing option and is not the highest-valued one. It is chosen for a reason that has nothing to do with the ranking.</p>
+<table><thead><tr><th style="width:16%">Vertical</th><th>Market position</th><th>Our position</th><th>Verdict</th></tr></thead><tbody>
+<tr><th>Healthcare</th><td class="win">Fastest growth at 28%; commands the highest exit premium of any vertical</td><td class="out">No domain edge. Density plays already run by specialists with twenty-year reputations — Dallas on oral healthcare, Atlanta on legal</td><td class="hold"><span class="tag tag-warn">Reserve</span></td></tr>
+<tr><th>Financial services<br><span style="font-weight:400;font-size:12px">mid-market</span></th><td>Second at 18% growth; regulatory load makes commodity providers structurally unfit</td><td class="win">The only vertical where we bring something the incumbent lacks — software built for crypto trading firms, so the risk language is already ours</td><td class="win"><span class="tag tag-pass">Selected</span></td></tr>
+<tr><th>Manufacturing</th><td>Third at 11%</td><td class="out">No edge, no compliance hook of comparable weight</td><td class="out"><span class="tag tag-rej">Out</span></td></tr>
+<tr><th>Municipal &amp; government</th><td>Named a secondary high-potential vertical by the same veteran who ranked it first</td><td class="out">Ruled out on principle — «we will never in our lives figure out the American government». Independently, cancellation-for-convenience prices the contract as month-to-month, which Node 03 shows halves the multiple</td><td class="out"><span class="tag tag-rej">Rejected</span></td></tr>
+</tbody></table>
+<div class="note"><b>The selection rests on one asserted advantage, and the principal flagged his own bias on it.</b> «I may be completely biased, and this may not answer what we should actually be doing.» The bias is worth naming precisely: the recommendation came from a single thirty-year operator, in a conversation the principal himself steered. The independent data above supports the <em>axis</em> — specialise — and ranks healthcare above financial services on both growth and exit value. What selects financial services is the transferability of crypto-trading domain knowledge, and that is an untested claim about ourselves, not a fact about the market.</div>
+
+<h3>What is actually being sold — the compliance stack</h3>
+<p>The vertical is not a marketing label; it is a defined set of obligations the client must satisfy and cannot satisfy alone. For US mid-market financial firms the stack overlaps and sometimes pulls in different directions: <b>SEC Regulation S-P</b> on detection, response and recovery from unauthorised access to customer data · <b>FINRA Rules 3110 and 4370</b> on continuous system supervision and business continuity · <b>FINRA 17a-4(f)</b> on records · <b>GLBA Safeguards Rule</b>, enforced by the FTC across RIAs, advisers and lenders, requiring a written information security programme, a named qualified individual, encryption, MFA, access controls and vendor oversight · plus SOX, CFTC, FDIC and FFIEC expectations, and GDPR or MiFID II on cross-border work.</p>
+<p><b>The sentence that makes this a moat rather than a feature list:</b> FINRA examinations, SEC cybersecurity requirements and GLBA audits require documentation that a generic MSP cannot produce. The barrier is evidentiary, not technical — which is why it converts into $250–350 per seat instead of $100–120, and why it cannot be undercut by a cheaper generalist.</p>
+
+<h3>Segment boundaries</h3>
+<p>Mid-market: not enterprise, which means bidding against very large firms; not SMB, whose decisions are «largely driven on cost». The mid-market outsources by preference, resists headcount and is willing to spend.</p>
+<div class="note"><b>The range circulating internally is 15–500 employees. The source said 50–500, and the discrepancy was introduced in the room rather than in the record.</b> The veteran gave the range as fifty to five hundred; it was repeated back as fifteen within the same exchange and went uncorrected, and the lower figure has travelled through the internal brief ever since. The 15–50 band is the price-driven SMB the same expert ruled out — carrying it into the ICP imports the segment we were warned against and drags the entry multiple with it.</div>
+
+<h3>The test this segment still has to pass</h3>
+<p>A vertical is not selected until five things close on each other: <b>the job → the vertical → the segment → the solution → the cost of the acquisition channel</b>, out of the four channels available, ending in unit economics that work. Any one of them failing means the segment is not ours regardless of how attractive the market looks. The cost of the channel now has a first number — ~$135K per client won, Node 08 — but it is borrowed from outside our vertical and has not been run here. And the solution is only half-specified: the compliance stack above says what the client needs, not what we uniquely deliver against it.</p>
+
+<h3>What would change this</h3>
+<p>If the first ten financial-services conversations do not convert measurably faster than a generalist pitch, the asserted edge is imaginary and the vertical becomes arbitrary — at which point healthcare's superior growth and exit premium outweigh the incumbents, and the reserve becomes the selection. If CMMC engagements price above the vertical premium, the obligation is worth more than the industry and the axis shifts from client industry to mandated workflow — a different company, described in Node 06. And if a competitor with the same crypto-adjacent background appears in the segment, the edge was never proprietary.</p>
+
+<p style="font-size:10.5px;color:#7B8590">Evidence: Nicolas, 4 August — the two axes, the ban on the middle, the veteran's ranking, self-declared bias · ChannelCon 2026 — database-only operator at $750K; density cases in Dallas and Atlanta; municipal as secondary high-potential · CompTIA vertical-specialisation margin data · 2025–26 MSP vertical growth and per-seat pricing benchmarks · MSP valuation multiples by vertical · SEC, FINRA, FTC GLBA rule texts.</p>
+</div>
+
+</div></details>
+<div class="node">
+<div class="node-no">Node 02b</div><h2>Geography</h2>
+<details open class="lvl1"><summary class="thesis">The California warning is directionally right and mechanically wrong: the state has plenty of MSPs and very few buyable ones, because its labour law pays owners to stay solo.</summary><div class="det1">
+
+<h3>Three geographies, routinely collapsed into one</h3>
+<p>«Where should we operate» is three separate questions with three different answers, and merging them is how the state choice gets made badly.</p>
+<table><thead><tr><th style="width:22%">Geography of</th><th>What it governs</th><th>Optimises for</th></tr></thead><tbody>
+<tr><th>Asset supply</th><td>Where buyable MSPs exist — firms with staff, contracts and transferable operations</td><td>Density of firms <em>with employees</em>, and the cost of owning them after close</td></tr>
+<tr><th>Demand</th><td>Where the selected vertical and the CMMC obligation actually sit</td><td>Client concentration, willingness to pay, regulatory pressure on the client</td></tr>
+<tr><th>Delivery</th><td>Where technicians sit — onshore, nearshore, offshore</td><td class="hold">Cost per ticket and 7×24 coverage. <b>Still unowned</b> — it collides with the California finding below and with the 7×24 obligation in Node 02; carried to Node 10 as an open axis</td></tr>
+</tbody></table>
+<p>The question was raised at the conference and left open: «is there an advantage to targeting a specific state or region, like New York?» This node answers it for supply and demand. Delivery is not answered anywhere yet — see Node 10.</p>
+
+<h3>The California claim, tested</h3>
+<p>The warning received was that California has difficult legislation and a low concentration of MSP firms. <b>Half of that is not supported.</b> California is a recognised MSP cluster — San Francisco and Los Angeles both appear in every mapping of technical hubs, alongside New York, Austin, Dallas, Miami, Chicago and Seattle. On raw firm counts the state is not thin.</p>
+<p><b>The other half is supported, and the mechanism is more useful than the claim.</b> From the conference floor: a veteran solo operator in California who has deliberately refused to hire for years, describing the regulatory and administrative overhead of having employees in the state as a <em>definitive, non-negotiable barrier</em>, and choosing a lifestyle practice over expansion because of it. That is not one owner's temperament — it is the predictable response to the cost structure below.</p>
+<table><thead><tr><th style="width:26%"></th><th>California</th><th>Texas</th><th>Florida</th></tr></thead><tbody>
+<tr><th>Overtime trigger</th><td class="out">After 8 hours in a <em>day</em>; double time after 12</td><td class="win">Federal 40-hour week</td><td class="win">Federal 40-hour week</td></tr>
+<tr><th>Meal break</th><td class="out">Mandatory 30 min above 5 hours; a missed break costs an extra hour of pay</td><td class="win">No state requirement</td><td class="win">Federal default</td></tr>
+<tr><th>Exposure specific to this business</th><td class="out">A technician monitoring a server through a break converts the break into compensable time — unplanned overtime, and the most litigated area of California employment law</td><td>—</td><td>—</td></tr>
+<tr><th>Utilisation tracking</th><td class="out">Imprecise time logs become a Department of Labor exposure — flagged at the conference as a California-specific problem</td><td>Tracking is a management tool only</td><td>Tracking is a management tool only</td></tr>
+</tbody></table>
+<div class="note"><b>The finding, stated properly.</b> California does not lack MSPs. It lacks MSPs <em>with employees</em> — the only kind that can be acquired. Its labour regime raises the cost of the fifth employee enough that a rational owner stops at four, and a firm that never hired has no transferable operation to buy. <b>Low supply of assets is the output of the legislation, not a separate fact about the state.</b></p></div>
+<p><b>And it collides with the vertical.</b> Node 02 selects mid-market financial services, where 7×24 coverage is a precondition rather than an upsell. Round-the-clock coverage means night shifts, on-call rotations and monitored breaks — precisely the three exposures California prices highest. The vertical and the state are not independent choices, and this pairing is the worst available.</p>
+
+<h3>Where the demand actually is</h3>
+<p>The CMMC overlay from Node 02 has a sharply concentrated geography, and it is the opposite of diffuse.</p>
+<table><thead><tr><th style="width:24%"></th><th>Concentration</th><th>Read</th></tr></thead><tbody>
+<tr><th>Defence contract awards</th><td class="win">Virginia, Texas and California together take close to a third; the top ten states take close to 60%</td><td>The CMMC opportunity is a ten-state problem, not a national one</td></tr>
+<tr><th>Leading states</th><td>Texas first at $71.6B (FY2023) · Virginia second, with 247,214 DoD personnel · California third at $60.8B</td><td>Texas leads demand and carries no California labour penalty</td></tr>
+<tr><th>Direction</th><td>Share held by the top fifteen states rose from 74.8% to 77.6% between FY2012 and FY2020</td><td>Concentration is increasing — geographic focus gets more right over time, not less</td></tr>
+</tbody></table>
+
+<h3>Where the two maps overlap</h3>
+<table><thead><tr><th style="width:15%">State</th><th>Asset supply</th><th>Cost of ownership</th><th>Demand — defence</th><th>Demand — financial services</th><th>Position</th></tr></thead><tbody>
+<tr><th>Texas</th><td class="win">Austin and Dallas are established clusters; strong regional MSP workforce presence</td><td class="win">No state break law, federal overtime, no state income tax</td><td class="win">First in the country</td><td>Growing — Dallas and Houston</td><td class="win"><span class="tag tag-pass">Primary</span></td></tr>
+<tr><th>Virginia<br><span style="font-weight:400;font-size:12px">and the DC belt</span></th><td class="hold">Thinner MSP cluster; incumbents already CMMC-certified</td><td class="hold">Moderate</td><td class="win">Second, with the highest DoD personnel density</td><td>Limited</td><td class="hold"><span class="tag tag-warn">Demand-side entry, not acquisition</span></td></tr>
+<tr><th>New York</th><td class="win">Cluster, and our operating base</td><td class="hold">Above Texas; needs its own test before scaling headcount</td><td class="out">Minor</td><td class="win">Deepest concentration in the country — the selected vertical</td><td class="win"><span class="tag tag-pass">Anchor</span></td></tr>
+<tr><th>Florida</th><td class="win">Miami cluster</td><td class="win">Federal default, no state income tax</td><td>Moderate</td><td>Growing — funds relocating from the north-east</td><td class="hold"><span class="tag tag-warn">Second wave</span></td></tr>
+<tr><th>California</th><td class="out">Firms are numerous, employers are not</td><td class="out">Highest in the country, and worst precisely on 7×24</td><td class="hold">Third by spend</td><td>Present</td><td class="out"><span class="tag tag-rej">Excluded from acquisition</span></td></tr>
+</tbody></table>
+
+<h3>What this changes</h3>
+<p>Two states, two different jobs. <b>New York is the anchor</b> — it is where the firm already operates and where the selected vertical is densest, so the first platform deal and the vertical proof happen here. <b>Texas is the expansion market</b> — it is the only state where cheap operations, the largest defence demand pool in the country and a real MSP cluster coincide, which makes it the natural home for the CMMC overlay and for the acquisitions that follow the anchor. California is excluded from the acquisition map and remains reachable through delivery from elsewhere if a client requires it.</p>
+<div class="note"><b>A second-order point on standards.</b> The industry has no universal standard and operates as a patchwork of state regulation — which is what makes geography a strategic variable at all. That is now being organised: GTIA and Texas A&amp;M's Global Cybersecurity Research Institute have formed a Consortium for Responsible IT Services to define operational and technical standards, first meeting October 2026. If a self-regulatory standard lands, the state-by-state arbitrage this node depends on compresses. Worth tracking, not worth planning around yet.</div>
+
+<h3>What would change this</h3>
+<p>A New York cost-of-employment test coming out materially worse than assumed would move the anchor, not just the expansion — the state has its own scheduling and spread-of-hours rules that have not been priced here and should be before headcount scales. Evidence that Texas asset prices already carry a premium from consolidator activity would flip the expansion market to Florida. And a California asset arriving with 7×24 already staffed and compliant would be worth re-testing on its own merits — the exclusion is about the cost of building that operation, not about owning one that exists.</p>
+
+<p style="font-size:10.5px;color:#7B8590">Evidence: ChannelCon 2026 — California solo operator on refusing to hire; utilisation tracking as a California DOL exposure; the open geography question · California, Texas and Florida wage-and-hour law, 2026 · defence contract awards by state, FY2022–FY2023 · US MSP cluster mapping and workforce distribution · GTIA / Texas A&amp;M consortium announcement.</p>
+</div>
+
+</div></details>
+<div class="node">
+<div class="node-no">Node 02c</div><h2>Segment arithmetic</h2>
+<details open class="lvl1"><summary class="thesis">One mid-market financial client is worth $30–50K a month. The hundred-million game needs about thirteen acquisitions and roughly $30M — not the two hundred million that the five-hundred-million game implies.</summary><div class="det1">
+
+<h3>What a single client is worth — two independent routes to the same number</h3>
+<p>The figure matters more than the market size, because it sets the size of the asset we are buying. Built two ways that do not share inputs.</p>
+<table><thead><tr><th style="width:30%"></th><th>From price per seat</th><th>From the client's IT budget</th></tr></thead><tbody>
+<tr><th>Basis</th><td>Vertical specialist pricing, Node 02</td><td>Financial services spend 7–10% of revenue on IT — the highest of any sector</td></tr>
+<tr><th>Working client</th><td>150 seats — midpoint of the 50–500 band</td><td>150 staff, revenue in the $45M range</td></tr>
+<tr><th>Calculation</th><td>150 × $250–350 per seat per month</td><td>IT budget $3.2–4.5M · managed services take 10.9% of IT budget</td></tr>
+<tr><th class="win">Annual contract value</th><td class="win">$450–630K</td><td class="win">$350–490K</td></tr>
+</tbody></table>
+<p>Two routes land inside the same order of magnitude, which is as much confirmation as estimates of this kind can give. <b>Working figure: $400–600K per client per year, $30–50K of MRR.</b> A single mid-market financial client is therefore worth roughly what ten to fifteen SMB clients are worth to a generalist — the same observation as the pricing gap in Node 02, expressed as an asset rather than a rate.</p>
+
+<h3>The client side of the market</h3>
+<table><thead><tr><th style="width:34%"></th><th>Count</th><th>Note</th></tr></thead><tbody>
+<tr><th>FDIC-insured commercial banks</th><td>~4,470</td><td>Community banks dominate the count</td></tr>
+<tr><th>Federally insured credit unions</th><td>~4,500</td><td>Heavily concentrated in the target size band</td></tr>
+<tr><th>SEC-registered broker-dealers</th><td>~3,300</td><td>—</td></tr>
+<tr><th>Regulated institutions, subtotal</th><td class="win">~12,300</td><td>Before RIAs, insurance agencies and lenders, which are not counted here</td></tr>
+<tr><th>Sector totals</th><td>7.6M employees · 500K+ private establishments</td><td>The vast majority below our size floor</td></tr>
+</tbody></table>
+<div class="note"><b>The size breakdown does not exist in public data, and that is worth stating rather than estimating around.</b> No source gives firm counts for financial services in the 50–500 employee band. Taking a conservative third of the regulated institutions puts the reachable client universe near <b>4,000 firms</b>; at $400–600K each that is a segment of roughly <b>$1.6–2.4B a year</b>. The figure is an order of magnitude, not a market study, and hardening it is a data-purchase task rather than an analysis task.</div>
+
+<h3>The provider side — and the gap that is itself a finding</h3>
+<p>Against 40–50K US providers, <b>no published source counts how many specialise in financial services.</b> Vertical specialists are a minority of the field, and financial services is one of the three verticals driving growth — but the population is unmapped. That absence cuts both ways: it means our own funnel has to be built by hand, and it means no consolidator has mapped this population either. <b>An unmapped population is a defensible position only for whoever maps it first.</b></p>
+<p>What is known is the purchase profile in provider terms: EBITDA $150–850K at a 13% median margin implies <b>revenue of roughly $1.2–6.5M</b> per target — which at $400–600K per client is an operator with somewhere between three and sixteen mid-market financial clients. That is a very small number of relationships, and it re-frames diligence: at this size, client concentration is not a risk factor to be scored, it is the defining characteristic of every asset we will look at. Node 03 flags concentration as the most common cause of multiple compression; here it is structural.</p>
+
+<h3>How many acquisitions each target implies</h3>
+<table><thead><tr><th style="width:26%">Target enterprise value</th><th>$100M</th><th>$300M</th><th>$500M</th></tr></thead><tbody>
+<tr><th>EBITDA required at 12×</th><td class="win">~$8.3M</td><td>~$25M</td><td>~$41M</td></tr>
+<tr><th>Assets at ~$660K post-deployment</th><td class="win">~13</td><td>~38</td><td>~62</td></tr>
+<tr><th>Rate over five years</th><td class="win">~2.5–3 per year</td><td>~8 per year</td><td>~12 per year</td></tr>
+<tr><th>Acquisition capital at ~$2M per asset</th><td class="win">~$26M, plus $3–3.5M for the anchor</td><td>~$76M</td><td>~$124M</td></tr>
+<tr><th>Against the reference rate</th><td class="win">Below ITPartners+, who did 7 in 18 months</td><td>Roughly Evergreen's rate</td><td class="out">Above any observed rate for a first-time acquirer</td></tr>
+</tbody></table>
+<div class="note"><b>This is the arithmetic behind «the hundred is visible, the billion is not».</b> At $100M the plan is thirteen acquisitions over five years — under three a year, slower than a two-year-old platform already achieves — funded by roughly $30M rather than the «almost two hundred million» that the five-hundred-million version requires. <b>The gap between the two targets is not one of ambition but of financing structure:</b> one of them can be built with a single round and debt against portfolio EBITDA, the other cannot exist without a fund. Both figures should be put to Oleg in exactly this form.</div>
+<p style="font-size:10.5px;color:#7B8590">Illustrative arithmetic on published benchmarks. Post-deployment EBITDA per asset carries forward from Node 03; entry price at ~$2M reflects 4–5× on a mid-band target. The financial model is the source of truth and is being rebased on industry data — these figures set scale and sequence, not the plan.</p>
+
+<h3>What we do not know, in order of how much it matters</h3>
+<p>How many financial-services MSPs exist and where they sit — unmapped anywhere public, and the single largest hole in this node. What share of the 12,300 regulated institutions falls in the 50–500 band — resolvable by purchasing establishment data rather than by reasoning. Whether $400–600K survives contact with real contracts, since both routes above are built from benchmarks rather than from signed agreements. And what the four channels actually cost to run, which is the open half of the five-way test in Node 02.</p>
+
+<p style="font-size:10.5px;color:#7B8590">Evidence: FDIC, NCUA and SEC/FINRA institution counts, 2025 · financial-services IT spend as share of revenue, 2026 benchmarks · managed services share of IT budget, 2025 · per-seat pricing for vertical specialists, Node 02 · target profile and post-deployment margin, Node 03.</p>
+</div>
+
+</div></details>
+<div class="node">
+<div class="node-no">Node 03</div><h2>Acquisition profile</h2>
+<details open class="lvl1"><summary class="thesis">Buying below the PE radar is not the edge — the margin we add is. It cuts the effective entry multiple from 5× to about 3×, and that, not the discount, is what the exit arbitrage rests on.</summary><div class="det1">
+
+<h3>Where the maturity scale prices an asset</h3>
+<table><thead><tr><th style="width:20%">Adjusted EBITDA</th><th>$250K–1M</th><th>$1–25M</th><th>$2.5–4M</th><th>$4–5M+</th></tr></thead><tbody>
+<tr><th>Multiple paid</th><td class="win">1–3× · 3–6×</td><td>5–8×</td><td>6–9×</td><td>8–10×+</td></tr>
+<tr><th>Recurring share</th><td>under 50% → —</td><td>majority</td><td>majority</td><td>majority</td></tr>
+<tr><th>Systems, KPIs, management</th><td>none to average</td><td>average</td><td>strong</td><td>experts lead divisions</td></tr>
+<tr><th>Position</th><td class="win"><span class="tag tag-pass">Buy here</span></td><td class="out"><span class="tag tag-rej">PE territory</span></td><td class="out"><span class="tag tag-rej">PE territory</span></td><td class="out"><span class="tag tag-rej">This is what we sell into</span></td></tr>
+</tbody></table>
+<p>Two practitioners with thirty-seven deals between them converge on the same line without coordinating. <b>Kevin Damghani</b>, seven deals: 60%+ recurring and $150–850K EBITDA — «generally under a million, because PE gets excited about a million or more». <b>Steve</b>, thirty deals: «I would go even smaller, because I want to be below the radar of all the PE money», with the line near $500K and the reason stated as arithmetic — companies obtainable at five or six, not ones that have to be taken to eight or nine to beat another bidder.</p>
+
+<h3>What the discount is actually worth once the margin thesis is applied</h3>
+<p>The sub-radar discount is commonly described as the edge. It is not, and the distinction decides how much capital the plan needs.</p>
+<table><thead><tr><th style="width:34%"></th><th>Bought and held as-is</th><th>Bought and improved</th></tr></thead><tbody>
+<tr><th>Asset EBITDA at entry</th><td>~$400K — the middle of the target band</td><td>~$400K</td></tr>
+<tr><th>Price paid at 5×</th><td>~$2.0M</td><td>~$2.0M</td></tr>
+<tr><th>EBITDA after deployment</th><td class="out">$400K — no change</td><td class="win">~$660K, on the 13% → 21.5% uplift in Node 01</td></tr>
+<tr><th class="win">Effective entry multiple</th><td class="out">5.0×</td><td class="win">~3.0×</td></tr>
+<tr><th>Arbitrage against a 12× exit</th><td>2.4×</td><td class="win">~4.0×</td></tr>
+</tbody></table>
+<p style="font-size:10.5px;color:#7B8590">Illustrative arithmetic on published benchmarks, not a model output. The financial model is being rebased on industry data captured at ChannelCon; these figures set the order of magnitude and the direction, not the plan.</p>
+<table><thead><tr><th style="width:24%">Multiple</th><th>Working assumption</th><th>Independent market data, 2026</th><th>Correction</th></tr></thead><tbody>
+<tr><th>Entry, our band</th><td>5–7×</td><td class="win">4× at sub-$5M revenue — the band we buy in</td><td class="win">Entry is cheaper than assumed; the arbitrage widens</td></tr>
+<tr><th>Exit, platform</th><td>10–14×, with 15–16× cited at $40–50M</td><td class="out">Median 8.9× across 120 transactions; 6–12× typical; 14× only for scaled, AI-enabled or cyber-heavy platforms</td><td class="out">15–16× is the tail, not the plan — the bridge should carry 12× and test 8.9×</td></tr>
+<tr><th>Recurring premium</th><td>Directional</td><td class="win">85%+ recurring → 10–12× · below 40% → 4–6×</td><td>Contract mix is the multiple; see Node 05</td></tr>
+<tr><th>Security premium</th><td>Not priced</td><td class="win">Cybersecurity services 8–15×, on NIST CSF 2.0, CMMC 2.0, state breach law and EU NIS 2 demand</td><td class="win">The SOC track is a multiple decision, not a service-line decision</td></tr>
+</tbody></table>
+<div class="note"><b>Client concentration is not a risk factor here, it is the shape of the asset.</b> Concentration is the most common cause of multiple compression in MSP transactions — three clients at 60% of revenue is priced down hard. But at our target size in this vertical, Node 02c shows the asset <em>is</em> three to sixteen clients by construction. So the screen cannot ask «is concentration acceptable» — it has to ask which concentration is survivable: a book anchored on two regulated institutions with ten-year relationships prices and behaves nothing like one anchored on two firms won last year on price.</div>
+<div class="note"><b>This is the single most important sentence in Part I.</b> If the uplift does not land, the strategy degrades from an operating thesis into a financial trade — buying cheap and hoping to sell dear, with no reason the next buyer pays more than we did. Node 09 tests it on the first two assets for exactly this reason.</div>
+
+<h3>What the required deal count does to this profile</h3>
+<p>Node 02c sets the count: thirteen assets for $100M, thirty-eight for $300M, sixty-two for $500M. The profile below is written for the first of those. <b>It does not survive the third unchanged</b> — sixty-two acquisitions at two to three a year is arithmetically impossible, so the $500M version requires either larger targets, which means paying PE prices and losing the entry arbitrage, or a deal rate above anything a first-time acquirer has achieved. The profile and the target are not independent choices, and the target should be set from the achievable rate rather than the rate inferred from the target.</p>
+<div class="note"><b>The competition, sized properly.</b> Evergreen closed 47 acquisitions in 2025 — 33 of them MSPs — and targets 30–40 MSPs in 2026. Private equity appeared in 69% of disclosed MSP deals across 169 transactions. At under three deals a year we are not competing on volume with that machine; we are competing for specific owners in one vertical in two states, which is the only contest we can win. Being below the PE radar is a statement about deal size, not about attention: 69% participation says the radar covers the band.</div>
+
+<h3>Is there enough supply</h3>
+<p>No. Supply is not the binding constraint, and it is worth stating plainly so that effort is not spent widening the funnel. Against ~40–45K US providers with median revenue of $2–5M and median EBITDA near 13%, the majority of the market sits inside the $150–850K band by construction. Applying a 60%+ recurring filter removes roughly half. What remains is measured in thousands against a requirement measured in dozens.</p>
+<p><b>The binding constraint is integration throughput.</b> Sourcing is a network problem with a known solution — peer groups hold ~130 owners across 14–15 groups and «almost all of them want to sell at some point», and access there is brokered rather than bought. Absorbing twelve companies a year without losing the margin uplift is an operating problem with no solution in the record. That is where the organisational build should be pointed, and it is the reason the integration lead is named before the M&amp;A lead.</p>
+
+<h3>The first deal is deliberately the exception</h3>
+<p>It has to be large enough to give the platform a footprint the smaller ones fold into: <b>revenue $2–3M, net 15–20%, price $3–3.5M</b>, with several consecutive years of that profit. Fastest close on record from the same source is 90 days; with cash ready and counsel in place, a month is possible.</p>
+
+<h3>Two clauses decide the multiple, and one of them is worth more than the discount</h3>
+<p>Agreements must be <b>assignable</b> — without that clause a sale falls to state law, which differs everywhere. And a three-year agreement with a 90-day exit is a month-to-month agreement: «your business is worth about half the multiple you think it is». One-year terms instead of three cost roughly <b>1.5× of multiple</b> — larger than the entire sub-radar discount, and available for the price of a renewal negotiation rather than an acquisition.</p>
+<div class="note"><b>Waiting is the most expensive option on the table.</b> From the buyer's side of a live case: $2M offered in the autumn; the owner waited, lost three key contracts, and the January offer was $1.1M — which closed. Six months of hesitation cost nearly a million dollars.</div>
+
+<h3>The window is closing while the thesis is being written</h3>
+<p>Transactions ran 435 → 675 → 782 → 1,000+ across 2022–2025, average deal size doubled from $2.5M to $5.0M, and average enterprise value rose ~15% in a single year. Consolidation is outpacing market growth, which means the same assets are being bid by more capital each year. <b>Entry multiples are the thing that moves first.</b> The plan assumes 5–6× at entry; that assumption has a shelf life, and the sub-radar band is the last place it survives — which is an argument for speed rather than for a wider mandate.</p>
+
+<p style="font-size:10.5px;color:#7B8590">Evidence: 584 &amp; Cogent Growth Partners maturity scale, Q4 2025, as presented by ITPartners+ · Damghani and Steve, ChannelCon 2026 · exit comps of 15–16× at $40–50M deal size, per Stephen · Evergreen, New Charter and ITPartners+ deal histories · CompTIA provider counts · Service Leadership Index 2026.</p>
+</div>
+
+</div></details>
+<div class="node">
+<div class="node-no">Node 03b</div><h2>Entry quadrant</h2>
+<details open class="lvl1"><summary class="thesis">Two forks, four cells — and they are not independent. The choice of first asset silently fixes where we stand on the integration scale, which is the contradiction opened in Node 00.</summary><div class="det1">
+
+<h3>Fork one — what the first asset is bought for</h3>
+<table><thead><tr><th style="width:20%"></th><th>A · Buy finished expertise</th><th>B · Buy a shell for AI-native</th></tr></thead><tbody>
+<tr><th>Price</th><td>Up to 10× — «price is not the point»</td><td class="win">~5×, a small operator</td></tr>
+<tr><th>What is being bought</th><td class="win">Domain expertise with SOPs, operating procedures, processes already running — something that can be scaled</td><td>Technology, people, or a client book. <b>Client base ranks first of the three</b></td></tr>
+<tr><th>What must be absent</th><td>—</td><td class="win">A business system. Established processes are a liability here, not an asset</td></tr>
+<tr><th>What follows</th><td>Cheap add-ons fold into the finished operation</td><td>An AI-native organisation is built onto the client base</td></tr>
+<tr><th>Fails when</th><td class="out">The bought processes are then broken to fit AI — «if you paid 10× for processes, why are you breaking them»</td><td class="out">There is nothing worth keeping — a shell with no book is a hiring exercise with a purchase price attached</td></tr>
+</tbody></table>
+
+<h3>The valuation logic that makes A defensible — priced out</h3>
+<p>The principal's argument is that this fork is not priced in multiples but <b>in time</b>: building the operating system ourselves costs a year or two, and that has to be converted into money — team cost plus the cost of losing the market meanwhile. Converting it:</p>
+<table><thead><tr><th style="width:30%"></th><th>Cost of buying it</th><th>Cost of building it</th></tr></thead><tbody>
+<tr><th>Direct</th><td class="out">Premium of ~$2M — a $400K-EBITDA asset at 10× rather than 5×</td><td>Team to build the operating layer, 12–24 months</td></tr>
+<tr><th>Deals not done meanwhile</th><td class="win">None — acquisition starts immediately</td><td class="out">At ~3 deals a year, a 12-month delay is ~$2M of EBITDA unbuilt — around $24M of enterprise value at a 12× exit</td></tr>
+<tr><th>Price drift</th><td class="win">Locked at today's multiple</td><td class="out">Average MSP enterprise value rose ~15% in a single year; the same assets cost more later</td></tr>
+<tr><th class="win">Net</th><td class="win">A $2M premium buys back a year</td><td class="out">A saved $2M costs materially more than $2M</td></tr>
+</tbody></table>
+<div class="note"><b>On these numbers fork A is the stronger side, and by a wide margin.</b> The premium is a one-off and bounded; the delay compounds against a market consolidating at 1,000+ transactions a year. The counter-argument is not financial but structural — see the collision below.</div>
+
+<h3>Fork two — when software gets built</h3>
+<table><thead><tr><th style="width:20%"></th><th>A · Software first</th><th>B · Service organisation first</th></tr></thead><tbody>
+<tr><th>Sequence</th><td class="out">Build the product, then find MSPs to sell it to</td><td class="win">Service organisation → GTM engine → acquisition engine → software on top of the installed base</td></tr>
+<tr><th>Verdict in the record</th><td class="out">Rejected twice, independently. «We turn back into SaaS» · «automate the workflow for one operator and <em>then</em> it becomes your product»</td><td class="win">Selected — client base is the distribution, software is what gets sold through it</td></tr>
+</tbody></table>
+<p>This fork is effectively closed. It is retained in the grid because it changes the capital profile of the first two years, not because the branch is live.</p>
+
+<h3>The four cells</h3>
+<table><thead><tr><th style="width:16%"></th><th>Software first</th><th>Service first</th></tr></thead><tbody>
+<tr><th>Buy finished expertise</th><td class="out">Most capital, least focus — pays a premium for processes while the team's attention sits in product</td><td class="win"><b>Cell A/B — the working candidate.</b> Buy the operating system, run acquisitions from month one, productise later</td></tr>
+<tr><th>Buy a shell</th><td class="out">Two unbuilt things at once: an organisation and a product</td><td class="hold">Cell B/B — cheapest entry, slowest to scale, and only coherent as a full AI-native rebuild</td></tr>
+</tbody></table>
+
+<h3>Why the grid is not actually 2×2</h3>
+<p>The two forks are not orthogonal to the integration scale in Node 00, and this is the finding of this node. <b>Fork A pulls toward the centralised platform</b> — buying finished expertise means keeping and standardising the operation that was paid for, which is the ITPartners+ posture as corrected in Node 04. <b>Fork B pulls to the right edge</b> — a shell with no business system is only worth buying if it is rebuilt entirely, which is the radical AI-native position, the one described as high-risk and as the only place a billion could sit.</p>
+<div class="note"><b>So the entry choice and the integration posture are one decision, not two.</b> Choosing to buy finished expertise decides that we are the middle of the scale — and therefore that the May archetype, which installs AI inside every acquired company, is diluted at the moment of purchase. Choosing shells decides the opposite. <b>The quadrant cannot be resolved before that is settled</b>, which is why Node 00 puts it first.</p></div>
+
+<h3>What the simulation has to answer</h3>
+<p>The request is explicit: draw the field and run Monte-Carlo across it to find what maximises the probability of success. For that to produce an answer rather than a chart, the criterion and the variables have to be fixed here and the run itself lives in the financial model.</p>
+<table><thead><tr><th style="width:26%">Element</th><th>Specification</th></tr></thead><tbody>
+<tr><th>Criterion</th><td class="win">P(enterprise value ≥ $100M within 5 years), reported per cell — not expected value, which hides ruin</td></tr>
+<tr><th>Stochastic inputs</th><td>Deal rate achieved · entry multiple · realised margin uplift against the modelled +8.5 pp · client churn through integration · exit multiple, testing 8.9× median against the 12× working figure · months to first close</td></tr>
+<tr><th>Cell-specific</th><td>Fork A: size of the premium, and whether add-ons actually fold into the bought operation. Fork B: months to a working AI-native organisation, and survival of the client book through the rebuild</td></tr>
+<tr><th>Ruin conditions</th><td class="out">Report P(ruin) alongside P(success): covenant breach on portfolio debt · anchor client loss at a three-to-sixteen-client asset · uplift below +4 pp, which removes the operating case entirely</td></tr>
+<tr><th>Correlations that must not be ignored</th><td>Entry multiple and deal rate move together — buying faster raises the price paid. Uplift and churn move against each other — the aggressive version of the playbook costs clients</td></tr>
+</tbody></table>
+<p><b>If a third significant branch appears</b> — onshore against offshore delivery is the candidate, since it changes both cost per ticket and the 7×24 obligation from Node 02 — the grid becomes a cube and the same criterion applies to eight cells.</p>
+
+<p style="font-size:10.5px;color:#7B8590">Evidence: Nicolas, 4 August — both forks, the time-based valuation argument, the request for Monte-Carlo across the quadrant · ChannelCon 2026 — «automate the workflow and it becomes your product» · transaction volume and enterprise-value drift, Node 03 · deal counts and capital, Node 02c.</p>
+</div>
+
+</div></details>
+<div class="node">
+<div class="node-no">Part II · Node 04</div><h2>Integration scale</h2>
+<details open class="lvl1"><summary class="thesis">The middle of the scale, as we described it, does not exist. The operator we modelled it on runs a centralised platform and says so from the stage — which leaves two real positions, and the outside data says the choice between them is a test of capability, not of appetite.</summary><div class="det1">
+
+<h3>The question, and what decides it</h3>
+<p>How much of an acquired firm do we change, and when. The answer is usually argued as a matter of risk appetite. It is not: each posture has a hard precondition, and the criterion this document is built on — <b>multiple × scale × retained ownership × probability of exit</b> — is failed outright by one of the three before any judgement about risk is made.</p>
+
+<h3>The three postures, as observed</h3>
+<table><thead><tr><th style="width:17%"></th><th>Decentralised<br><span style="font-weight:400;font-size:12px">Evergreen · New Charter</span></th><th>Centralised platform<br><span style="font-weight:400;font-size:12px">ITPartners+</span></th><th>Rebuild<br><span style="font-weight:400;font-size:12px">no completed precedent</span></th></tr></thead><tbody>
+<tr><th>What is integrated</th><td class="hold">Finance and HR; brand, team and market identity preserved. Add-ons integrate variably, platforms not at all</td><td class="win">Everything operational — «one team, one coat of paint». Single stack</td><td class="out">The operation is replaced; only the client book is kept</td></tr>
+<tr><th>Capital it requires</th><td class="out">Permanent or fund capital — Evergreen at 100+ acquisitions, New Charter sponsored by a PE firm from launch</td><td class="win">Private credit against portfolio EBITDA — terms in Node 07</td><td class="hold">Whatever builds the platform before deal one</td></tr>
+<tr><th>Exit</th><td class="out"><b>Evergreen never sells — that is the stated model.</b> New Charter runs to a sponsor's horizon</td><td class="hold">Facility matures at five years and requires recapitalisation; the plan is to be an attractive PE target by then</td><td class="hold">Unproven</td></tr>
+<tr><th>Verified how</th><td>Company statements and independent trade coverage of both platforms</td><td class="win">Founder from the stage, 44 min, plus the funding announcement and press release</td><td class="out">Described in industry commentary as the emerging logic; no operator in the record has completed it</td></tr>
+</tbody></table>
+
+<h3>The correction: we placed ITPartners+ one position to the left of where it sits</h3>
+<p>Our internal reading was that this operator leaves the acquired firm alone — assess, keep the strengths, absorb the weak functions — and that a centralising turn is a hidden move some years later. Neither half survives contact with what he actually said.</p>
+<p><b>The assessment is about the owner's job, not the firm's operations.</b> The strengths kept and the weak functions absorbed are HR, finance and accounting lifted off the owner's plate, with the owner's remaining role chosen through the <span class="src">Delegate and Elevate</span> exercise from EOS. The company itself goes to one team and one coat of paint from the outset. He states the contrast himself: his model is <b>centralised</b>, as against the decentralised platforms where the acquired MSP keeps its brand and the owner becomes a general manager.</p>
+<div class="note"><b>So there is no pyramid to flip at year five — the centralisation is published on day one, and it is what the owners are buying into.</b> What we read as concealment is the offer working as designed: owners who will not sell for cash will merge for a multiple they cannot reach alone. The mechanics of that offer are Node 06; what matters here is that <b>the middle we thought we had found is a centralised platform with a partnership wrapper</b>, and the scale therefore has two live positions, not three.</p></div>
+
+<h3>What the five-year clock actually is</h3>
+<p>The facility matures in five years and requires recapitalisation; the group's plan is to have grown into an attractive acquisition target for private equity inside that window, and it is roughly eighteen months in. <b>The owners' promised second exit and the lender's maturity date are the same event.</b> That is not a trick, it is the structure — and it carries one consequence we cannot copy without inheriting: this posture is not permanent capital. It runs to a fixed date, and everything about the integration pace is set by that date rather than by what the acquired firms can absorb.</p>
+
+<h3>Whether integration pays — the part that cannot be answered from inside the industry</h3>
+<p>The conference gives us models. It does not tell us whether the model works, because everyone presenting is mid-flight. The outside record on serial acquisition is unusually consistent and it is not encouraging.</p>
+<table><thead><tr><th style="width:38%">Finding</th><th>Figure</th><th>What it implies for us</th></tr></thead><tbody>
+<tr><th>Integrations that miss the synergies modelled at close</th><td class="out">Over 70%</td><td>The uplift in our model is the modal thing that does not arrive</td></tr>
+<tr><th>M&amp;A transactions that destroy shareholder value</th><td class="out">~60% (Bain)</td><td>Base rate, before any roll-up-specific compounding</td></tr>
+<tr><th>PE deals with more than two add-ons, by IRR</th><td class="out">19.9% — against 23.1% for standalone buyouts</td><td class="out"><b>More add-ons returned less.</b> Integration capacity, not deal sourcing, is the binding constraint</td></tr>
+<tr><th>Programmatic acquirers, 2+ deals a year, median TSR against peers</th><td class="win">Best of four categories; ~0.9% a year of outperformance</td><td class="win">The capability is real — and is built over years of repeated deals, not bought</td></tr>
+<tr><th>Rule of thumb from the same dataset</th><td>No single deal above 30% of value</td><td class="win">At ~$2M per asset our deals stay inside this from the second one onward</td></tr>
+</tbody></table>
+<div class="note"><b>Read together, the two halves point the same way and they invert the usual argument about this scale.</b> The right edge is not the risky choice and the middle the safe one. Both are capability tests, and the capability is integration throughput. Node 02c commits us to about thirteen acquisitions — which puts us squarely inside the population that underperformed, unless the throughput exists before deal one rather than being learned across the first five.</div>
+
+<h3>Scoring the postures against the criterion</h3>
+<table><thead><tr><th style="width:22%"></th><th>Decentralised</th><th>Centralised platform</th><th>Rebuild</th></tr></thead><tbody>
+<tr><th>Multiple</th><td class="hold">Group-level platform range</td><td class="win">Platform range, and the operating leverage to reach it</td><td class="win">Highest — capability gap is being priced</td></tr>
+<tr><th>Scale reachable</th><td class="win">Highest observed</td><td class="hold">Seven deals and 39 states in six years — moderate</td><td class="out">Bounded by rebuild throughput, which is unmeasured</td></tr>
+<tr><th>Ownership retained</th><td class="out">Diluted by the sponsor from launch</td><td class="win">Almost entirely retained at the raise — Node 07</td><td class="hold">Depends on how the platform is financed</td></tr>
+<tr><th>Probability of exit</th><td class="out"><b>Zero by design at Evergreen</b>; sponsor horizon at New Charter</td><td class="hold">High but dated — set by the facility, not by us</td><td class="out">Unknown; no completed case</td></tr>
+<tr><th>Precondition we lack</th><td class="out">Permanent or fund capital</td><td class="hold">Portfolio EBITDA a lender will underwrite — Node 07</td><td class="out">A working delivery platform before the first acquisition</td></tr>
+<tr><th>Verdict</th><td class="out"><span class="tag tag-rej">Rejected</span></td><td class="win"><span class="tag tag-pass">Selected</span></td><td class="hold"><span class="tag tag-warn">Sequenced, not rejected</span></td></tr>
+</tbody></table>
+
+<h3>The choice, and why not the runner-up</h3>
+<p><b>Centralised platform, with the AI layer built on our own operation first and every subsequent acquisition migrated onto it.</b> The decentralised posture is rejected on the criterion rather than on taste: a model whose defining promise is that it never sells cannot serve a founder cash-out, and the version that does sell requires the sponsor whose absence is the point of the exercise.</p>
+<p>The rebuild is not rejected — it is <b>put in sequence.</b> Industry commentary describes the same move we scored at the right edge: buy the client base, migrate it onto the delivery platform, capture the margin difference. The actors doing it already had the platform. We do not, and building it and using it on thirteen assets at once is the specific failure the IRR data describes.</p>
+<div class="note"><b>This resolves the contradiction opened in Node 00, and it resolves it by sequencing rather than by choosing a side.</b> The May archetype is not diluted at the moment of purchase — it is deferred by exactly one asset. The AI-native operating model gets built inside the operation we already run and the first firm we buy; from deal two onward, migration onto that platform <em>is</em> the integration, which is why the centralised posture and the archetype are the same programme rather than opposites. It also reframes our own MSP leg, currently ~$150K a year and named in Node 00 as the weak point: <b>it is not a pilot, it is where the platform gets built before it is expensive to get wrong.</b></p></div>
+
+<h3>What this rests on, and what would break it</h3>
+<p>It rests on three things, none yet demonstrated. That a delivery platform good enough to migrate a bought book onto can be built on one small operation. That migration does not cost the book — at three to sixteen clients per asset (Node 02c), losing two clients is losing the asset. And that centralised terms still close deals against decentralised competitors bidding for the same owners.</p>
+<p><b>Falsifiers, in the order they would appear.</b> If the first migration runs past two quarters or loses an anchor client, we are the 19.9% population and the plan reverts to fewer and larger assets. If owners in our vertical refuse centralised terms, the offer has to be repriced in cash, which lifts the entry multiple and breaks the capital arithmetic in Node 02c. And if a platform already running AI-native delivery begins buying in financial services, the sequencing argument above expires — the capability gap we intend to build into is being closed by someone with a head start.</p>
+
+<p style="font-size:10.5px;color:#7B8590">Evidence: Kevin Damghani, founder &amp; CEO of ITPartners+ — ChannelCon 2026, 44 min session and accompanying deck · ITPartners+ / Metropolitan Partners Group $30M facility, June 2025, company and newswire releases · Evergreen Services Group on its decentralised, permanent-hold model, and trade coverage of the same · New Charter Technologies and Oval Partners launch materials · post-merger integration failure rates, consultancy meta-analyses and Bain · add-on IRR against standalone buyouts, PE deal-level data · McKinsey programmatic-acquirer study, 2,000 companies · Nicolas, 4 August — the scale itself and the reading of the middle path corrected here.</p>
+</div>
+
+</div></details>
+<div class="node">
+<div class="node-no">Part II · Node 05</div><h2>Two companies</h2>
+<details open class="lvl1"><summary class="thesis">A dollar of vertical software revenue is worth three to eight dollars of managed-services revenue — which is the whole case for separating them. What the case does not survive is the assumption that the slot is empty: the horizontal version of the product already exists, and it is owned by the company that owns the PSA.</summary><div class="det1">
+
+<h3>The question, and the criterion</h3>
+<p>One perimeter or two, and if two, from when. The principal's position is that they cannot be one: <b>«you cannot cross a bulldog with a rhinoceros»</b> — a private-equity game and a software vendor are different businesses with different risks and different multiples. The criterion is narrower than the intuition: separation is justified only if it raises founder cash-out by more than the cost of running two entities, and only once there is something to separate.</p>
+
+<h3>The valuation gap, computed</h3>
+<p>This is the number the argument rests on, and it has not been written down before.</p>
+<table><thead><tr><th style="width:30%"></th><th>Managed services</th><th>Vertical software</th></tr></thead><tbody>
+<tr><th>How it is priced</th><td>EBITDA multiple, against operational maturity</td><td>Revenue multiple, against growth and retention</td></tr>
+<tr><th>Multiple observed</th><td>IT services and consulting ~9.7× EBITDA; platform range at the top, Node 03</td><td class="win">Private software median ~22.4× EBITDA; 3–15× ARR by quality</td></tr>
+<tr><th>Vertical premium</th><td>Depth is paid for, Node 02</td><td class="win">Vertical SaaS ~8.1× revenue against horizontal ~5.2× — a 1.5–2.0× premium for the same product sold into one industry</td></tr>
+<tr><th class="win">Implied per dollar of revenue</th><td>At 13% median margin and a 10× multiple: <b>~1.3×</b>. At our modelled post-deployment margin and 12×: ~2.6×</td><td class="win"><b>~8×</b> at the vertical benchmark</td></tr>
+</tbody></table>
+<div class="note"><b>Three to eight dollars of enterprise value for one dollar of software revenue against one dollar of service revenue.</b> That gap is why the separation is worth arguing about at all — and it is also the trap, because the gap is only available to software that is sold to customers we do not own. Revenue booked from our own portfolio is an internal transfer; a buyer prices it as cost recovery inside the services business, not as ARR.</p></div>
+
+<h3>Why they are two businesses and not two divisions</h3>
+<table><thead><tr><th style="width:20%"></th><th>Services entity</th><th>Software entity</th></tr></thead><tbody>
+<tr><th>Function</th><td class="win">The channel — it holds the client relationships</td><td class="win">The producer — it makes what the channel carries</td></tr>
+<tr><th>Reach</th><td>Our own acquired firms</td><td class="win">Dozens of MSPs, not only ours. The whole industry runs this way: MSPs already act as small integrators, distributing for hundreds of vendors on a revenue share</td></tr>
+<tr><th>Role of our own MSP</th><td colspan="2" class="win">The pilot ground — where the software is tested against a real book before it is sold to anyone else. Node 04 makes the same leg the place the delivery platform gets built</td></tr>
+<tr><th>Buyer at exit</th><td>Strategic or PE, on the services scorecard</td><td>Software buyer, on ARR and retention</td></tr>
+<tr><th>Sold</th><td colspan="2">Separately, and probably not at the same time</td></tr>
+</tbody></table>
+
+<h3>The sequence is closed, and it was closed twice independently</h3>
+<blockquote>“First you buy the client base, then you build software on top of it… I don’t believe in building software and then running around trying to push it onto every MSP — that just turns us back into SaaS.” — Nicolas, 4 August</blockquote>
+<p>The same conclusion arrived from the other direction at the conference. <span class="src">Jeff McHugh</span>, solution provider: automate one critical, regulator-mandated workflow for one MSP in a regulated industry — “and suddenly the software you just wrote becomes your product. You turn around and sell it to MSP after MSP after MSP.” Distribution then runs through the RMM vendors — “pick one, become friends.” <b>Two people who have not spoken to each other arrived at channel-before-product</b>, which is as close to settled as this document gets.</p>
+<p>It is also priced into the services scorecard independently: the highest multiples go to an <b>80% MRR / 20% hardware-and-projects</b> mix on three-year assignable agreements. <span class="src">Damghani</span> Software revenue booked inside the services entity does not improve that mix — it dilutes it.</p>
+
+<h3>What the software actually is — and whether the slot is open</h3>
+<p>The specification is deliberately unambitious about infrastructure: <b>take the existing PSA, RMM, accounting and access systems, do not rewrite any of them, and build an intelligence layer on top</b> — «an Intuit» that reads contracts and earnings and tells a firm where it actually stands, plus a security operations capability and, if it goes well, payments. Explicitly: the same work a consolidator does by hand during diligence, done automatically.</p>
+<p>That is a sound instinct about where the value sits. It is also, in its horizontal form, occupied.</p>
+<table><thead><tr><th style="width:26%">Slot</th><th>Who holds it</th><th>Open to us</th></tr></thead><tbody>
+<tr><th>Operational automation over the stack</th><td class="out">Crowded. Omdia names five Champions in RMM/PSA for 2026 — ConnectWise, HaloPSA, Kaseya, N-able, NinjaOne. Rewst sits above them as the automation layer; SuperOps is AI-native by construction with an agent doing ticket triage and resolution drafting inside the PSA</td><td class="out"><span class="tag tag-rej">No</span></td></tr>
+<tr><th>Maturity and valuation scorecard</th><td class="out"><b>Owned outright.</b> Service Leadership — a ConnectWise company — has run the industry benchmark for twenty years and sells SLIQ, the web application owners use to assess and drive their own Operational Maturity Level. In October 2025 it launched a cut-down edition aimed at <em>smaller</em> providers, with 70% fewer input fields</td><td class="out"><span class="tag tag-rej">No</span></td></tr>
+<tr><th>Vertical compliance evidence</th><td class="win">Vacant. None of the vendors above is vertical. The moat identified in Node 02 is evidentiary — producing what a FINRA examination or a GLBA audit demands — and it is generated as a by-product of doing the work</td><td class="win"><span class="tag tag-pass">Yes</span></td></tr>
+<tr><th>Remediation rather than assessment</th><td class="hold">Partly vacant. The incumbent tells an owner where he stands; it does not move him. Contract conversion, revenue-mix shift and add-back cleanup are still manual — and are exactly what raises the multiple</td><td class="hold"><span class="tag tag-warn">Probably</span></td></tr>
+</tbody></table>
+<div class="note"><b>The finding is not that the software idea is wrong — it is that its horizontal version was already built by the incumbent, and its downmarket edition shipped ten months ago.</b> What survives the check is the vertical: a compliance-evidence and remediation layer for financial-services MSPs, which is also the only version that earns the 8.1× rather than the 5.2× benchmark. That is a narrower product than «an Intuit for MSPs», and it is one our own acquisition programme generates the training data for — every target we diligence is a use of it.</div>
+
+<h3>When the second entity gets incorporated — the trigger, named</h3>
+<p>Deferring was correct and was never made operational. Three conditions, all of which have to hold together:</p>
+<table><thead><tr><th style="width:34%">Condition</th><th>Why it is the threshold</th></tr></thead><tbody>
+<tr><th>One paying customer outside the portfolio</th><td class="win">Below this the product is internal tooling, and internal tooling is priced as cost inside the services entity, not as ARR</td></tr>
+<tr><th>A gross margin distinguishable from service delivery</th><td>If the engineers building it are the engineers running tickets, there is no second P&amp;L to separate</td></tr>
+<tr><th>Shared costs allocable without argument</th><td>Transfer pricing between the two entities is what a diligence process will attack first</td></tr>
+</tbody></table>
+<div class="note"><b>And one interaction that argues for waiting rather than hurrying.</b> The capital route in Node 07 is priced off portfolio EBITDA. Moving revenue out of the services entity before the borrowing base is established reduces the amount the lender will underwrite — so incorporating early costs acquisition capacity at exactly the moment it is scarcest. The second entity is a consequence of the first working, not a parallel bet.</p></div>
+
+<h3>What this rests on, and what would break it</h3>
+<p>It rests on the services business existing at all — today the managed-services leg is seven people and one anchor client at 25 seats, and a channel that small cannot prove a product. It rests on the vertical slot staying vacant long enough, which is a wager against five funded vendors noticing the same gap. And it rests on the compliance layer being genuinely separable from delivery, rather than being a set of reports only meaningful inside our own operating model.</p>
+<p><b>Falsifiers.</b> If an incumbent ships financial-services compliance evidence as a module, the vertical slot closes and the software entity has no case — the correct response then is to stop, not to differentiate. If eighteen months after the first acquisition there is still no customer outside the portfolio, the product is internal tooling and should be accounted for as such rather than carried as a second company in the plan. And if the software team can only be staffed by pulling people off delivery, the two-entity thesis is a resourcing fiction: one business cannot fund two at this scale.</p>
+
+<p style="font-size:10.5px;color:#7B8590">Evidence: Nicolas, 4 August — two companies, channel and producer, pilot ground, separate exits · Nicolas, day 1 after ChannelCon — the intelligence layer, SOC and payments specification · Jeff McHugh and Kevin Damghani, ChannelCon 2026 · IT services and private software EBITDA multiples, 2025–26 · vertical against horizontal SaaS revenue multiples · Omdia Global RMM/PSA Leadership Matrix 2026 · Rewst and SuperOps product positioning · Service Leadership Index and SLIQ, and the Benchmark Essentials launch of October 2025.</p>
+</div>
+
+</div></details>
+<div class="node">
+<div class="node-no">Part II · Node 06</div><h2>Offer to owners</h2>
+<details open class="lvl1"><summary class="thesis">Owners do not sell for a cheque — the arithmetic of selling does not work for them. They join for the multiple they cannot reach alone.</summary><div class="det1">
+<h3>The arithmetic of selling does not work for the owner — which is why cash alone never closes</h3>
+<p>A 32-year MSP owner, on the offer he walked away from: a $1M sale, less 30–40% tax, leaves ~$700K; against annual expenses of $200K that is five years of runway, and then back to work. “I can generate the same value by simply operating for another five years.” He became an acquirer instead. <span class="src">ChannelCon 2026, 8 min session</span></p>
+<h3>Five aligned owners turn $500K of EBITDA into a $20–25M outcome</h3>
+<table><thead><tr><th style="width:34%"></th><th>Grinding alone</th><th>Merging as owners</th></tr></thead><tbody>
+<tr><th>EBITDA</th><td class="out">$500K</td><td class="win">$2.5M — five aligned owners</td></tr>
+<tr><th>Multiple</th><td class="out">4–5×</td><td class="win">Platform range, Node 03</td></tr>
+<tr><th>Proceeds</th><td class="out">$2–2.5M · one exit · twenty years of carrying everything</td><td class="win">$20–25M · roll equity · stay an owner · exit twice</td></tr>
+</tbody></table>
+<p style="font-size:10.5px;color:#7B8590">“Same owners. Same work ethic. Different leverage.” — ITPartners+ deck, slide “The leverage math” (222134)</p>
+<h3>We approach companies that are not for sale — that is the profile that converts</h3>
+<p><b>60%+ recurring revenue · $150–850K EBITDA · owners who want options, not an exit ramp.</b> And explicitly: “usually great companies that are not for sale — that’s what we prefer.” <span class="src">ITPartners+ target profile, slide 222135</span></p>
+<div class="note"><b>Culture is a filter, not a formality.</b> Deals with strong numbers were walked away from over weak culture. Of seven integrations, six retained every single employee; the one that did not failed on the owner’s announcement to his own staff, not on the deal terms. <span class="src">Damghani</span></div>
+</div>
+
+</div></details><div class="node">
+<div class="node-no">Part II · Node 07</div><h2>Capital</h2>
+<details open class="lvl1"><summary class="thesis">Private credit bought ITPartners+ $30M for 4% of the company. A 50% Series A buys $5M for half of it.</summary><div class="det1">
+<table><thead><tr><th style="width:22%"></th><th>Debt-led (observed)</th><th>Series A at 50% / $5M (on the table)</th></tr></thead><tbody>
+<tr><th>Proceeds</th><td class="win">$30M facility</td><td class="hold">$5M</td></tr>
+<tr><th>Equity given up</th><td class="win">4%</td><td class="out">50%, before ESOP</td></tr>
+<tr><th>Control</th><td class="win">Retained — “no outsiders calling the shots”</td><td class="out">50/50 deadlock; any option pool pushes the founder below half</td></tr>
+<tr><th>Instrument</th><td class="hold">Private credit — a New York firm providing non-controlling growth capital, closed June 2025. <b>Not a bank facility</b>, which is why it was available against a services portfolio</td><td class="hold">Priced equity</td></tr>
+<tr><th>Constraint</th><td class="hold">Matures at 5 years → forced recap, which sets the exit clock</td><td class="hold">Terms are inherited by every later round</td></tr>
+<tr><th>Precondition</th><td class="out">Requires portfolio EBITDA a lender will underwrite — we do not have it yet</td><td class="win">Available now</td></tr>
+</tbody></table>
+<p style="font-size:10.5px;color:#7B8590">Debt terms: Damghani, ChannelCon 2026 — “we secured thirty million in funding, and the kicker is it’s not private equity… we only had to give up four percent equity.” Series A terms: internal, 17 July 2026.</p>
+<div class="note"><b>The two are not alternatives at the same moment.</b> Debt is priced off portfolio EBITDA, which the first platform deal has to create. The sequence that fits the evidence is equity first to buy the anchor, debt second once the portfolio can carry it — which makes the size of the first round a function of one deal, not of a five-year plan.</div>
+</div>
+
+
+
+</div></details><div class="node">
+<div class="node-no">Part III · Node 08</div><h2>Channels</h2>
+<details open class="lvl1"><summary class="thesis">There are two funnels, not one, and the document has been answering the wrong one. The channels named so far buy companies; the test left open in Node 02 needs the cost of buying <em>clients</em> — and on the only benchmark that exists, that cost is a capital line, not a marketing line.</summary><div class="det1">
+
+<h3>The separation, and why it matters</h3>
+<p>«Channel» has been carrying two jobs in this document. They have different buyers, different economics and different owners, and conflating them is what has kept the five-way test in Node 02 open without anyone noticing which half was missing.</p>
+<table><thead><tr><th style="width:16%"></th><th>Funnel A · Deal flow</th><th>Funnel B · Client acquisition</th></tr></thead><tbody>
+<tr><th>What it buys</th><td>MSPs — the assets</td><td class="win">End clients — the revenue inside them</td></tr>
+<tr><th>Volume needed</th><td>~13 over five years, Node 02c</td><td class="win">Continuous, in every asset we own</td></tr>
+<tr><th>Who runs it</th><td>The principal, an advisor, or a hired originator</td><td class="win">A sales organisation that does not exist yet</td></tr>
+<tr><th>Closes the Node 02 test</th><td class="out">No</td><td class="win">Yes — this is the missing half</td></tr>
+</tbody></table>
+
+<h3>Funnel B — what a client actually costs, and the benchmark that misleads</h3>
+<p>The figure circulating in this document is a ratio: sales and marketing as a share of revenue runs <b>0.4%</b> at the bottom quartile, <b>1.5%</b> at the leading peer group and <b>2.6%</b> at the top — and the bottom quartile is also the one losing recurring revenue every month. <span class="src">Service Leadership</span> It is a real benchmark and it is the wrong instrument for us.</p>
+<div class="note"><b>That ratio describes maintenance spend at a firm that already has reputation and referral flow in its market. It is not the price of entering a vertical cold, which is our situation.</b> The only direct figure in the record points the other way: an operator reported average acquisition cost of about <b>$12,000 per client — roughly $900 per seat</b> — after eighteen months of measuring it. Sales-led B2B medians sit in the same place, near $11,400, and have risen ~9% since 2024 on longer cycles and more stakeholders per deal.</div>
+<table><thead><tr><th style="width:34%"></th><th>Modelled on the ratio</th><th>Modelled on measured cost</th></tr></thead><tbody>
+<tr><th>Basis</th><td>1.5% of an asset's revenue, $1.2–6.5M (Node 02c)</td><td class="win">$900 per seat × 150 seats, our working client</td></tr>
+<tr><th>Budget implied</th><td class="out">$18–98K a year</td><td class="win">~$135K per client won</td></tr>
+<tr><th>Adding four clients to one asset</th><td class="out">Not fundable from the line</td><td>~$540K</td></tr>
+<tr><th>Payback</th><td>—</td><td class="win">~7–10 months on gross profit at 40% margin; under a year on a $400–600K ACV</td></tr>
+</tbody></table>
+<p><b>The economics are sound and the accounting is wrong.</b> A CAC that pays back inside a year against a $400–600K contract is a good business. But at roughly $135K a client it cannot come out of a 1.5% operating line — <b>organic growth inside acquired assets is a capital line, and the financial model has to carry it as one.</b> That is a specific correction to hand the parallel rebase, and it is the first hard number this document has produced for the open half of the Node 02 test.</p>
+
+<h3>Funnel B — the channels, and which one we are actually allowed</h3>
+<table><thead><tr><th style="width:22%">Channel</th><th>Evidence</th><th>Position</th></tr></thead><tbody>
+<tr><th>Vertical events and associations</th><td class="win">The mechanism behind the specialisation premium in Node 02 — «walk into any vertical because everyone there knows me». For financial services this means banking and credit-union associations, not IT conferences</td><td class="win"><span class="tag tag-pass">Primary</span></td></tr>
+<tr><th>Vendor partnerships</th><td class="win">MSPs already act as small integrators, distributing for dozens of vendors on revenue share. The same relationships route product the other way — Node 05</td><td class="win"><span class="tag tag-pass">Primary</span></td></tr>
+<tr><th>Inbound and content</th><td class="hold">Purchasable and cheap relative to the others: a mid-tier seat in the industry's main marketing peer group runs ~$2,500 and includes automated campaign infrastructure and search-visibility tooling</td><td class="hold"><span class="tag tag-warn">Cheap to test first</span></td></tr>
+<tr><th>Outbound</th><td class="hold">“Outbound sales hasn’t always worked for us very well” — 25-year owner, with the room agreeing. But we run 2–3 SDRs and a closer on the software side today, which is the one sales asset we actually own</td><td class="hold"><span class="tag tag-warn">Secondary — and the only one we can staff now</span></td></tr>
+<tr><th>Outsourced sales</th><td class="out">Offered on the floor as a service — a client's sales team built in six months on $150K of payroll. Rejected by the principal on principle: the channel is the asset, and an asset cannot be rented</td><td class="out"><span class="tag tag-rej">Rejected</span></td></tr>
+</tbody></table>
+<p><b>Sell to the CEO, not the IT director.</b> From a thirty-year specialist: in small and mid-sized businesses «CTOs and CIOs don't know a lot… it never ceases to surprise me how little they know», and his own stated regret was not selling to the CEO sooner. In our vertical that reads more sharply still — the buyer of a compliance obligation is whoever signs for the examination, which is not the IT function.</p>
+
+<h3>Funnel A — and the offer on the table, priced</h3>
+<p>An advisor has proposed exclusive engagement on deal flow: <b>$50,000 a month for three years, plus 5% of purchase price.</b> He runs peer groups across the US and Canada — around 130 owners across 14–15 groups, «almost all of whom want to sell at some point» — which is precisely the proprietary pipeline Node 02c identified as missing, since no published source maps financial-services MSPs at all. The principal's reaction was that it is «ten times the market».</p>
+<table><thead><tr><th style="width:26%"></th><th>Market, lower middle market</th><th>Proposed</th></tr></thead><tbody>
+<tr><th>Retainer</th><td>$10–25K a month sell-side; buy-side skews higher, and is episodic</td><td class="out">$50K a month</td></tr>
+<tr><th>Duration</th><td class="win">3–6 months</td><td class="out">36 months</td></tr>
+<tr><th>Creditable against success fee</th><td class="win">Usually, in part, with a cap</td><td class="out">Not offered</td></tr>
+<tr><th>Total retainer exposure</th><td class="win">$30–150K</td><td class="out"><b>$1.8M</b></td></tr>
+<tr><th>Success fee</th><td>4–6% under $25M; 3–8% all-in fee load</td><td class="win">5% — <b>at market</b></td></tr>
+</tbody></table>
+<div class="note"><b>The commission is not the problem — it is exactly market. The retainer is twelve to sixty times the market exposure, and «ten times» understates it.</b> Priced against the programme: $1.8M of retainer plus ~$1.3M of commission across thirteen deals at ~$2M each is <b>~$3.1M, roughly a tenth of the entire $30M acquisition budget</b>, or ~$238K of sourcing cost per deal — about 12% of the purchase price of an asset we are trying to buy at 4–5×. That is multiple compression bought with cash.<br><br><b>And the fix is standard practice rather than a haggle:</b> shorten the term, make the retainer creditable against the success fee, and run one deal first. His own pipeline is the thing worth paying for, and a commission-weighted structure pays for it precisely when it produces. This is live — the principal committed to a decision after 6 August.</div>
+
+<h3>The sales organisation, and the sequence</h3>
+<p>The principal's position is unambiguous: <b>build our own sales force, and make it strong</b> — because whichever way consolidation runs, organic or acquired, the go-to-market engine has to be reflexive in B2B. It is also the one thing that cannot be bought, hired around, or deferred, and today it exists only on the software side.</p>
+<p>Which sets the order. <b>Funnel A can run on the principal plus a commission-weighted advisor from month one.</b> Funnel B cannot start until there is an asset to sell into, and cannot be judged until one full cycle has been measured in our vertical rather than borrowed from someone else's. The first acquisition is therefore not only the operating platform (Node 04) and the software's pilot ground (Node 05) — <b>it is also the instrument that prices our own CAC.</b></p>
+
+<h3>What would break this</h3>
+<p>If measured CAC in financial services comes in materially above $135K a client, the payback stretches past a year and organic growth stops being the value-creation story — the plan reverts to buying revenue rather than winning it, which raises the deal count in Node 02c. If the advisor will not restructure, the alternative is a full-time originator at roughly $250K a year all-in, cheaper over three years but starting from no pipeline — and the vertical is unmapped, so the pipeline is most of what is being bought. And if the CEO-not-CIO thesis fails in a regulated vertical, where a compliance officer or a risk committee may in fact be the buyer, the entire message and channel mix is aimed at the wrong desk.</p>
+
+<p style="font-size:10.5px;color:#7B8590">Evidence: Nicolas, 4 August — own sales force, outsourced sales rejected, channel as asset · advisor consultation, ChannelCon 2026, 35 min — terms, pipeline, cadence · Service Leadership sales-and-marketing spend by quartile · measured MSP acquisition cost per client and per seat, operator-reported · sales-led B2B CAC medians and trend, 2026 · Axial 2026 M&amp;A Fee Guide, 331 advisor responses, and lower-middle-market retainer and success-fee norms · ChannelCon 2026 — outbound scepticism, CEO-not-CIO, marketing peer-group pricing.</p>
+</div>
+
+</div></details>
+<div class="node">
+<div class="node-no">Part III · Node 09</div><h2>What must be true</h2>
+<details open class="lvl1"><summary class="thesis">Seven assumptions carry the thesis. Each has a number from the benchmark set and a test that can fail it — and the seventh had no number until Node 08 produced one.</summary><div class="det1">
+<table><thead><tr><th style="width:26%">Assumption</th><th>Threshold</th><th>Test</th></tr></thead><tbody>
+<tr><th>Sellers exist at our price</th><td>LOI at 5–6× adjusted EBITDA, assignable contracts, 3-year terms</td><td class="win">50 targets in CRM · 20 live seller conversations · 1 signed LOI</td></tr>
+<tr><th>Margin uplift is real</th><td>Gross margin 40% → 51.2% · net 4.3% → 15.5%</td><td>90 days on the first asset</td></tr>
+<tr><th>Utilisation moves</th><td>61% → 70% (not 85% — the gap is onboarding and dispatch, not sales)</td><td>Ticket and dispatch data, one quarter</td></tr>
+<tr><th>Retention holds through integration</th><td>Monthly churn ≤0.5% (leading) against 1.3% at the bottom quartile</td><td>Cohort retention, 6 months post-close</td></tr>
+<tr><th>Specialisation carries a premium</th><td>CMMC readiness $4–8K per client per month</td><td>Two signed compliance engagements in the vertical</td></tr>
+<tr><th>Owners accept equity over cash</th><td>Roll-equity split accepted by ≥1 of first 3 sellers</td><td>First three negotiations</td></tr>
+<tr><th>The channel can be built at all</th><td class="win">CAC ≤$135K a client, payback inside 12 months on gross profit</td><td class="win">First four clients won in the vertical, measured — not borrowed</td></tr></tbody></table>
+<div class="note"><b>Seven assumptions, and the last one was excluded from every previous version of this list because it had no number.</b> It now has one — Node 08 — and it carries every other line here: none of the six above can be tested without an operating asset winning clients.</div>
+</div>
+
+</div></details><div class="node">
+<div class="node-no">Part III · Node 10</div><h2>Next gate, and what is still open</h2>
+<details open class="lvl1"><summary class="thesis">The next milestone is one signed LOI — not a plan, a partner or a round. Four axes remain genuinely open, and one of them is a correction to the principal's own reading that has to be confirmed before anything below it is built.</summary><div class="det1">
+
+<div class="cut">
+<div><b>Gate</b>One LOI at ≤5–6× adjusted EBITDA, with an assignability clause and three-year terms. Target profile: 60%+ recurring, $150–850K EBITDA, owner seeking options rather than an exit.</div>
+<div><b>Kill criterion</b>100 contacts and zero LOIs across two quarters means sellers will not transact at our price — the entry model, not the vertical, is what failed.</div>
+<div><b>Cost of delay</b>A live case from the buyer's side: $2M offered in autumn, $1.1M in January after three contracts were lost. Six months cost nearly a million.</div>
+</div>
+
+<h3>What closed since the last version, and on what</h3>
+<table><thead><tr><th style="width:26%">Question</th><th>Resolution</th><th>Where</th></tr></thead><tbody>
+<tr><th>Target figure</th><td class="win">$100M in five years. Not a variant of the billion — a different financing structure, reachable on one round plus debt</td><td>00 · 02c</td></tr>
+<tr><th>Where we stand on integration</th><td class="win">Centralised platform. The middle path as described does not exist; the operator it was modelled on centralises from day one</td><td>04</td></tr>
+<tr><th>Whether the May archetype survives</th><td class="win">Yes — deferred by one asset, not diluted. AI-native is built on our own operation and the first purchase, then migration is the integration</td><td>04</td></tr>
+<tr><th>One company or two</th><td class="win">Two, sequenced. Trigger named: a paying customer outside the portfolio</td><td>05</td></tr>
+<tr><th>Cost of the client channel</th><td class="win">First number — ~$135K per client won, payback under a year, and it belongs on the capital line rather than the 1.5% operating line</td><td>09</td></tr>
+</tbody></table>
+
+<h3>What is open, in the order it has to be settled</h3>
+<table><thead><tr><th style="width:22%">Axis</th><th>Why it is still open</th><th>Who settles it, and when</th></tr></thead><tbody>
+<tr><th class="out">The integration correction itself</th><td class="out">Node 04 reverses the principal's own reading of the model he identified as our entry path. Everything in Part II is built on the corrected version. If the correction is rejected, Part II is rebuilt, not adjusted</td><td class="out"><b>Nicolas — first, and before anything else</b></td></tr>
+<tr><th>Delivery: onshore, nearshore or offshore</th><td class="hold">Unowned in every version of this document. It collides with two findings that are already fixed: the 7×24 obligation the vertical carries (Node 02) and the California labour arithmetic that makes covered hours expensive (Node 02b). Current base is Portugal and Georgia, chosen for cost before the vertical was chosen</td><td>Nicolas, with the first asset's ticket data</td></tr>
+<tr><th>Advisor terms</th><td class="hold">Commission is at market; the retainer is 12–60× market exposure. Restructure — shorter term, creditable, one deal first — or hire an originator at ~$250K a year into an unmapped vertical</td><td class="out"><b>Live — decision committed for after 6 August</b></td></tr>
+<tr><th>Software scope</th><td class="hold">The horizontal product exists and is owned by the PSA incumbent. Only the vertical compliance-evidence and remediation layer survives. Narrowing the ambition is a decision nobody has formally taken</td><td>Nicolas, before any engineering is committed</td></tr>
+<tr><th>Segment population</th><td>How many financial-services MSPs exist and where — unmapped in any public source, and the largest hole in the analysis. This is a data purchase, not an analysis task</td><td>Resolvable now, cheaply</td></tr>
+</tbody></table>
+
+<h3>What this document does not establish</h3>
+<p>Stated plainly, because the omissions are the first thing a fund will look for. <b>It does not price the outcome</b> — enterprise value, returns and scenario ranges belong to the financial model, which is being rebased on the benchmark set and has not yet returned; the arithmetic in Node 02c sets scale and sequence, not the plan. <b>It does not demonstrate that we can integrate</b>, which the outside data in Node 04 identifies as the binding constraint on every roll-up, and which no evidence in our possession addresses. <b>It does not establish demand for the software</b> beyond our own portfolio, which is the condition the entire two-multiple case in Node 05 depends on. And <b>it does not close the vertical choice on market data</b> — healthcare outgrows financial services and exits higher; what selects our vertical is an untested claim about our own transferable knowledge, and Node 02 says so in those words.</p>
+
+<h3>The simulation, and what it is waiting for</h3>
+<p>The Monte-Carlo run requested across the entry quadrant is specified in Node 03b — criterion, stochastic inputs, cell-specific variables, ruin conditions and the correlations that must not be ignored. It is a financial-model task and it is blocked on the same rebase. <b>Running it before the inputs are rebased would produce a chart rather than an answer</b>, which is the specific failure the request was meant to avoid.</p>
+
+<h3>The next ninety days</h3>
+<p>One decision, one purchase, one number. <b>Confirm or reject the integration correction</b>, because Part II is built on it. <b>Restructure or decline the advisor engagement</b> on the terms in Node 08, and start deal flow either way — the market is running at over a thousand transactions a year and enterprise values moved 15% in twelve months, so the cost of waiting is measurable and is already in the record. <b>And buy the establishment data</b> that sizes the segment, which is the cheapest open item on the list and the one blocking the funnel from being built by hand.</p>
+<div class="note"><b>The gate is deliberately small.</b> Nothing in this document is proven by another quarter of research — the leg that carries the multiple is at ~$150K a year and the buyer has not bought anything yet. One signed LOI at our price converts the entire thesis from desk work into a measurable operation, and the same LOI is what prices our CAC, tests the integration claim and gives the lender a borrowing base. It is the only next step that resolves more than one open axis at once.</div>
+
+<p style="font-size:10.5px;color:#7B8590">Sources: gate profile and cost-of-delay case, ChannelCon 2026 · transaction volume and enterprise-value drift, Node 03 · open axes carried from Nodes 02, 02b, 02c, 04, 05 and 09 · financial model, in rebase, maintained separately.</p>
+</div>
+
+</div></details>
+</div></body></html>
